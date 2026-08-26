@@ -1,4 +1,8 @@
 import { useEffect, useState, type RefObject } from 'react'
+import {
+  TEMPORAL_WINDOW_FRAMES,
+  type TemporalBufferSnapshot,
+} from './TemporalLandmarkBuffer'
 import type {
   LandmarkCounts,
   LandmarkFrame,
@@ -15,11 +19,20 @@ const EMPTY_COUNTS: LandmarkCounts = {
   rightHand: 0,
 }
 
+const EMPTY_TEMPORAL_BUFFER: TemporalBufferSnapshot = {
+  bufferedFrames: 0,
+  durationMs: 0,
+  progress: 0,
+  ready: false,
+  targetFrames: TEMPORAL_WINDOW_FRAMES,
+}
+
 type LandmarkDetectionResult = {
   counts: LandmarkCounts
   errorMessage: string | null
   frame: LandmarkFrame | null
   status: LandmarkStatus
+  temporal: TemporalBufferSnapshot
 }
 
 function describeError(error: unknown) {
@@ -35,6 +48,9 @@ export function useLandmarkDetection(
   const [counts, setCounts] = useState<LandmarkCounts>(EMPTY_COUNTS)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [frame, setFrame] = useState<LandmarkFrame | null>(null)
+  const [temporal, setTemporal] = useState<TemporalBufferSnapshot>(
+    EMPTY_TEMPORAL_BUFFER,
+  )
   const [workerStatus, setWorkerStatus] =
     useState<Exclude<LandmarkStatus, 'idle'>>('loading')
 
@@ -74,7 +90,9 @@ export function useLandmarkDetection(
       frameInFlight = false
       setWorkerStatus('error')
       setErrorMessage(message)
+      setCounts(EMPTY_COUNTS)
       setFrame(null)
+      setTemporal(EMPTY_TEMPORAL_BUFFER)
     }
 
     function handleWorkerMessage(
@@ -86,6 +104,7 @@ export function useLandmarkDetection(
           setErrorMessage(null)
           setCounts(EMPTY_COUNTS)
           setFrame(null)
+          setTemporal(EMPTY_TEMPORAL_BUFFER)
           break
 
         case 'ready':
@@ -97,6 +116,7 @@ export function useLandmarkDetection(
           frameInFlight = false
           setCounts(event.data.counts)
           setFrame(event.data.landmarks)
+          setTemporal(event.data.temporal)
           break
 
         case 'error':
@@ -177,5 +197,6 @@ export function useLandmarkDetection(
     errorMessage: enabled ? errorMessage : null,
     frame: enabled ? frame : null,
     status,
+    temporal: enabled ? temporal : EMPTY_TEMPORAL_BUFFER,
   }
 }
