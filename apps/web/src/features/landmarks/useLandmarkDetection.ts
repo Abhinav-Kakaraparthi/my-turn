@@ -1,0 +1,174 @@
+﻿import { useEffect, useState, type RefObject } from 'react'
+import type {
+  LandmarkCounts,
+  LandmarkStatus,
+  LandmarkWorkerResponse,
+} from './landmarkWorker.types'
+
+const DETECTION_INTERVAL_MS = 100
+
+const EMPTY_COUNTS: LandmarkCounts = {
+  face: 0,
+  leftHand: 0,
+  pose: 0,
+  rightHand: 0,
+}
+
+type LandmarkDetectionResult = {
+  counts: LandmarkCounts
+  errorMessage: string | null
+  status: LandmarkStatus
+}
+
+function describeError(error: unknown) {
+  return error instanceof Error
+    ? error.message
+    : 'The camera frame could not be analyzed.'
+}
+
+export function useLandmarkDetection(
+  videoRef: RefObject<HTMLVideoElement | null>,
+  enabled: boolean,
+): LandmarkDetectionResult {
+  const [counts, setCounts] = useState<LandmarkCounts>(EMPTY_COUNTS)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [workerStatus, setWorkerStatus] =
+    useState<Exclude<LandmarkStatus, 'idle'>>('loading')
+
+  useEffect(() => {
+    if (!enabled) {
+      return
+    }
+
+    const video = videoRef.current
+
+    if (!video) {
+      return
+    }
+
+    const activeVideo: HTMLVideoElement = video
+
+    const worker = new Worker(
+      new URL('./landmarkWorker.ts', import.meta.url),
+      {
+        name: 'holistic-landmarks',
+        type: 'module',
+      },
+    )
+
+    let animationFrameId = 0
+    let disposed = false
+    let frameInFlight = false
+    let lastDetectionAt = 0
+    let workerReady = false
+
+    function fail(message: string) {
+      if (disposed) {
+        return
+      }
+
+      workerReady = false
+      frameInFlight = false
+      setWorkerStatus('error')
+      setErrorMessage(message)
+    }
+
+    function handleWorkerMessage(
+      event: MessageEvent<LandmarkWorkerResponse>,
+    ) {
+      switch (event.data.type) {
+        case 'loading':
+          setWorkerStatus('loading')
+          setErrorMessage(null)
+          setCounts(EMPTY_COUNTS)
+          break
+
+        case 'ready':
+          workerReady = true
+          setWorkerStatus('running')
+          break
+
+        case 'result':
+          frameInFlight = false
+          setCounts(event.data.counts)
+          break
+
+        case 'error':
+          fail(event.data.message)
+          break
+      }
+    }
+
+    function captureFrame() {
+      frameInFlight = true
+
+      void createImageBitmap(activeVideo)
+        .then((frame) => {
+          if (disposed) {
+            frame.close()
+            return
+          }
+
+          try {
+            worker.postMessage(
+              {
+                type: 'detect',
+                frame,
+                timestampMs: performance.now(),
+              },
+              [frame],
+            )
+          } catch (error) {
+            frame.close()
+            fail(describeError(error))
+          }
+        })
+        .catch((error: unknown) => {
+          fail(describeError(error))
+        })
+    }
+
+    function processFrame(timestamp: number) {
+      if (disposed) {
+        return
+      }
+
+      const intervalElapsed =
+        timestamp - lastDetectionAt >= DETECTION_INTERVAL_MS
+
+      if (
+        workerReady &&
+        !frameInFlight &&
+        intervalElapsed &&
+        activeVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
+      ) {
+        lastDetectionAt = timestamp
+        captureFrame()
+      }
+
+      animationFrameId = requestAnimationFrame(processFrame)
+    }
+
+    worker.addEventListener('message', handleWorkerMessage)
+    worker.addEventListener('error', (event) => {
+      fail(event.message || 'The landmark worker stopped unexpectedly.')
+    })
+
+    worker.postMessage({ type: 'initialize' })
+    animationFrameId = requestAnimationFrame(processFrame)
+
+    return () => {
+      disposed = true
+      cancelAnimationFrame(animationFrameId)
+      worker.terminate()
+    }
+  }, [enabled, videoRef])
+
+  const status: LandmarkStatus = enabled ? workerStatus : 'idle'
+
+  return {
+    counts: enabled ? counts : EMPTY_COUNTS,
+    errorMessage: enabled ? errorMessage : null,
+    status,
+  }
+}

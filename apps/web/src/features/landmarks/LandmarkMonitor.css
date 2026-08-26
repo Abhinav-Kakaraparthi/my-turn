@@ -1,0 +1,55 @@
+﻿.landmark-monitor {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #d5e2dd;
+  border-radius: 16px;
+  background: #f3f8f6;
+}
+
+.landmark-monitor-label {
+  margin: 0 0 6px;
+  color: #687873;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landmark-monitor-state {
+  margin: 0;
+  color: #173f36;
+  font-size: 0.95rem;
+  font-weight: 760;
+}
+
+.landmark-counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.landmark-counts div {
+  padding: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.landmark-counts dt {
+  color: #687873;
+  font-size: 0.68rem;
+}
+
+.landmark-counts dd {
+  margin: 3px 0 0;
+  color: #173f36;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.landmark-monitor-error {
+  margin: 12px 0 0;
+  color: #7b2d20;
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
