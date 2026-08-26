@@ -1,9 +1,16 @@
-import { useEffect, useState, type RefObject } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react'
 import {
   TEMPORAL_WINDOW_FRAMES,
   type TemporalBufferSnapshot,
 } from './TemporalLandmarkBuffer'
 import type {
+  CapturedSignSequence,
   LandmarkCounts,
   LandmarkFrame,
   LandmarkStatus,
@@ -27,7 +34,15 @@ const EMPTY_TEMPORAL_BUFFER: TemporalBufferSnapshot = {
   targetFrames: TEMPORAL_WINDOW_FRAMES,
 }
 
+type PendingCapture = {
+  reject: (reason?: unknown) => void
+  requestId: string
+  resolve: (sequence: CapturedSignSequence) => void
+}
+
 type LandmarkDetectionResult = {
+  cancelSequenceCapture: () => void
+  captureSequence: () => Promise<CapturedSignSequence>
   counts: LandmarkCounts
   errorMessage: string | null
   frame: LandmarkFrame | null
@@ -45,6 +60,8 @@ export function useLandmarkDetection(
   videoRef: RefObject<HTMLVideoElement | null>,
   enabled: boolean,
 ): LandmarkDetectionResult {
+  const workerRef = useRef<Worker | null>(null)
+  const pendingCaptureRef = useRef<PendingCapture | null>(null)
   const [counts, setCounts] = useState<LandmarkCounts>(EMPTY_COUNTS)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [frame, setFrame] = useState<LandmarkFrame | null>(null)
@@ -53,6 +70,71 @@ export function useLandmarkDetection(
   )
   const [workerStatus, setWorkerStatus] =
     useState<Exclude<LandmarkStatus, 'idle'>>('loading')
+
+  const captureSequence = useCallback(
+    (): Promise<CapturedSignSequence> => {
+      const worker = workerRef.current
+
+      if (!worker) {
+        return Promise.reject(
+          new Error('Turn on the camera before recording an example.'),
+        )
+      }
+
+      if (pendingCaptureRef.current) {
+        return Promise.reject(
+          new Error('A sign example is already being recorded.'),
+        )
+      }
+
+      const requestId = crypto.randomUUID()
+
+      return new Promise<CapturedSignSequence>((resolve, reject) => {
+        pendingCaptureRef.current = {
+          reject,
+          requestId,
+          resolve,
+        }
+
+        try {
+          worker.postMessage({
+            type: 'begin-capture',
+            requestId,
+          })
+        } catch (error) {
+          pendingCaptureRef.current = null
+          reject(
+            error instanceof Error
+              ? error
+              : new Error('The sign recording could not start.'),
+          )
+        }
+      })
+    },
+    [],
+  )
+
+  const cancelSequenceCapture = useCallback(() => {
+    const pendingCapture = pendingCaptureRef.current
+    const worker = workerRef.current
+
+    if (!pendingCapture) {
+      return
+    }
+
+    if (!worker) {
+      pendingCaptureRef.current = null
+      pendingCapture.reject(
+        new DOMException('Sign recording cancelled.', 'AbortError'),
+      )
+      return
+    }
+
+    worker.postMessage({
+      type: 'cancel-capture',
+      requestId: pendingCapture.requestId,
+    })
+  }, [])
 
   useEffect(() => {
     if (!enabled) {
@@ -75,11 +157,24 @@ export function useLandmarkDetection(
       },
     )
 
+    workerRef.current = worker
+
     let animationFrameId = 0
     let disposed = false
     let frameInFlight = false
     let lastDetectionAt = 0
     let workerReady = false
+
+    function rejectPendingCapture(error: Error) {
+      const pendingCapture = pendingCaptureRef.current
+
+      if (!pendingCapture) {
+        return
+      }
+
+      pendingCaptureRef.current = null
+      pendingCapture.reject(error)
+    }
 
     function fail(message: string) {
       if (disposed) {
@@ -93,6 +188,7 @@ export function useLandmarkDetection(
       setCounts(EMPTY_COUNTS)
       setFrame(null)
       setTemporal(EMPTY_TEMPORAL_BUFFER)
+      rejectPendingCapture(new Error(message))
     }
 
     function handleWorkerMessage(
@@ -118,6 +214,31 @@ export function useLandmarkDetection(
           setFrame(event.data.landmarks)
           setTemporal(event.data.temporal)
           break
+
+        case 'capture-started':
+          break
+
+        case 'capture-completed': {
+          const pendingCapture = pendingCaptureRef.current
+
+          if (pendingCapture?.requestId === event.data.requestId) {
+            pendingCaptureRef.current = null
+            pendingCapture.resolve(event.data.sequence)
+          }
+          break
+        }
+
+        case 'capture-cancelled': {
+          const pendingCapture = pendingCaptureRef.current
+
+          if (pendingCapture?.requestId === event.data.requestId) {
+            pendingCaptureRef.current = null
+            pendingCapture.reject(
+              new DOMException('Sign recording cancelled.', 'AbortError'),
+            )
+          }
+          break
+        }
 
         case 'error':
           fail(event.data.message)
@@ -186,6 +307,14 @@ export function useLandmarkDetection(
     return () => {
       disposed = true
       cancelAnimationFrame(animationFrameId)
+
+      if (workerRef.current === worker) {
+        workerRef.current = null
+      }
+
+      rejectPendingCapture(
+        new Error('The camera stopped before recording finished.'),
+      )
       worker.terminate()
     }
   }, [enabled, videoRef])
@@ -193,6 +322,8 @@ export function useLandmarkDetection(
   const status: LandmarkStatus = enabled ? workerStatus : 'idle'
 
   return {
+    cancelSequenceCapture,
+    captureSequence,
     counts: enabled ? counts : EMPTY_COUNTS,
     errorMessage: enabled ? errorMessage : null,
     frame: enabled ? frame : null,

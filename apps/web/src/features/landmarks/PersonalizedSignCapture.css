@@ -1,0 +1,239 @@
+.personalized-capture {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: 48px;
+  margin-top: 24px;
+  padding: 32px;
+  border: 1px solid #d2ddd9;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(30, 70, 60, 0.07);
+}
+
+.personalized-capture-copy h3 {
+  max-width: 430px;
+  margin: 10px 0 14px;
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  line-height: 1.05;
+}
+
+.personalized-capture-copy > p:last-child {
+  max-width: 460px;
+  margin: 0;
+  color: #61706b;
+  line-height: 1.65;
+}
+
+.personalized-capture-workspace {
+  min-width: 0;
+}
+
+.capture-form {
+  padding: 20px;
+  border-radius: 16px;
+  background: #f3f8f6;
+}
+
+.capture-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #173f36;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.capture-form input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid #c9d8d2;
+  border-radius: 12px;
+  color: #14231f;
+  background: #ffffff;
+  font: inherit;
+}
+
+.capture-form input:focus {
+  border-color: #397b69;
+  outline: 3px solid rgba(57, 123, 105, 0.16);
+}
+
+.capture-form input:disabled {
+  color: #6a7974;
+  background: #eef3f1;
+}
+
+.capture-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.capture-actions button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.capture-record-button {
+  flex: 1;
+  border: 0;
+  color: #ffffff;
+  background: #173f36;
+}
+
+.capture-record-button:hover:not(:disabled) {
+  background: #22594c;
+}
+
+.capture-record-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.capture-cancel-button {
+  border: 1px solid #d9a79d;
+  color: #762b22;
+  background: #fff3f0;
+}
+
+.capture-actions button:focus-visible,
+.personalized-library button:focus-visible {
+  outline: 3px solid #ffbd59;
+  outline-offset: 3px;
+}
+
+.capture-guidance {
+  margin: 10px 0 0;
+  color: #687873;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.personalized-library {
+  margin-top: 18px;
+}
+
+.personalized-library-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.personalized-library-heading h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.personalized-library-heading > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  color: #173f36;
+  background: #e4f0eb;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.personalized-library ul {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.personalized-library li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid #dde7e3;
+  border-radius: 12px;
+}
+
+.personalized-library li > div {
+  min-width: 0;
+}
+
+.personalized-library strong,
+.personalized-library li span {
+  display: block;
+}
+
+.personalized-library strong {
+  overflow: hidden;
+  color: #173f36;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.personalized-library li span {
+  margin-top: 4px;
+  color: #687873;
+  font-size: 0.68rem;
+}
+
+.personalized-library li button {
+  border: 0;
+  color: #762b22;
+  background: transparent;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.personalized-library li button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.personalized-library-empty {
+  margin: 12px 0 0;
+  padding: 16px;
+  border: 1px dashed #c9d8d2;
+  border-radius: 12px;
+  color: #687873;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.capture-notice,
+.capture-error {
+  margin: 14px 0 0;
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.capture-notice {
+  color: #205f50;
+  background: #e8f5f0;
+}
+
+.capture-error {
+  color: #7b2d20;
+  background: #fff3f0;
+}
+
+@media (max-width: 760px) {
+  .personalized-capture {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 24px;
+  }
+
+  .capture-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
