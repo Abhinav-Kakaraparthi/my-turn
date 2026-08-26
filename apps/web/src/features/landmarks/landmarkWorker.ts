@@ -2,6 +2,8 @@
 
 import type { HolisticLandmarker } from '@mediapipe/tasks-vision'
 import { createHolisticLandmarker } from './createHolisticLandmarker'
+import { createSignFeatureFrame } from './signFeatureFrame'
+import { TemporalLandmarkBuffer } from './TemporalLandmarkBuffer'
 import type {
   LandmarkFrame,
   LandmarkWorkerRequest,
@@ -9,6 +11,7 @@ import type {
 } from './landmarkWorker.types'
 
 const workerScope = self as unknown as DedicatedWorkerGlobalScope
+const temporalBuffer = new TemporalLandmarkBuffer()
 
 let landmarker: HolisticLandmarker | null = null
 let initialization: Promise<HolisticLandmarker> | null = null
@@ -61,6 +64,17 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
     const detector = await getLandmarker()
     const result = detector.detectForVideo(frame, timestampMs)
 
+    const featureFrame = createSignFeatureFrame({
+      face: result.faceLandmarks[0],
+      leftHand: result.leftHandLandmarks[0],
+      pose: result.poseLandmarks[0],
+      rightHand: result.rightHandLandmarks[0],
+    })
+
+    const temporal = featureFrame
+      ? temporalBuffer.add(featureFrame, timestampMs)
+      : temporalBuffer.noteMissing(timestampMs)
+
     const landmarks: LandmarkFrame = {
       face: packCoordinates(result.faceLandmarks[0]),
       leftHand: packCoordinates(result.leftHandLandmarks[0]),
@@ -72,6 +86,7 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
       type: 'result',
       timestampMs,
       landmarks,
+      temporal,
       counts: {
         face: countPoints(landmarks.face),
         leftHand: countPoints(landmarks.leftHand),
@@ -87,6 +102,7 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
 async function handleMessage(message: LandmarkWorkerRequest) {
   switch (message.type) {
     case 'initialize':
+      temporalBuffer.clear()
       send({ type: 'loading' })
       await getLandmarker()
       send({ type: 'ready' })

@@ -1,3 +1,5 @@
+import type { TemporalBufferSnapshot } from './TemporalLandmarkBuffer'
+
 export type LandmarkCounts = {
   face: number
   leftHand: number
@@ -25,6 +27,7 @@ export type LandmarkWorkerResponse =
       type: 'result'
       counts: LandmarkCounts
       landmarks: LandmarkFrame
+      temporal: TemporalBufferSnapshot
       timestampMs: number
     }
   | { type: 'error'; message: string }

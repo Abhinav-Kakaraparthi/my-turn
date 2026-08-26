@@ -1,4 +1,4 @@
-﻿.landmark-monitor {
+.landmark-monitor {
   margin-bottom: 24px;
   padding: 16px;
   border: 1px solid #d5e2dd;
@@ -45,6 +45,60 @@
   color: #173f36;
   font-size: 1rem;
   font-weight: 800;
+}
+
+.temporal-window {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #d5e2dd;
+}
+
+.temporal-window-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #687873;
+  font-size: 0.68rem;
+}
+
+.temporal-window-heading strong {
+  color: #173f36;
+  font-weight: 800;
+}
+
+.temporal-window progress {
+  display: block;
+  width: 100%;
+  height: 7px;
+  margin-top: 9px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  appearance: none;
+  background: #dce8e3;
+}
+
+.temporal-window progress::-webkit-progress-bar {
+  border-radius: 999px;
+  background: #dce8e3;
+}
+
+.temporal-window progress::-webkit-progress-value {
+  border-radius: 999px;
+  background: #3f8b77;
+}
+
+.temporal-window progress::-moz-progress-bar {
+  border-radius: 999px;
+  background: #3f8b77;
+}
+
+.temporal-window > p {
+  margin: 7px 0 0;
+  color: #687873;
+  font-size: 0.66rem;
+  line-height: 1.4;
 }
 
 .landmark-monitor-error {
