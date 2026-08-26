@@ -1,3 +1,5 @@
+import { CameraPreview } from './features/camera/CameraPreview'
+
 const roles = [
   {
     title: 'I am signing',
@@ -48,8 +50,8 @@ function App() {
             </p>
 
             <div className="hero-actions">
-              <a className="primary-action" href="#choose-role">
-                Enter My Turn
+              <a className="primary-action" href="#camera-workspace">
+                Start signing
               </a>
               <a className="secondary-action" href="#how-it-works">
                 How it works
@@ -74,6 +76,8 @@ function App() {
             </div>
           </aside>
         </section>
+
+        <CameraPreview />
 
         <section
           className="role-section"
