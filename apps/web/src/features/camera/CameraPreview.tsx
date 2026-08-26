@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useCamera, type CameraStatus } from './useCamera'
 import { LandmarkMonitor } from '../landmarks/LandmarkMonitor'
+import { LandmarkOverlay } from '../landmarks/LandmarkOverlay'
 import { useLandmarkDetection } from '../landmarks/useLandmarkDetection'
 import './CameraPreview.css'
 
@@ -20,7 +21,8 @@ export function CameraPreview() {
 
   const isActive = status === 'active'
   const isRequesting = status === 'requesting'
-  const landmarks = useLandmarkDetection(videoRef, isActive)
+  const { frame: landmarkFrame, ...landmarkMonitor } =
+    useLandmarkDetection(videoRef, isActive)
 
   useEffect(() => {
     const video = videoRef.current
@@ -61,6 +63,8 @@ export function CameraPreview() {
             aria-label="Your live camera preview"
           />
 
+          <LandmarkOverlay frame={landmarkFrame} videoRef={videoRef} />
+
           {!isActive && (
             <div className="camera-placeholder">
               <span className="camera-placeholder-mark" aria-hidden="true" />
@@ -88,7 +92,7 @@ export function CameraPreview() {
             </p>
           )}
 
-          <LandmarkMonitor {...landmarks} />
+          <LandmarkMonitor {...landmarkMonitor} />
 
           <button
             className={isActive ? 'camera-button stop' : 'camera-button'}
