@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useCamera, type CameraStatus } from './useCamera'
 import { LandmarkMonitor } from '../landmarks/LandmarkMonitor'
 import { LandmarkOverlay } from '../landmarks/LandmarkOverlay'
+import { PersonalizedSignCapture } from '../landmarks/PersonalizedSignCapture'
 import { useLandmarkDetection } from '../landmarks/useLandmarkDetection'
 import './CameraPreview.css'
 
@@ -21,8 +22,12 @@ export function CameraPreview() {
 
   const isActive = status === 'active'
   const isRequesting = status === 'requesting'
-  const { frame: landmarkFrame, ...landmarkMonitor } =
-    useLandmarkDetection(videoRef, isActive)
+  const {
+    cancelSequenceCapture,
+    captureSequence,
+    frame: landmarkFrame,
+    ...landmarkMonitor
+  } = useLandmarkDetection(videoRef, isActive)
 
   useEffect(() => {
     const video = videoRef.current
@@ -113,6 +118,14 @@ export function CameraPreview() {
           </p>
         </aside>
       </div>
+
+      <PersonalizedSignCapture
+        cameraActive={isActive}
+        cancelCapture={cancelSequenceCapture}
+        captureSequence={captureSequence}
+        perceptionReady={landmarkMonitor.status === 'running'}
+        temporal={landmarkMonitor.temporal}
+      />
     </section>
   )
 }

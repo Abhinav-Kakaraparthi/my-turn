@@ -1,5 +1,12 @@
 import type { TemporalBufferSnapshot } from './TemporalLandmarkBuffer'
 
+export type CapturedSignSequence = {
+  featureSize: number
+  frameCount: number
+  schemaVersion: string
+  values: Float32Array
+}
+
 export type LandmarkCounts = {
   face: number
   leftHand: number
@@ -19,6 +26,8 @@ export type LandmarkStatus = 'idle' | 'loading' | 'running' | 'error'
 export type LandmarkWorkerRequest =
   | { type: 'initialize' }
   | { type: 'detect'; frame: ImageBitmap; timestampMs: number }
+  | { type: 'begin-capture'; requestId: string }
+  | { type: 'cancel-capture'; requestId: string }
 
 export type LandmarkWorkerResponse =
   | { type: 'loading' }
@@ -30,4 +39,11 @@ export type LandmarkWorkerResponse =
       temporal: TemporalBufferSnapshot
       timestampMs: number
     }
+  | { type: 'capture-started'; requestId: string }
+  | {
+      type: 'capture-completed'
+      requestId: string
+      sequence: CapturedSignSequence
+    }
+  | { type: 'capture-cancelled'; requestId: string }
   | { type: 'error'; message: string }

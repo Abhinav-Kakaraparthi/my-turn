@@ -2,7 +2,11 @@
 
 import type { HolisticLandmarker } from '@mediapipe/tasks-vision'
 import { createHolisticLandmarker } from './createHolisticLandmarker'
-import { createSignFeatureFrame } from './signFeatureFrame'
+import {
+  createSignFeatureFrame,
+  SIGN_FEATURE_SCHEMA_VERSION,
+  SIGN_FEATURE_SIZE,
+} from './signFeatureFrame'
 import { TemporalLandmarkBuffer } from './TemporalLandmarkBuffer'
 import type {
   LandmarkFrame,
@@ -13,6 +17,7 @@ import type {
 const workerScope = self as unknown as DedicatedWorkerGlobalScope
 const temporalBuffer = new TemporalLandmarkBuffer()
 
+let activeCaptureId: string | null = null
 let landmarker: HolisticLandmarker | null = null
 let initialization: Promise<HolisticLandmarker> | null = null
 
@@ -59,6 +64,66 @@ function countPoints(coordinates: Float32Array) {
   return coordinates.length / 2
 }
 
+function beginCapture(requestId: string) {
+  if (activeCaptureId) {
+    send({
+      type: 'capture-cancelled',
+      requestId: activeCaptureId,
+    })
+  }
+
+  activeCaptureId = requestId
+  temporalBuffer.clear()
+
+  send({
+    type: 'capture-started',
+    requestId,
+  })
+}
+
+function cancelCapture(requestId: string) {
+  if (activeCaptureId !== requestId) {
+    return
+  }
+
+  activeCaptureId = null
+  temporalBuffer.clear()
+
+  send({
+    type: 'capture-cancelled',
+    requestId,
+  })
+}
+
+function completeCaptureIfReady(
+  ready: boolean,
+  frameCount: number,
+) {
+  if (!ready || !activeCaptureId) {
+    return
+  }
+
+  const values = temporalBuffer.createSequence()
+
+  if (!values) {
+    return
+  }
+
+  const requestId = activeCaptureId
+  activeCaptureId = null
+
+  send({
+    type: 'capture-completed',
+    requestId,
+    sequence: {
+      featureSize: SIGN_FEATURE_SIZE,
+      frameCount,
+      schemaVersion: SIGN_FEATURE_SCHEMA_VERSION,
+      values,
+    },
+  })
+}
+
 async function detectFrame(frame: ImageBitmap, timestampMs: number) {
   try {
     const detector = await getLandmarker()
@@ -94,6 +159,11 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
         rightHand: countPoints(landmarks.rightHand),
       },
     })
+
+    completeCaptureIfReady(
+      temporal.ready,
+      temporal.targetFrames,
+    )
   } finally {
     frame.close()
   }
@@ -102,6 +172,7 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
 async function handleMessage(message: LandmarkWorkerRequest) {
   switch (message.type) {
     case 'initialize':
+      activeCaptureId = null
       temporalBuffer.clear()
       send({ type: 'loading' })
       await getLandmarker()
@@ -110,6 +181,14 @@ async function handleMessage(message: LandmarkWorkerRequest) {
 
     case 'detect':
       await detectFrame(message.frame, message.timestampMs)
+      break
+
+    case 'begin-capture':
+      beginCapture(message.requestId)
+      break
+
+    case 'cancel-capture':
+      cancelCapture(message.requestId)
       break
   }
 }
