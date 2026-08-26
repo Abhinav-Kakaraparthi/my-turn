@@ -5,6 +5,7 @@ import {
 } from 'react'
 import type { TemporalBufferSnapshot } from './TemporalLandmarkBuffer'
 import type { CapturedSignSequence } from './landmarkWorker.types'
+import { PersonalizedSignRecognition } from './PersonalizedSignRecognition'
 import {
   deletePersonalizedSign,
   listPersonalizedSigns,
@@ -49,6 +50,7 @@ export function PersonalizedSignCapture({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRecording, setIsRecording] = useState(false)
+  const [isRecognizing, setIsRecognizing] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
   const [phrase, setPhrase] = useState('')
   const [samples, setSamples] = useState<PersonalizedSignSample[]>([])
@@ -171,7 +173,7 @@ export function PersonalizedSignCapture({
             <button
               className="capture-record-button"
               type="submit"
-              disabled={!canRecord || isRecording}
+              disabled={!canRecord || isRecording || isRecognizing}
             >
               {isRecording
                 ? `Recording ${temporal.bufferedFrames}/${temporal.targetFrames}…`
@@ -254,6 +256,17 @@ export function PersonalizedSignCapture({
             </ul>
           )}
         </div>
+
+        <PersonalizedSignRecognition
+          cameraActive={cameraActive}
+          cancelCapture={cancelCapture}
+          captureSequence={captureSequence}
+          disabled={isRecording}
+          onActiveChange={setIsRecognizing}
+          perceptionReady={perceptionReady}
+          samples={samples}
+          temporal={temporal}
+        />
 
         {notice && (
           <p className="capture-notice" role="status">

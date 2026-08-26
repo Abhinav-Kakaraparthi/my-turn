@@ -1,0 +1,157 @@
+﻿.personalized-recognition {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #d3e1dc;
+}
+
+.personalized-recognition-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.personalized-recognition-heading h4 {
+  margin: 0.2rem 0 0;
+  color: #10241f;
+  font-size: 1.15rem;
+}
+
+.personalized-recognition-heading > span {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: #deeee8;
+  color: #174c40;
+  font-weight: 800;
+}
+
+.recognition-label {
+  margin: 0;
+  color: #287565;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.recognition-copy,
+.recognition-guidance {
+  margin: 0;
+  color: #657b74;
+  line-height: 1.55;
+}
+
+.recognition-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.recognition-actions button {
+  min-height: 3.25rem;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.recognition-compare-button {
+  flex: 1;
+  border: 0;
+  background: #174c40;
+  color: #fff;
+}
+
+.recognition-cancel-button {
+  padding: 0 1.5rem;
+  border: 1px solid #9eb8b0;
+  background: #fff;
+  color: #174c40;
+}
+
+.recognition-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.recognition-result {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+  border: 1px solid #b9d6cd;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.recognition-result > div:first-child {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.recognition-result span,
+.recognition-result dt {
+  color: #657b74;
+  font-size: 0.82rem;
+}
+
+.recognition-result strong {
+  color: #0e493d;
+  font-size: 1.35rem;
+}
+
+.recognition-result dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.recognition-result dl div {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: #edf6f2;
+}
+
+.recognition-result dd {
+  margin: 0.2rem 0 0;
+  color: #10241f;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.recognition-result p {
+  margin: 0;
+  color: #657b74;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.recognition-notice,
+.recognition-error {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.recognition-notice {
+  background: #e3f2ed;
+  color: #17604f;
+}
+
+.recognition-error {
+  background: #fde7e2;
+  color: #8b2d1d;
+}
+
+@media (max-width: 640px) {
+  .personalized-recognition-heading,
+  .recognition-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .recognition-cancel-button {
+    min-width: 100%;
+  }
+}
