@@ -1,4 +1,4 @@
-﻿# Contributing
+# Contributing
 
 My Turn favors small, explicit components over framework-heavy abstractions.
 
