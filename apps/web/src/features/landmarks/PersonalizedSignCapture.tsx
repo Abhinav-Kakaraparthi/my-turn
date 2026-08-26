@@ -114,6 +114,31 @@ export function PersonalizedSignCapture({
     }
   }
 
+  function handleRecognitionActiveChange(active: boolean) {
+    setIsRecognizing(active)
+
+    if (active) {
+      setErrorMessage(null)
+      setNotice(null)
+    }
+  }
+
+  async function handleSaveFeedback(
+    intendedPhrase: string,
+    sequence: CapturedSignSequence,
+  ) {
+    setErrorMessage(null)
+    setNotice(null)
+
+    const sample = await savePersonalizedSign(
+      intendedPhrase,
+      sequence,
+    )
+
+    setSamples((currentSamples) => [sample, ...currentSamples])
+
+    return sample
+  }
   async function handleDelete(sample: PersonalizedSignSample) {
     setDeletingId(sample.id)
     setErrorMessage(null)
@@ -262,7 +287,8 @@ export function PersonalizedSignCapture({
           cancelCapture={cancelCapture}
           captureSequence={captureSequence}
           disabled={isRecording}
-          onActiveChange={setIsRecognizing}
+          onActiveChange={handleRecognitionActiveChange}
+          onSaveFeedback={handleSaveFeedback}
           perceptionReady={perceptionReady}
           samples={samples}
           temporal={temporal}

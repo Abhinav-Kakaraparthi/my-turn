@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { TemporalBufferSnapshot } from './TemporalLandmarkBuffer'
 import type { CapturedSignSequence } from './landmarkWorker.types'
 import {
@@ -14,6 +14,10 @@ type PersonalizedSignRecognitionProps = {
   captureSequence: () => Promise<CapturedSignSequence>
   disabled: boolean
   onActiveChange: (active: boolean) => void
+  onSaveFeedback: (
+    phrase: string,
+    sequence: CapturedSignSequence,
+  ) => Promise<PersonalizedSignSample>
   perceptionReady: boolean
   samples: PersonalizedSignSample[]
   temporal: TemporalBufferSnapshot
@@ -35,14 +39,19 @@ export function PersonalizedSignRecognition({
   captureSequence,
   disabled,
   onActiveChange,
+  onSaveFeedback,
   perceptionReady,
   samples,
   temporal,
 }: PersonalizedSignRecognitionProps) {
   const [closestMatch, setClosestMatch] =
     useState<PersonalizedSignMatch | null>(null)
+  const [capturedSequence, setCapturedSequence] =
+    useState<CapturedSignSequence | null>(null)
+  const [correctionPhrase, setCorrectionPhrase] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isComparing, setIsComparing] = useState(false)
+  const [isSavingFeedback, setIsSavingFeedback] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
 
   const visibleMatch =
@@ -51,14 +60,21 @@ export function PersonalizedSignRecognition({
       ? closestMatch
       : null
 
+  const phraseSuggestions = Array.from(
+    new Set(samples.map((sample) => sample.phrase)),
+  ).sort((left, right) => left.localeCompare(right))
+
   const canCompare =
     cameraActive &&
     perceptionReady &&
     samples.length > 0 &&
-    !disabled
+    !disabled &&
+    !isSavingFeedback
 
   async function handleCompare() {
+    setCapturedSequence(null)
     setClosestMatch(null)
+    setCorrectionPhrase('')
     setErrorMessage(null)
     setNotice(null)
     setIsComparing(true)
@@ -76,6 +92,7 @@ export function PersonalizedSignRecognition({
         return
       }
 
+      setCapturedSequence(sequence)
       setClosestMatch(bestMatch)
     } catch (error) {
       if (isCancellation(error)) {
@@ -89,6 +106,51 @@ export function PersonalizedSignRecognition({
     }
   }
 
+  async function saveFeedback(
+    intendedPhrase: string,
+    wasCorrected: boolean,
+  ) {
+    const normalizedPhrase = intendedPhrase.trim()
+
+    if (!normalizedPhrase) {
+      setErrorMessage('Enter the intended phrase before saving feedback.')
+      return
+    }
+
+    if (!capturedSequence || !visibleMatch) {
+      setErrorMessage('Compare a sign before providing feedback.')
+      return
+    }
+
+    setErrorMessage(null)
+    setNotice(null)
+    setIsSavingFeedback(true)
+
+    try {
+      const sample = await onSaveFeedback(
+        normalizedPhrase,
+        capturedSequence,
+      )
+
+      setCapturedSequence(null)
+      setClosestMatch(null)
+      setCorrectionPhrase('')
+      setNotice(
+        wasCorrected
+          ? `Correction saved locally as “${sample.phrase}”.`
+          : `Confirmed and saved another example for “${sample.phrase}”.`,
+      )
+    } catch (error) {
+      setErrorMessage(describeError(error))
+    } finally {
+      setIsSavingFeedback(false)
+    }
+  }
+
+  function handleCorrection(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    void saveFeedback(correctionPhrase, true)
+  }
   return (
     <section
       className="personalized-recognition"
@@ -180,6 +242,70 @@ export function PersonalizedSignRecognition({
             This is a local similarity candidate, not a confirmed ASL
             translation.
           </p>
+
+          <div className="recognition-feedback">
+            <p>Is this the phrase you intended?</p>
+
+            <div className="recognition-feedback-actions">
+              <button
+                className="recognition-confirm-button"
+                type="button"
+                disabled={isSavingFeedback}
+                onClick={() =>
+                  void saveFeedback(visibleMatch.phrase, false)
+                }
+              >
+                {isSavingFeedback
+                  ? 'Saving feedback…'
+                  : 'Yes, learn this example'}
+              </button>
+            </div>
+
+            <form
+              className="recognition-correction-form"
+              onSubmit={handleCorrection}
+            >
+              <label htmlFor="recognition-correction-phrase">
+                Or enter the intended phrase
+              </label>
+
+              <div className="recognition-correction-row">
+                <input
+                  id="recognition-correction-phrase"
+                  type="text"
+                  list="recognition-phrase-suggestions"
+                  autoComplete="off"
+                  maxLength={120}
+                  placeholder="Choose or enter a correction"
+                  value={correctionPhrase}
+                  disabled={isSavingFeedback}
+                  onChange={(event) =>
+                    setCorrectionPhrase(event.target.value)
+                  }
+                />
+
+                <button
+                  type="submit"
+                  disabled={
+                    isSavingFeedback || !correctionPhrase.trim()
+                  }
+                >
+                  Save correction
+                </button>
+              </div>
+
+              <datalist id="recognition-phrase-suggestions">
+                {phraseSuggestions.map((savedPhrase) => (
+                  <option key={savedPhrase} value={savedPhrase} />
+                ))}
+              </datalist>
+            </form>
+
+            <p>
+              Feedback stores this normalized landmark sequence locally.
+              No camera image or video is saved.
+            </p>
+          </div>
         </div>
       )}
 

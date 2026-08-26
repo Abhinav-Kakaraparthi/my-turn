@@ -1,4 +1,4 @@
-﻿.personalized-recognition {
+.personalized-recognition {
   display: grid;
   gap: 1rem;
   padding-top: 1.5rem;
@@ -127,6 +127,73 @@
   line-height: 1.5;
 }
 
+.recognition-feedback {
+  display: grid;
+  gap: 0.9rem;
+  padding-top: 1rem;
+  border-top: 1px solid #d3e1dc;
+}
+
+.recognition-feedback-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.recognition-feedback button {
+  min-height: 2.85rem;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.recognition-confirm-button {
+  padding: 0 1.25rem;
+  border: 0;
+  background: #174c40;
+  color: #fff;
+}
+
+.recognition-correction-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.recognition-correction-form label {
+  color: #334e47;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.recognition-correction-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+}
+
+.recognition-correction-row input {
+  min-width: 0;
+  min-height: 2.85rem;
+  padding: 0 0.85rem;
+  border: 1px solid #9eb8b0;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #10241f;
+  font: inherit;
+}
+
+.recognition-correction-row button {
+  padding: 0 1.15rem;
+  border: 1px solid #9eb8b0;
+  background: #edf6f2;
+  color: #174c40;
+}
+
+.recognition-feedback button:disabled,
+.recognition-correction-row input:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
 .recognition-notice,
 .recognition-error {
   margin: 0;
@@ -146,12 +213,18 @@
 
 @media (max-width: 640px) {
   .personalized-recognition-heading,
-  .recognition-actions {
+  .recognition-actions,
+  .recognition-feedback-actions {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .recognition-cancel-button {
+  .recognition-correction-row {
+    grid-template-columns: 1fr;
+  }
+
+  .recognition-cancel-button,
+  .recognition-feedback button {
     min-width: 100%;
   }
 }
