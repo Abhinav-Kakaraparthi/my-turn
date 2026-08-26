@@ -1,6 +1,7 @@
-﻿import { useEffect, useState, type RefObject } from 'react'
+import { useEffect, useState, type RefObject } from 'react'
 import type {
   LandmarkCounts,
+  LandmarkFrame,
   LandmarkStatus,
   LandmarkWorkerResponse,
 } from './landmarkWorker.types'
@@ -17,6 +18,7 @@ const EMPTY_COUNTS: LandmarkCounts = {
 type LandmarkDetectionResult = {
   counts: LandmarkCounts
   errorMessage: string | null
+  frame: LandmarkFrame | null
   status: LandmarkStatus
 }
 
@@ -32,6 +34,7 @@ export function useLandmarkDetection(
 ): LandmarkDetectionResult {
   const [counts, setCounts] = useState<LandmarkCounts>(EMPTY_COUNTS)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [frame, setFrame] = useState<LandmarkFrame | null>(null)
   const [workerStatus, setWorkerStatus] =
     useState<Exclude<LandmarkStatus, 'idle'>>('loading')
 
@@ -71,6 +74,7 @@ export function useLandmarkDetection(
       frameInFlight = false
       setWorkerStatus('error')
       setErrorMessage(message)
+      setFrame(null)
     }
 
     function handleWorkerMessage(
@@ -81,6 +85,7 @@ export function useLandmarkDetection(
           setWorkerStatus('loading')
           setErrorMessage(null)
           setCounts(EMPTY_COUNTS)
+          setFrame(null)
           break
 
         case 'ready':
@@ -91,6 +96,7 @@ export function useLandmarkDetection(
         case 'result':
           frameInFlight = false
           setCounts(event.data.counts)
+          setFrame(event.data.landmarks)
           break
 
         case 'error':
@@ -103,9 +109,9 @@ export function useLandmarkDetection(
       frameInFlight = true
 
       void createImageBitmap(activeVideo)
-        .then((frame) => {
+        .then((cameraFrame) => {
           if (disposed) {
-            frame.close()
+            cameraFrame.close()
             return
           }
 
@@ -113,13 +119,13 @@ export function useLandmarkDetection(
             worker.postMessage(
               {
                 type: 'detect',
-                frame,
+                frame: cameraFrame,
                 timestampMs: performance.now(),
               },
-              [frame],
+              [cameraFrame],
             )
           } catch (error) {
-            frame.close()
+            cameraFrame.close()
             fail(describeError(error))
           }
         })
@@ -169,6 +175,7 @@ export function useLandmarkDetection(
   return {
     counts: enabled ? counts : EMPTY_COUNTS,
     errorMessage: enabled ? errorMessage : null,
+    frame: enabled ? frame : null,
     status,
   }
 }

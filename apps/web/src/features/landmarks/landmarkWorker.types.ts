@@ -1,8 +1,15 @@
-﻿export type LandmarkCounts = {
+export type LandmarkCounts = {
   face: number
   leftHand: number
   pose: number
   rightHand: number
+}
+
+export type LandmarkFrame = {
+  face: Float32Array
+  leftHand: Float32Array
+  pose: Float32Array
+  rightHand: Float32Array
 }
 
 export type LandmarkStatus = 'idle' | 'loading' | 'running' | 'error'
@@ -14,5 +21,10 @@ export type LandmarkWorkerRequest =
 export type LandmarkWorkerResponse =
   | { type: 'loading' }
   | { type: 'ready' }
-  | { type: 'result'; counts: LandmarkCounts; timestampMs: number }
+  | {
+      type: 'result'
+      counts: LandmarkCounts
+      landmarks: LandmarkFrame
+      timestampMs: number
+    }
   | { type: 'error'; message: string }

@@ -1,8 +1,9 @@
-﻿/// <reference lib="webworker" />
+/// <reference lib="webworker" />
 
 import type { HolisticLandmarker } from '@mediapipe/tasks-vision'
 import { createHolisticLandmarker } from './createHolisticLandmarker'
 import type {
+  LandmarkFrame,
   LandmarkWorkerRequest,
   LandmarkWorkerResponse,
 } from './landmarkWorker.types'
@@ -38,19 +39,44 @@ function describeError(error: unknown) {
     : 'Landmark detection failed unexpectedly.'
 }
 
+function packCoordinates(
+  landmarks: readonly { x: number; y: number }[] | undefined,
+) {
+  const coordinates = new Float32Array((landmarks?.length ?? 0) * 2)
+
+  landmarks?.forEach((landmark, index) => {
+    coordinates[index * 2] = landmark.x
+    coordinates[index * 2 + 1] = landmark.y
+  })
+
+  return coordinates
+}
+
+function countPoints(coordinates: Float32Array) {
+  return coordinates.length / 2
+}
+
 async function detectFrame(frame: ImageBitmap, timestampMs: number) {
   try {
     const detector = await getLandmarker()
     const result = detector.detectForVideo(frame, timestampMs)
 
+    const landmarks: LandmarkFrame = {
+      face: packCoordinates(result.faceLandmarks[0]),
+      leftHand: packCoordinates(result.leftHandLandmarks[0]),
+      pose: packCoordinates(result.poseLandmarks[0]),
+      rightHand: packCoordinates(result.rightHandLandmarks[0]),
+    }
+
     send({
       type: 'result',
       timestampMs,
+      landmarks,
       counts: {
-        face: result.faceLandmarks[0]?.length ?? 0,
-        leftHand: result.leftHandLandmarks[0]?.length ?? 0,
-        pose: result.poseLandmarks[0]?.length ?? 0,
-        rightHand: result.rightHandLandmarks[0]?.length ?? 0,
+        face: countPoints(landmarks.face),
+        leftHand: countPoints(landmarks.leftHand),
+        pose: countPoints(landmarks.pose),
+        rightHand: countPoints(landmarks.rightHand),
       },
     })
   } finally {
