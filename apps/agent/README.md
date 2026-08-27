@@ -44,3 +44,17 @@ Useful endpoints:
 
 The initial session service is intentionally in-memory. Persistent meeting
 memory will be added separately.
+
+## Container
+
+The production container runs as a non-root user, listens on the Cloud Run
+`PORT`, and excludes local credentials, virtual environments, test files,
+caches, and databases from both Docker and Cloud Build contexts.
+
+From the repository root, build the image:
+
+    docker build --tag my-turn-agent:local apps/agent
+
+The deployed Cloud Run service must remain authenticated until an
+application-level authentication and abuse-prevention boundary is added.
+It uses a dedicated runtime service account with Vertex AI access.
