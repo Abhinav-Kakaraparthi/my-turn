@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   requestCommunicationDraft,
   type CommunicationDraft,
@@ -37,6 +37,8 @@ function isCancellation(error: unknown) {
   return error instanceof DOMException && error.name === 'AbortError'
 }
 
+const AUTO_SPEAK_MIN_SIMILARITY = 0.88
+
 export function PersonalizedSignRecognition({
   cameraActive,
   cancelCapture,
@@ -58,7 +60,10 @@ export function PersonalizedSignRecognition({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isComparing, setIsComparing] = useState(false)
   const [isSavingFeedback, setIsSavingFeedback] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
+  const liveRecognitionBusyRef = useRef(false)
+  const waitingForHandsToClearRef = useRef(false)
 
   const visibleMatch =
     closestMatch &&
@@ -70,14 +75,58 @@ export function PersonalizedSignRecognition({
     new Set(samples.map((sample) => sample.phrase)),
   ).sort((left, right) => left.localeCompare(right))
 
-  const canCompare =
+  const liveRecognitionReady =
     cameraActive &&
     perceptionReady &&
     samples.length > 0 &&
     !disabled &&
     !isSavingFeedback
 
-  async function handleCompare() {
+  function speakText(text: string) {
+    const normalizedText = text.trim()
+
+    if (!normalizedText) {
+      return false
+    }
+
+    if (!('speechSynthesis' in window)) {
+      setErrorMessage('This browser does not support speech output.')
+      return false
+    }
+
+    window.speechSynthesis.cancel()
+
+    const utterance = new SpeechSynthesisUtterance(normalizedText)
+
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => {
+      setIsSpeaking(false)
+      setErrorMessage('The browser could not play the communication draft.')
+    }
+
+    setErrorMessage(null)
+    setIsSpeaking(true)
+    window.speechSynthesis.speak(utterance)
+    return true
+  }
+
+  function makeSpeakableDraft(
+    draft: CommunicationDraft,
+    recognizedPhrase: string,
+  ): CommunicationDraft {
+    if (!draft.needsUserConfirmation) {
+      return draft
+    }
+
+    return {
+      caption: recognizedPhrase,
+      clarificationQuestion: null,
+      needsUserConfirmation: false,
+      speechText: recognizedPhrase,
+    }
+  }
+
+  async function recognizeCurrentSign() {
     setCapturedSequence(null)
     setClosestMatch(null)
     setCommunicationDraft(null)
@@ -101,13 +150,41 @@ export function PersonalizedSignRecognition({
 
       setCapturedSequence(sequence)
       setClosestMatch(bestMatch)
+
+      if (bestMatch.similarity < AUTO_SPEAK_MIN_SIMILARITY) {
+        setNotice(
+          `My Turn is only ${Math.round(
+            bestMatch.similarity * 100,
+          )}% confident. Show the sign again or correct the result below.`,
+        )
+        return
+      }
+
+      const agentDraft = await requestCommunicationDraft(
+        bestMatch.phrase,
+      )
+      const speakableDraft = makeSpeakableDraft(
+        agentDraft,
+        bestMatch.phrase,
+      )
+
+      setCommunicationDraft(speakableDraft)
+
+      const speechStarted = speakText(speakableDraft.speechText)
+
+      setNotice(
+        speechStarted
+          ? `Recognized “${bestMatch.phrase}” and spoke it automatically.`
+          : `Recognized “${bestMatch.phrase}”.`,
+      )
     } catch (error) {
       if (isCancellation(error)) {
-        setNotice('Comparison cancelled.')
+        setNotice('Live recognition paused.')
       } else {
         setErrorMessage(describeError(error))
       }
     } finally {
+      liveRecognitionBusyRef.current = false
       setIsComparing(false)
       onActiveChange(false)
     }
@@ -148,8 +225,14 @@ export function PersonalizedSignRecognition({
           : `Confirmed and saved another example for “${sample.phrase}”.`,
       )
 
-      const draft = await requestCommunicationDraft(normalizedPhrase)
-      setCommunicationDraft(draft)
+      const agentDraft = await requestCommunicationDraft(normalizedPhrase)
+      const speakableDraft = makeSpeakableDraft(
+        agentDraft,
+        normalizedPhrase,
+      )
+
+      setCommunicationDraft(speakableDraft)
+      speakText(speakableDraft.speechText)
     } catch (error) {
       setErrorMessage(describeError(error))
     } finally {
@@ -161,6 +244,54 @@ export function PersonalizedSignRecognition({
     event.preventDefault()
     void saveFeedback(correctionPhrase, true)
   }
+
+  useEffect(() => {
+    if (!cameraActive || !perceptionReady || samples.length === 0) {
+      waitingForHandsToClearRef.current = false
+      return
+    }
+
+    if (disabled || isSavingFeedback) {
+      waitingForHandsToClearRef.current = true
+      return
+    }
+
+    if (isSpeaking) {
+      return
+    }
+
+    if (waitingForHandsToClearRef.current) {
+      if (
+        temporal.bufferedFrames === 0 &&
+        !liveRecognitionBusyRef.current
+      ) {
+        waitingForHandsToClearRef.current = false
+        setNotice('Live translation is listening for the next sign.')
+      }
+
+      return
+    }
+
+    if (
+      temporal.bufferedFrames === 0 ||
+      liveRecognitionBusyRef.current
+    ) {
+      return
+    }
+
+    waitingForHandsToClearRef.current = true
+    liveRecognitionBusyRef.current = true
+    void recognizeCurrentSign()
+  }, [
+    cameraActive,
+    disabled,
+    isSavingFeedback,
+    isSpeaking,
+    perceptionReady,
+    samples.length,
+    temporal.bufferedFrames,
+  ])
+
   return (
     <section
       className="personalized-recognition"
@@ -168,9 +299,9 @@ export function PersonalizedSignRecognition({
     >
       <div className="personalized-recognition-heading">
         <div>
-          <p className="recognition-label">Local comparison</p>
+          <p className="recognition-label">Live translation</p>
           <h4 id="personalized-recognition-title">
-            Try your saved signing examples
+            Sign naturally. My Turn will speak automatically.
           </h4>
         </div>
 
@@ -178,21 +309,21 @@ export function PersonalizedSignRecognition({
       </div>
 
       <p className="recognition-copy">
-        Perform a sign again and My Turn will find the closest example
-        saved on this device.
+        When a signing hand appears, My Turn automatically captures the
+        motion window, compares it with examples saved on this device,
+        and speaks high-confidence results.
       </p>
 
       <div className="recognition-actions">
-        <button
-          className="recognition-compare-button"
-          type="button"
-          disabled={!canCompare || isComparing}
-          onClick={() => void handleCompare()}
-        >
+        <p className="recognition-guidance" role="status">
           {isComparing
-            ? `Comparing ${temporal.bufferedFrames}/${temporal.targetFrames}…`
-            : 'Compare my sign'}
-        </button>
+            ? `Listening ${temporal.bufferedFrames}/${temporal.targetFrames}…`
+            : liveRecognitionReady
+              ? waitingForHandsToClearRef.current
+                ? 'Lower your hands briefly before the next sign.'
+                : 'Live translation is listening.'
+              : 'Live translation will start when the camera and local examples are ready.'}
+        </p>
 
         {isComparing && (
           <button
@@ -200,20 +331,21 @@ export function PersonalizedSignRecognition({
             type="button"
             onClick={cancelCapture}
           >
-            Cancel
+            Stop current capture
           </button>
         )}
       </div>
 
       {samples.length === 0 && (
         <p className="recognition-guidance">
-          Record at least one personalized example before comparing.
+          Record at least one personalized example before starting live
+          translation.
         </p>
       )}
 
       {samples.length > 0 && !cameraActive && (
         <p className="recognition-guidance">
-          Turn on the camera to compare a sign.
+          Turn on the camera to start automatic translation.
         </p>
       )}
 
@@ -225,8 +357,8 @@ export function PersonalizedSignRecognition({
 
       {isComparing && (
         <p className="recognition-guidance" role="status">
-          Perform the sign while your face, upper body, and signing hand
-          remain visible.
+          Keep your face, upper body, and signing hand visible. No compare
+          or speak button is required.
         </p>
       )}
 
@@ -249,73 +381,75 @@ export function PersonalizedSignRecognition({
           </dl>
 
           <p>
-            This is a local similarity candidate, not a confirmed ASL
-            translation.
+            High-confidence matches are spoken automatically. Use the
+            correction controls only when the detected phrase is wrong.
           </p>
 
-          <div className="recognition-feedback">
-            <p>Is this the phrase you intended?</p>
+          {visibleMatch.similarity < AUTO_SPEAK_MIN_SIMILARITY && (
+            <div className="recognition-feedback">
+              <p>Is this the phrase you intended?</p>
 
-            <div className="recognition-feedback-actions">
-              <button
-                className="recognition-confirm-button"
-                type="button"
-                disabled={isSavingFeedback}
-                onClick={() =>
-                  void saveFeedback(visibleMatch.phrase, false)
-                }
-              >
-                {isSavingFeedback
-                  ? 'Saving feedback…'
-                  : 'Yes, learn this example'}
-              </button>
-            </div>
-
-            <form
-              className="recognition-correction-form"
-              onSubmit={handleCorrection}
-            >
-              <label htmlFor="recognition-correction-phrase">
-                Or enter the intended phrase
-              </label>
-
-              <div className="recognition-correction-row">
-                <input
-                  id="recognition-correction-phrase"
-                  type="text"
-                  list="recognition-phrase-suggestions"
-                  autoComplete="off"
-                  maxLength={120}
-                  placeholder="Choose or enter a correction"
-                  value={correctionPhrase}
-                  disabled={isSavingFeedback}
-                  onChange={(event) =>
-                    setCorrectionPhrase(event.target.value)
-                  }
-                />
-
+              <div className="recognition-feedback-actions">
                 <button
-                  type="submit"
-                  disabled={
-                    isSavingFeedback || !correctionPhrase.trim()
+                  className="recognition-confirm-button"
+                  type="button"
+                  disabled={isSavingFeedback}
+                  onClick={() =>
+                    void saveFeedback(visibleMatch.phrase, false)
                   }
                 >
-                  Save correction
+                  {isSavingFeedback
+                    ? 'Saving feedback…'
+                    : 'Yes, learn this example'}
                 </button>
               </div>
 
-              <datalist id="recognition-phrase-suggestions">
-                {phraseSuggestions.map((savedPhrase) => (
-                  <option key={savedPhrase} value={savedPhrase} />
-                ))}
-              </datalist>
-            </form>
+              <form
+                className="recognition-correction-form"
+                onSubmit={handleCorrection}
+              >
+                <label htmlFor="recognition-correction-phrase">
+                  Or enter the intended phrase
+                </label>
 
-            <p>
-              Feedback stores this normalized landmark sequence locally.
-              No camera image or video is saved.
-            </p>
-          </div>
+                <div className="recognition-correction-row">
+                  <input
+                    id="recognition-correction-phrase"
+                    type="text"
+                    list="recognition-phrase-suggestions"
+                    autoComplete="off"
+                    maxLength={120}
+                    placeholder="Choose or enter a correction"
+                    value={correctionPhrase}
+                    disabled={isSavingFeedback}
+                    onChange={(event) =>
+                      setCorrectionPhrase(event.target.value)
+                    }
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={
+                      isSavingFeedback || !correctionPhrase.trim()
+                    }
+                  >
+                    Save correction
+                  </button>
+                </div>
+
+                <datalist id="recognition-phrase-suggestions">
+                  {phraseSuggestions.map((savedPhrase) => (
+                    <option key={savedPhrase} value={savedPhrase} />
+                  ))}
+                </datalist>
+              </form>
+
+              <p>
+                Feedback stores this normalized landmark sequence locally.
+                No camera image or video is saved.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -326,15 +460,11 @@ export function PersonalizedSignRecognition({
             <strong>{communicationDraft.caption}</strong>
           </div>
 
-          {communicationDraft.needsUserConfirmation ? (
-            <p>
-              Confirmation required:{' '}
-              {communicationDraft.clarificationQuestion ??
-                'Please clarify the intended meaning.'}
-            </p>
-          ) : (
-            <p>The caption is ready for voice output.</p>
-          )}
+          <p>
+            {isSpeaking
+              ? 'Speaking automatically…'
+              : 'Automatic voice output completed.'}
+          </p>
         </div>
       )}
 
