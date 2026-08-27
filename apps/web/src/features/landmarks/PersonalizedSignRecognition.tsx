@@ -1,4 +1,8 @@
 import { useState, type FormEvent } from 'react'
+import {
+  requestCommunicationDraft,
+  type CommunicationDraft,
+} from '../communication/communicationAgentClient'
 import type { TemporalBufferSnapshot } from './TemporalLandmarkBuffer'
 import type { CapturedSignSequence } from './landmarkWorker.types'
 import {
@@ -46,6 +50,8 @@ export function PersonalizedSignRecognition({
 }: PersonalizedSignRecognitionProps) {
   const [closestMatch, setClosestMatch] =
     useState<PersonalizedSignMatch | null>(null)
+  const [communicationDraft, setCommunicationDraft] =
+    useState<CommunicationDraft | null>(null)
   const [capturedSequence, setCapturedSequence] =
     useState<CapturedSignSequence | null>(null)
   const [correctionPhrase, setCorrectionPhrase] = useState('')
@@ -74,6 +80,7 @@ export function PersonalizedSignRecognition({
   async function handleCompare() {
     setCapturedSequence(null)
     setClosestMatch(null)
+    setCommunicationDraft(null)
     setCorrectionPhrase('')
     setErrorMessage(null)
     setNotice(null)
@@ -140,6 +147,9 @@ export function PersonalizedSignRecognition({
           ? `Correction saved locally as “${sample.phrase}”.`
           : `Confirmed and saved another example for “${sample.phrase}”.`,
       )
+
+      const draft = await requestCommunicationDraft(normalizedPhrase)
+      setCommunicationDraft(draft)
     } catch (error) {
       setErrorMessage(describeError(error))
     } finally {
@@ -306,6 +316,25 @@ export function PersonalizedSignRecognition({
               No camera image or video is saved.
             </p>
           </div>
+        </div>
+      )}
+
+      {communicationDraft && (
+        <div className="recognition-result" role="status">
+          <div>
+            <span>Gemini communication draft</span>
+            <strong>{communicationDraft.caption}</strong>
+          </div>
+
+          {communicationDraft.needsUserConfirmation ? (
+            <p>
+              Confirmation required:{' '}
+              {communicationDraft.clarificationQuestion ??
+                'Please clarify the intended meaning.'}
+            </p>
+          ) : (
+            <p>The caption is ready for voice output.</p>
+          )}
         </div>
       )}
 
