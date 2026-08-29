@@ -7,6 +7,13 @@ export type CapturedSignSequence = {
   values: Float32Array
 }
 
+export type CapturedPopsignSequence = {
+  durationMs: number
+  frameCount: number
+  sequenceId: number
+  values: Float32Array
+}
+
 export type LandmarkCounts = {
   face: number
   leftHand: number
@@ -18,6 +25,7 @@ export type LandmarkFrame = {
   face: Float32Array
   leftHand: Float32Array
   pose: Float32Array
+  practice: Float32Array
   rightHand: Float32Array
 }
 
@@ -44,6 +52,10 @@ export type LandmarkWorkerResponse =
       type: 'capture-completed'
       requestId: string
       sequence: CapturedSignSequence
+    }
+  | {
+      type: 'popsign-segment-completed'
+      sequence: CapturedPopsignSequence
     }
   | { type: 'capture-cancelled'; requestId: string }
   | { type: 'error'; message: string }

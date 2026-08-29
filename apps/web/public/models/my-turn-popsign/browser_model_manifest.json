@@ -1,0 +1,22 @@
+{
+  "format": "tensorflowjs_graph_model",
+  "model": "model.json",
+  "input_name": "landmark_sequence",
+  "input_shape": [
+    null,
+    64,
+    94,
+    4
+  ],
+  "classes": 250,
+  "label_map": "sign_to_prediction_index_map.json",
+  "metadata": "asl_model_metadata.json",
+  "automatic_speech": {
+    "minimum_confidence": 0.85,
+    "minimum_margin": 0.45
+  },
+  "request_confirmation": {
+    "minimum_confidence": 0.6,
+    "maximum_confidence": 0.85
+  }
+}

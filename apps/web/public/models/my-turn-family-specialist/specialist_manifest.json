@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "format": "tfjs-layers-model",
+  "modelType": "family-confusion-specialist-head",
+  "labels": [
+    "dad",
+    "grandpa",
+    "hello"
+  ],
+  "inputName": "temporal_features",
+  "inputShape": [
+    null,
+    64,
+    256
+  ],
+  "baseFeatureNode": "StatefulPartitionedCall/my_turn_popsign_recognizer_float32_1/activation_17_1/mul_1",
+  "validationAccuracy": 0.9136,
+  "helloRecall": 0.9828
+}

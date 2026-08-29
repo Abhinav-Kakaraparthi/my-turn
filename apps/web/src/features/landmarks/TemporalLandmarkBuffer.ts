@@ -3,7 +3,7 @@ import {
   type SignFeatureFrame,
 } from './signFeatureFrame'
 
-export const TEMPORAL_WINDOW_FRAMES = 20
+export const TEMPORAL_WINDOW_FRAMES = 10
 
 const DEFAULT_MAX_FRAME_GAP_MS = 350
 

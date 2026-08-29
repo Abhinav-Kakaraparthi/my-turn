@@ -1,0 +1,202 @@
+.practice-coach {
+  display: grid;
+  gap: 17px;
+  margin-top: 16px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.practice-coach-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.practice-coach-heading .section-label {
+  margin-bottom: 10px;
+}
+
+.practice-coach-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  font-weight: 610;
+  letter-spacing: -0.04em;
+}
+
+.practice-coach-heading > span {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.practice-coach-heading > span[data-active="true"] {
+  border-color: rgba(99, 230, 181, 0.24);
+  color: var(--mint);
+  background: rgba(99, 230, 181, 0.08);
+}
+
+.practice-coach-copy,
+.practice-coach-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.practice-coach-toolbar {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.practice-coach-toolbar label {
+  display: grid;
+  gap: 7px;
+  min-width: 190px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 680;
+}
+
+.practice-coach-toolbar select,
+.practice-coach-toolbar button {
+  min-height: 42px;
+  border-radius: 9px;
+}
+
+.practice-coach-toolbar select {
+  padding: 0 36px 0 13px;
+  border: 1px solid var(--line-strong);
+  color: #d8d8df;
+  background: #11131a;
+}
+
+.practice-coach-toolbar button {
+  padding: 0 16px;
+  border: 0;
+  color: #0b0a10;
+  background: linear-gradient(135deg, #b8b0ff, #8e80ff);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.practice-coach-toolbar button.practice-coach-secondary {
+  border: 1px solid var(--line-strong);
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.practice-coach-toolbar button:disabled,
+.practice-coach-toolbar select:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.practice-coach-feedback {
+  display: grid;
+  gap: 12px;
+}
+
+.practice-coach-instruction {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid rgba(99, 230, 181, 0.15);
+  border-radius: 11px;
+  background: rgba(99, 230, 181, 0.045);
+}
+
+.practice-coach-instruction span {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.practice-coach-instruction strong {
+  color: #d9f9ed;
+  font-size: 0.82rem;
+}
+
+.practice-coach-feedback dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.practice-coach-feedback dl div {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.practice-coach-feedback dt {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+.practice-coach-feedback dd {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 0.96rem;
+  font-weight: 720;
+}
+
+.practice-coach-message,
+.practice-coach-error {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.practice-coach-message {
+  border: 1px solid var(--line);
+  color: #c8c9d0;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.practice-coach-error {
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  color: #ffaaa4;
+  background: rgba(255, 91, 79, 0.08);
+}
+
+.practice-coach-note {
+  color: #666974;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 720px) {
+  .practice-coach {
+    padding: 22px;
+  }
+
+  .practice-coach-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .practice-coach-heading > span {
+    align-self: flex-start;
+  }
+
+  .practice-coach-feedback dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .practice-coach-feedback dl {
+    grid-template-columns: 1fr;
+  }
+}

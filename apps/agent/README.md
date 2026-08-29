@@ -5,6 +5,11 @@ meeting context into structured caption and speech drafts.
 
 Camera frames, video, and landmark sequences are never sent to this service.
 
+Confirmed captions, the recognizer's proposed label, the user's confirmed
+label, confidence metadata, and anonymous browser/session IDs are stored in
+Firestore. This provides bounded conversation memory and correction evidence
+without storing camera data or landmark sequences.
+
 ## Observability
 
 The service emits one-line JSON logs for HTTP and Gemini model boundaries.
@@ -38,12 +43,15 @@ Start the service:
 Useful endpoints:
 
 - `GET /healthz`
+- `GET /memory/recent`
+- `POST /memory/events`
 - `GET /list-apps`
 - `POST /run`
 - `GET /docs`
 
-The initial session service is intentionally in-memory. Persistent meeting
-memory will be added separately.
+ADK invocation state remains intentionally short-lived. User-confirmed
+communication memory is persisted separately in Firestore so unconfirmed
+recognition and camera-derived data never enter cloud memory.
 
 ## Container
 

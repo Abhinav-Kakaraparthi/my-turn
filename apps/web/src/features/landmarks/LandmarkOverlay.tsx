@@ -237,7 +237,7 @@ export function LandmarkOverlay({
       context,
       frame.face,
       projection,
-      'rgba(112, 224, 184, 0.64)',
+      'rgba(132, 215, 255, 0.54)',
       0.85,
     )
 
@@ -246,14 +246,14 @@ export function LandmarkOverlay({
       frame.leftHand,
       HAND_CONNECTIONS,
       projection,
-      '#70e0b8',
+      '#63e6b5',
       2.5,
     )
     drawPoints(
       context,
       frame.leftHand,
       projection,
-      '#d9fff1',
+      '#d8fff0',
       2.5,
     )
 
@@ -262,14 +262,14 @@ export function LandmarkOverlay({
       frame.rightHand,
       HAND_CONNECTIONS,
       projection,
-      '#ffbd59',
+      '#9f91ff',
       2.5,
     )
     drawPoints(
       context,
       frame.rightHand,
       projection,
-      '#fff1d8',
+      '#e7e3ff',
       2.5,
     )
   }, [frame, videoRef])

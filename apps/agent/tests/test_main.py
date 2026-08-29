@@ -19,6 +19,8 @@ class ApplicationTests(unittest.TestCase):
         }
 
         self.assertIn("/healthz", route_paths)
+        self.assertIn("/memory/events", route_paths)
+        self.assertIn("/memory/recent", route_paths)
         self.assertIn("/list-apps", route_paths)
         self.assertIn("/run", route_paths)
 

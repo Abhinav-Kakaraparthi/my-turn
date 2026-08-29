@@ -1,0 +1,674 @@
+.popsign-recognition {
+  display: grid;
+  gap: 17px;
+  margin-top: 16px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(139, 124, 255, 0.09), transparent 24rem),
+    var(--surface);
+}
+
+.popsign-recognition-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.popsign-recognition-heading .section-label {
+  margin-bottom: 10px;
+}
+
+.popsign-recognition-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  font-weight: 610;
+  letter-spacing: -0.04em;
+}
+
+.popsign-recognition-heading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid rgba(139, 124, 255, 0.24);
+  border-radius: 8px;
+  color: #c6c0ff;
+  background: var(--violet-soft);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.popsign-recognition-copy,
+.popsign-recognition-status,
+.popsign-segment-details {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.popsign-recognition-status {
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: #c8c9d0;
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 0.78rem;
+  font-weight: 630;
+}
+
+.popsign-segment-details {
+  color: #686b76;
+  font-size: 0.7rem;
+}
+
+.motion-calibration {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.motion-calibration-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.motion-calibration-heading > div {
+  display: grid;
+  gap: 4px;
+}
+
+.motion-calibration-heading span {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.motion-calibration-heading strong {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.motion-calibration > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  line-height: 1.65;
+}
+
+.motion-calibration-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.motion-calibration-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(139, 124, 255, 0.24);
+  border-radius: 9px;
+  color: #d9d5ff;
+  background: rgba(139, 124, 255, 0.08);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.motion-calibration-actions button:hover:not(:disabled) {
+  border-color: rgba(139, 124, 255, 0.5);
+  background: rgba(139, 124, 255, 0.14);
+}
+
+.motion-calibration-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.motion-calibration-actions button span {
+  color: var(--mint);
+  font-size: 0.65rem;
+}
+
+.motion-calibration-actions .motion-calibration-clear {
+  grid-column: 1 / -1;
+  justify-content: center;
+  border-color: var(--line);
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.motion-calibration .motion-calibration-notice {
+  color: #c6c0ff;
+}
+
+.popsign-result {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid rgba(139, 124, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(139, 124, 255, 0.045);
+}
+
+.popsign-result > div:first-child {
+  display: grid;
+  gap: 5px;
+}
+
+.popsign-result span,
+.popsign-result dt {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.popsign-result > div:first-child strong {
+  color: #ebe9ff;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.popsign-result dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.popsign-diagnostics {
+  display: grid;
+  gap: 14px;
+}
+
+.popsign-diagnostics summary {
+  width: fit-content;
+  color: #aaa5d8;
+  font-size: 0.72rem;
+  font-weight: 680;
+  cursor: pointer;
+}
+
+.popsign-diagnostics:not([open]) > :not(summary) {
+  display: none;
+}
+
+.popsign-camera-card {
+  width: min(560px, 100%);
+  margin-left: auto;
+  padding: 15px;
+  border: 1px solid rgba(139, 124, 255, 0.42);
+  border-radius: 14px;
+  color: #f3f1ff;
+  background: rgba(11, 12, 19, 0.9);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(18px);
+  pointer-events: auto;
+}
+
+.popsign-camera-card[data-decision="confirmation"] {
+  border-color: rgba(241, 197, 107, 0.48);
+}
+
+.popsign-camera-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.popsign-camera-card-heading > div {
+  display: grid;
+  gap: 3px;
+}
+
+.popsign-camera-card-heading span,
+.popsign-camera-card > p {
+  color: #b4b5bf;
+  font-size: 0.68rem;
+}
+
+.popsign-camera-card-heading strong {
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  text-transform: lowercase;
+}
+
+.popsign-camera-card-heading > span {
+  padding: 5px 8px;
+  border: 1px solid rgba(99, 230, 181, 0.25);
+  border-radius: 8px;
+  color: var(--mint);
+  background: rgba(99, 230, 181, 0.08);
+  font-weight: 720;
+}
+
+.popsign-camera-card > p {
+  margin: 10px 0 0;
+  line-height: 1.45;
+}
+
+.popsign-camera-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.popsign-camera-choices button,
+.popsign-camera-retry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid rgba(139, 124, 255, 0.32);
+  border-radius: 9px;
+  color: #eeecff;
+  background: rgba(139, 124, 255, 0.13);
+  font: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.popsign-camera-choices button:hover:not(:disabled),
+.popsign-camera-retry:hover:not(:disabled) {
+  border-color: rgba(139, 124, 255, 0.62);
+  background: rgba(139, 124, 255, 0.22);
+}
+
+.popsign-camera-choices button:disabled {
+  cursor: wait;
+  opacity: 0.52;
+}
+
+.popsign-camera-choices button strong {
+  color: var(--mint);
+  font-size: 0.66rem;
+}
+
+.popsign-camera-retry {
+  width: 100%;
+  justify-content: center;
+  min-height: 34px;
+  margin-top: 7px;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #b4b5bf;
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 0.65rem;
+}
+
+.popsign-result dl div {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.popsign-result dd {
+  margin: 5px 0 0;
+  color: #f0f0f3;
+  font-size: 0.85rem;
+  font-weight: 720;
+  text-transform: capitalize;
+}
+
+.popsign-result ol {
+  display: grid;
+  gap: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.popsign-result li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  border-bottom: 1px solid var(--line);
+}
+
+.popsign-result li span {
+  color: #c5c6cd;
+}
+
+.popsign-result li strong {
+  color: var(--mint);
+  font-size: 0.72rem;
+}
+
+.popsign-rejection-note {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.14);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+.popsign-confirmation {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 15px;
+  border: 1px solid rgba(241, 197, 107, 0.2);
+  border-radius: 11px;
+  background: rgba(241, 197, 107, 0.045);
+}
+
+.popsign-confirmation > p {
+  margin: 0;
+  color: #c9c1ae;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.popsign-confirmation > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.popsign-confirmation button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid rgba(139, 124, 255, 0.25);
+  border-radius: 9px;
+  color: #ddd9ff;
+  background: rgba(139, 124, 255, 0.08);
+  font: inherit;
+  cursor: pointer;
+}
+
+.popsign-confirmation button:hover:not(:disabled) {
+  border-color: rgba(139, 124, 255, 0.5);
+  background: rgba(139, 124, 255, 0.14);
+}
+
+.popsign-confirmation button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.popsign-confirmation button span,
+.popsign-confirmation button strong {
+  font-size: 0.7rem;
+}
+
+.popsign-confirmation button strong {
+  color: var(--mint);
+}
+
+.popsign-confirmation .popsign-confirmation-retry {
+  justify-content: center;
+  border-color: var(--line);
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.12);
+  font-size: 0.68rem;
+}
+
+.popsign-communication {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid rgba(99, 230, 181, 0.16);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(99, 230, 181, 0.055), transparent 18rem),
+    rgba(255, 255, 255, 0.015);
+}
+
+.popsign-communication-heading,
+.popsign-communication-heading > div,
+.popsign-history > div:first-child,
+.popsign-current-caption > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.popsign-communication-heading > div,
+.popsign-current-caption > div:first-child {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.popsign-communication-heading span,
+.popsign-history span,
+.popsign-current-caption span {
+  color: var(--text-muted);
+  font-size: 0.66rem;
+}
+
+.popsign-communication-heading h4 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 660;
+  letter-spacing: -0.025em;
+}
+
+.popsign-communication-heading > span {
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  font-weight: 680;
+}
+
+.popsign-communication-heading > span[data-active="true"] {
+  border-color: rgba(99, 230, 181, 0.25);
+  color: var(--mint);
+  background: rgba(99, 230, 181, 0.07);
+}
+
+.popsign-communication-notice,
+.popsign-history > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.popsign-communication-notice {
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: #c8c9d0;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.popsign-communication-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  border-radius: 9px;
+  background: rgba(255, 91, 79, 0.065);
+}
+
+.popsign-communication-error p {
+  margin: 0;
+  color: #ffaaa4;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.popsign-communication-error button,
+.popsign-current-caption button,
+.popsign-history button {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid rgba(139, 124, 255, 0.28);
+  border-radius: 8px;
+  color: #ddd9ff;
+  background: rgba(139, 124, 255, 0.09);
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 680;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.popsign-communication-error button:hover:not(:disabled),
+.popsign-current-caption button:hover:not(:disabled),
+.popsign-history button:hover:not(:disabled) {
+  border-color: rgba(139, 124, 255, 0.52);
+  background: rgba(139, 124, 255, 0.15);
+}
+
+.popsign-current-caption {
+  display: grid;
+  gap: 13px;
+  padding: 16px;
+  border: 1px solid rgba(99, 230, 181, 0.16);
+  border-radius: 11px;
+  background: rgba(99, 230, 181, 0.035);
+}
+
+.popsign-current-caption > div:first-child strong {
+  color: var(--mint);
+  font-size: 0.78rem;
+  font-weight: 680;
+  text-transform: lowercase;
+}
+
+.popsign-current-caption blockquote {
+  margin: 0;
+  color: #f1f0f5;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 560;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.popsign-current-caption button {
+  justify-self: start;
+  min-height: 40px;
+}
+
+.popsign-history {
+  display: grid;
+  gap: 10px;
+}
+
+.popsign-history > div:first-child strong {
+  color: var(--mint);
+  font-size: 0.72rem;
+}
+
+.popsign-history ol {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.popsign-history li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 58px;
+  padding: 10px 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.11);
+}
+
+.popsign-history li > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.popsign-history li strong {
+  overflow: hidden;
+  color: #d9d9df;
+  font-size: 0.76rem;
+  font-weight: 590;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popsign-error {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  border-radius: 10px;
+  color: #ffaaa4;
+  background: rgba(255, 91, 79, 0.08);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .popsign-recognition {
+    padding: 22px;
+  }
+
+  .popsign-recognition-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .popsign-recognition-heading > span {
+    align-self: flex-start;
+  }
+
+  .popsign-result dl {
+    grid-template-columns: 1fr;
+  }
+
+  .motion-calibration-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .popsign-confirmation > div {
+    grid-template-columns: 1fr;
+  }
+
+  .popsign-camera-card {
+    padding: 12px;
+  }
+
+  .popsign-camera-choices {
+    grid-template-columns: 1fr;
+  }
+
+  .popsign-communication-error {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .motion-calibration-actions .motion-calibration-clear {
+    grid-column: auto;
+  }
+}

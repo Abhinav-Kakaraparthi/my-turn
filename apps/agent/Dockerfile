@@ -15,6 +15,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir -r requirements.txt
 
 COPY agents ./agents
+COPY firestore_memory.py ./firestore_memory.py
 COPY main.py ./main.py
 
 USER app
