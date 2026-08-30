@@ -1,3 +1,5 @@
+import base64
+import binascii
 import os
 import re
 import time
@@ -17,6 +19,7 @@ from agents.my_turn_agent.observability import log_event
 from firestore_memory import (
     ConfirmedCommunication,
     FirestoreMemoryStore,
+    RecognitionCorrection,
 )
 
 
@@ -26,6 +29,7 @@ REQUEST_ID_PATTERN = re.compile(
     r"^[A-Za-z0-9._:-]{1,128}$",
 )
 SAFE_ID_PATTERN = r"^[A-Za-z0-9._:-]{1,128}$"
+POPSIGN_LANDMARK_BYTE_COUNT = 64 * 94 * 4 * 4
 
 
 class MemoryEventRequest(BaseModel):
@@ -56,6 +60,37 @@ class RecentCommunicationResponse(BaseModel):
 
 class RecentMemoryResponse(BaseModel):
     items: list[RecentCommunicationResponse]
+
+
+class RecognitionCorrectionRequest(BaseModel):
+    correction_id: str = Field(pattern=SAFE_ID_PATTERN)
+    communication_event_id: str | None = Field(
+        default=None,
+        pattern=SAFE_ID_PATTERN,
+    )
+    user_id: str = Field(pattern=SAFE_ID_PATTERN)
+    session_id: str = Field(pattern=SAFE_ID_PATTERN)
+    predicted_sign: str = Field(min_length=1, max_length=80)
+    corrected_sign: str = Field(min_length=1, max_length=80)
+    model: str = Field(min_length=1, max_length=64)
+    model_version: str = Field(min_length=1, max_length=80)
+    confidence: float = Field(ge=0, le=1)
+    margin: float = Field(ge=0, le=1)
+    duration_ms: int = Field(ge=1, le=3000)
+    sequence_id: int = Field(ge=0)
+    supersedes_correction_id: str | None = Field(
+        default=None,
+        pattern=SAFE_ID_PATTERN,
+    )
+    landmark_values_base64: str = Field(
+        min_length=100_000,
+        max_length=150_000,
+    )
+
+
+class RecognitionCorrectionResponse(BaseModel):
+    stored: bool
+    document_path: str
 
 
 def allowed_origins() -> list[str]:
@@ -245,6 +280,80 @@ async def recent_memory(
             )
             for item in items
         ],
+    )
+
+
+@app.post(
+    "/feedback/corrections",
+    response_model=RecognitionCorrectionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def save_recognition_correction(
+    request: RecognitionCorrectionRequest,
+) -> RecognitionCorrectionResponse:
+    try:
+        landmark_values = base64.b64decode(
+            request.landmark_values_base64,
+            validate=True,
+        )
+    except (binascii.Error, ValueError) as error:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="The landmark tensor is not valid base64.",
+        ) from error
+
+    if len(landmark_values) != POPSIGN_LANDMARK_BYTE_COUNT:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                "The landmark tensor does not have shape [64, 94, 4]."
+            ),
+        )
+
+    correction = RecognitionCorrection(
+        communication_event_id=request.communication_event_id,
+        confidence=request.confidence,
+        corrected_sign=request.corrected_sign,
+        correction_id=request.correction_id,
+        duration_ms=request.duration_ms,
+        landmark_values=landmark_values,
+        margin=request.margin,
+        model=request.model,
+        model_version=request.model_version,
+        predicted_sign=request.predicted_sign,
+        sequence_id=request.sequence_id,
+        session_id=request.session_id,
+        supersedes_correction_id=(
+            request.supersedes_correction_id
+        ),
+        user_id=request.user_id,
+    )
+
+    try:
+        store = get_memory_store()
+        document_path = await run_in_threadpool(
+            store.save_recognition_correction,
+            correction,
+        )
+    except (GoogleAPICallError, GoogleAuthError) as error:
+        log_event(
+            "firestore.correction.failed",
+            error_type=type(error).__name__,
+            severity="ERROR",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Training feedback is temporarily unavailable.",
+        ) from error
+
+    log_event(
+        "firestore.correction.saved",
+        corrected_sign=request.corrected_sign,
+        predicted_sign=request.predicted_sign,
+    )
+    return RecognitionCorrectionResponse(
+        stored=True,
+        document_path=document_path,
     )
 
 

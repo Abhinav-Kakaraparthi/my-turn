@@ -23,6 +23,24 @@ class ConfirmedCommunication:
 
 
 @dataclass(frozen=True)
+class RecognitionCorrection:
+    communication_event_id: str | None
+    confidence: float
+    corrected_sign: str
+    correction_id: str
+    duration_ms: int
+    landmark_values: bytes
+    margin: float
+    model: str
+    model_version: str
+    predicted_sign: str
+    sequence_id: int
+    session_id: str
+    supersedes_correction_id: str | None
+    user_id: str
+
+
+@dataclass(frozen=True)
 class StoredCommunication:
     id: str
     recognized_sign: str
@@ -99,6 +117,59 @@ class FirestoreMemoryStore:
 
         return event_reference.path
 
+    def save_recognition_correction(
+        self,
+        correction: RecognitionCorrection,
+    ) -> str:
+        user_reference = self.client.collection(
+            USERS_COLLECTION,
+        ).document(correction.user_id)
+        correction_reference = user_reference.collection(
+            "recognition_corrections",
+        ).document(correction.correction_id)
+        correction_document = {
+            **asdict(correction),
+            "event_type": "recognition_corrected",
+            "landmark_shape": [64, 94, 4],
+            "landmark_encoding": "float32-little-endian",
+            "created_at": firestore.SERVER_TIMESTAMP,
+            "explicit_training_consent": True,
+            "stores_camera_data": False,
+            "stores_landmarks": True,
+        }
+        user_document = {
+            "last_active_at": firestore.SERVER_TIMESTAMP,
+            "correction_count": firestore.Increment(1),
+            "stores_camera_data": False,
+            "stores_landmarks": True,
+        }
+        batch = self.client.batch()
+
+        batch.set(user_reference, user_document, merge=True)
+        batch.set(correction_reference, correction_document)
+
+        if correction.communication_event_id:
+            communication_reference = user_reference.collection(
+                "communication_events",
+            ).document(correction.communication_event_id)
+
+            batch.set(
+                communication_reference,
+                {
+                    "corrected_sign": correction.corrected_sign,
+                    "event_type": "recognition_rejected_by_user",
+                    "superseded_by_correction_id": (
+                        correction.correction_id
+                    ),
+                    "updated_at": firestore.SERVER_TIMESTAMP,
+                },
+                merge=True,
+            )
+
+        batch.commit()
+
+        return correction_reference.path
+
     def recent_communications(
         self,
         user_id: str,
@@ -113,12 +184,16 @@ class FirestoreMemoryStore:
                 "created_at",
                 direction=firestore.Query.DESCENDING,
             )
-            .limit(limit)
+            .limit(limit * 3)
         )
         recent: list[StoredCommunication] = []
 
         for snapshot in query.stream():
             value = snapshot.to_dict() or {}
+
+            if value.get("event_type") == "recognition_rejected_by_user":
+                continue
+
             created_at = value.get("created_at")
 
             recent.append(
@@ -138,6 +213,9 @@ class FirestoreMemoryStore:
                     ),
                 ),
             )
+
+            if len(recent) >= limit:
+                break
 
         recent.reverse()
         return recent
