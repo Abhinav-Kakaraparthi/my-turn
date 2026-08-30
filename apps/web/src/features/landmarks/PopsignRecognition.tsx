@@ -107,6 +107,8 @@ export function PopsignRecognition({
   )
   const ignoredDisabledSequenceIdRef = useRef<number | null>(null)
   const ignoredPracticeSequenceIdRef = useRef<number | null>(null)
+  const speechUtteranceRef =
+    useRef<SpeechSynthesisUtterance | null>(null)
 
   function speakText(text: string) {
     const normalizedText = text.trim()
@@ -122,18 +124,50 @@ export function PopsignRecognition({
       return false
     }
 
-    window.speechSynthesis.cancel()
-
+    const synthesis = window.speechSynthesis
     const utterance = new SpeechSynthesisUtterance(normalizedText)
 
-    utterance.onend = () => setIsSpeaking(false)
-    utterance.onerror = () => {
+    speechUtteranceRef.current = utterance
+
+    utterance.onend = () => {
+      if (speechUtteranceRef.current !== utterance) return
+
+      speechUtteranceRef.current = null
       setIsSpeaking(false)
-      setCommunicationError('The browser could not play the caption.')
+    }
+
+    utterance.onerror = (event) => {
+      if (speechUtteranceRef.current !== utterance) return
+
+      speechUtteranceRef.current = null
+      setIsSpeaking(false)
+
+      if (
+        event.error !== 'canceled' &&
+        event.error !== 'interrupted'
+      ) {
+        setCommunicationError(
+          'The browser could not play the caption.',
+        )
+      }
+    }
+
+    const startSpeech = () => {
+      if (speechUtteranceRef.current !== utterance) return
+
+      synthesis.resume()
+      synthesis.speak(utterance)
     }
 
     setIsSpeaking(true)
-    window.speechSynthesis.speak(utterance)
+
+    if (synthesis.speaking || synthesis.pending) {
+      synthesis.cancel()
+      window.setTimeout(startSpeech, 75)
+    } else {
+      startSpeech()
+    }
+
     return true
   }
 
@@ -190,8 +224,8 @@ export function PopsignRecognition({
 
     setCommunicationNotice(
       speechStarted
-        ? `Caption confirmed and spoken for “${recognizedSign}”.`
-        : `Caption confirmed for “${recognizedSign}”.`,
+        ? `Caption confirmed and spoken for â€œ${recognizedSign}â€.`
+        : `Caption confirmed for â€œ${recognizedSign}â€.`,
     )
   }
 
@@ -222,7 +256,7 @@ export function PopsignRecognition({
     setCommunicationDraftId(null)
     setCommunicationError(null)
     setCommunicationNotice(
-      `Turning “${recognizedSign}” into a grounded caption…`,
+      `Turning â€œ${recognizedSign}â€ into a grounded captionâ€¦`,
     )
     setDraftApproved(false)
     setDraftSign(recognizedSign)
@@ -340,6 +374,8 @@ export function PopsignRecognition({
 
     communicationAbortRef.current?.abort()
 
+    speechUtteranceRef.current = null
+
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel()
     }
@@ -445,20 +481,54 @@ export function PopsignRecognition({
             <div className="popsign-camera-card-heading">
               <div>
                 <span>
-                  {prediction.decision === 'automatic'
-                    ? 'Auto voice'
-                    : 'Quick confirmation'}
+                  {communicationDraft
+                    ? 'Caption and voice'
+                    : prediction.decision === 'automatic'
+                      ? 'Auto voice'
+                      : 'Quick confirmation'}
                 </span>
-                <strong>{prediction.sign}</strong>
+                <strong>{draftSign ?? prediction.sign}</strong>
               </div>
               <span>{formatPercentage(prediction.confidence)}</span>
             </div>
 
-            {prediction.decision === 'automatic' ? (
+            {communicationDraft && draftSign ? (
+              <div className="popsign-camera-caption">
+                <div className="popsign-camera-caption-heading">
+                  <span>Ready to communicate</span>
+                  {isSpeaking && <strong>Speaking</strong>}
+                </div>
+
+                <blockquote>{communicationDraft.caption}</blockquote>
+
+                {communicationDraft.needsUserConfirmation &&
+                !draftApproved ? (
+                  <button
+                    className="popsign-camera-primary-action"
+                    type="button"
+                    onClick={approveCurrentDraft}
+                  >
+                    Approve & speak
+                  </button>
+                ) : (
+                  <button
+                    className="popsign-camera-primary-action"
+                    type="button"
+                    disabled={isSpeaking}
+                    onClick={() =>
+                      speakText(communicationDraft.speechText)
+                    }
+                  >
+                    {isSpeaking ? 'Speaking...' : 'Replay voice'}
+                  </button>
+                )}
+              </div>
+            ) : prediction.decision === 'automatic' ? (
               <p>High-confidence match. Creating the caption automatically.</p>
             ) : confirmationPending ? (
               <>
                 <p>The match is uncertain. Tap the sign you intended.</p>
+
                 <div className="popsign-camera-choices">
                   {(prediction.confirmationCandidates ??
                     prediction.candidates.slice(0, 3))
@@ -478,6 +548,7 @@ export function PopsignRecognition({
                       </button>
                     ))}
                 </div>
+
                 <button
                   className="popsign-camera-retry"
                   type="button"
@@ -528,7 +599,7 @@ export function PopsignRecognition({
           : isTooLong
               ? 'Motion excluded because it exceeded 3 seconds. Perform one sign naturally and lower both hands.'
               : isPredicting
-          ? 'Classifying the completed motion…'
+          ? 'Classifying the completed motionâ€¦'
           : ready
             ? 'Ready. Perform one sign from the 250-sign vocabulary.'
             : 'Turn on the camera and wait for both local models.'}
@@ -628,7 +699,7 @@ export function PopsignRecognition({
                     type="button"
                     onClick={retryCurrentSign}
                   >
-                    None of these — try the sign again
+                    None of these â€” try the sign again
                   </button>
                 </div>
               )}
@@ -714,11 +785,11 @@ export function PopsignRecognition({
           </article>
         )}
 
-        <div className="popsign-history">
-          <div>
-            <span>Recent confirmed captions</span>
-            <strong>{communicationHistory.length}</strong>
-          </div>
+        <details className="popsign-history">
+          <summary>
+            <span>History / previous captions</span>
+            <strong>{communicationHistory.length} saved</strong>
+          </summary>
 
           {communicationHistory.length === 0 ? (
             <p>
@@ -746,7 +817,7 @@ export function PopsignRecognition({
                 ))}
             </ol>
           )}
-        </div>
+        </details>
       </section>
 
       {errorMessage && (

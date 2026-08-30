@@ -672,3 +672,110 @@
     grid-column: auto;
   }
 }
+
+
+/* Camera-first caption controls */
+
+.popsign-camera-caption {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.popsign-camera-caption-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.popsign-camera-caption-heading span,
+.popsign-camera-caption-heading strong {
+  color: var(--mint);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.popsign-camera-caption blockquote {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.28);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 650;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.popsign-camera-primary-action {
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 16px;
+  border: 1px solid rgba(180, 168, 255, 0.8);
+  border-radius: 11px;
+  color: #0c0918;
+  background: #a99cff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.popsign-camera-primary-action:hover:not(:disabled) {
+  background: #beb5ff;
+}
+
+.popsign-camera-primary-action:focus-visible {
+  outline: 3px solid rgba(99, 230, 181, 0.75);
+  outline-offset: 3px;
+}
+
+.popsign-camera-primary-action:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.popsign-history > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: #dedee5;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  list-style: none;
+}
+
+.popsign-history > summary::-webkit-details-marker {
+  display: none;
+}
+
+.popsign-history > summary strong {
+  margin-left: auto;
+  color: var(--mint);
+  font-size: 0.72rem;
+}
+
+.popsign-history > summary::after {
+  content: "▾";
+  color: #a99cff;
+  font-size: 1rem;
+  transition: transform 160ms ease;
+}
+
+.popsign-history[open] > summary::after {
+  transform: rotate(180deg);
+}
+
+.popsign-history[open] > summary {
+  margin-bottom: 10px;
+}
+
+.popsign-history > summary:focus-visible {
+  outline: 3px solid rgba(139, 124, 255, 0.55);
+  outline-offset: 2px;
+}
