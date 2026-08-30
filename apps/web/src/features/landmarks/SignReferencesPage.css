@@ -1,0 +1,377 @@
+.sign-references-main,
+.sign-references-shell footer {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.sign-references-intro {
+  max-width: 900px;
+  padding-block: 92px 76px;
+}
+
+.sign-references-intro h1 {
+  margin-bottom: 28px;
+  font-size: clamp(3.5rem, 7vw, 6.2rem);
+}
+
+.sign-references-intro > p:last-child {
+  max-width: 720px;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 1.04rem;
+  line-height: 1.7;
+}
+
+.sign-reference-workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.65fr) minmax(0, 1.35fr);
+  gap: 16px;
+  align-items: start;
+  padding-bottom: 112px;
+}
+
+.sign-reference-browser,
+.sign-reference-player {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(13, 15, 20, 0.94);
+}
+
+.sign-reference-browser {
+  padding: 22px;
+}
+
+.sign-reference-browser-heading,
+.sign-reference-player-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sign-reference-browser-heading .section-label,
+.sign-reference-player-heading .section-label {
+  margin-bottom: 8px;
+}
+
+.sign-reference-browser-heading h2,
+.sign-reference-player-heading h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  text-transform: capitalize;
+}
+
+.sign-reference-browser-heading > span,
+.sign-reference-player-heading > span {
+  flex: 0 0 auto;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.sign-reference-search {
+  display: grid;
+  gap: 7px;
+  margin: 22px 0 14px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 680;
+}
+
+.sign-reference-search input {
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  color: var(--text);
+  background: #101218;
+}
+
+.sign-reference-search input::placeholder {
+  color: #5f626d;
+}
+
+.sign-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  max-height: 640px;
+  overflow-y: auto;
+  padding-right: 5px;
+  scrollbar-color: rgba(139, 124, 255, 0.35) transparent;
+}
+
+.sign-reference-grid button {
+  display: flex;
+  min-width: 0;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.02);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.sign-reference-grid button:hover {
+  border-color: rgba(139, 124, 255, 0.3);
+  background: rgba(139, 124, 255, 0.07);
+}
+
+.sign-reference-grid button[data-selected="true"] {
+  border-color: rgba(99, 230, 181, 0.34);
+  color: #e9fff7;
+  background: rgba(99, 230, 181, 0.09);
+}
+
+.sign-reference-grid button span:first-child {
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+}
+
+.sign-reference-grid button span:last-child {
+  color: var(--violet-bright);
+  font-size: 0.55rem;
+}
+
+.sign-reference-stage {
+  position: sticky;
+  top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.sign-reference-player {
+  padding: 24px;
+}
+
+.sign-reference-canvas-wrap {
+  position: relative;
+  min-height: 540px;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(139, 124, 255, 0.2);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(139, 124, 255, 0.09), transparent 50%),
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    #0b1514;
+  background-size: auto, 38px 38px, 38px 38px, auto;
+}
+
+.sign-reference-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 540px;
+}
+
+.sign-reference-player-status,
+.sign-reference-player-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(360px, calc(100% - 40px));
+  margin: 0;
+  padding: 13px;
+  border-radius: 10px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.sign-reference-player-status {
+  color: var(--text-soft);
+  background: rgba(8, 12, 14, 0.8);
+}
+
+.sign-reference-player-error,
+.sign-reference-error {
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  color: #ffaaa4;
+  background: rgba(255, 91, 79, 0.08);
+}
+
+.sign-reference-controls {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sign-reference-controls button,
+.sign-reference-controls select {
+  min-height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.sign-reference-controls button {
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+.sign-reference-controls button:first-child {
+  border: 0;
+  color: #0a0910;
+  background: linear-gradient(135deg, #b8b0ff, #8e80ff);
+  font-weight: 720;
+}
+
+.sign-reference-controls button[aria-pressed="true"] {
+  border-color: rgba(99, 230, 181, 0.3);
+  color: var(--mint);
+}
+
+.sign-reference-controls button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.sign-reference-controls label {
+  display: grid;
+  gap: 5px;
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.64rem;
+}
+
+.sign-reference-controls select {
+  min-width: 88px;
+  padding: 0 10px;
+}
+
+.sign-reference-source-detail {
+  margin: 13px 0 0;
+  color: #656873;
+  font-size: 0.65rem;
+}
+
+.sign-reference-practice-link {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 18px;
+  border: 1px solid rgba(99, 230, 181, 0.2);
+  border-radius: 12px;
+  color: #dffff2;
+  background: rgba(99, 230, 181, 0.065);
+  font-size: 0.78rem;
+  font-weight: 680;
+  text-decoration: none;
+}
+
+.sign-reference-message,
+.sign-reference-error {
+  margin: 14px 0;
+  padding: 12px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.sign-reference-disclosure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
+  gap: 60px;
+  padding-block: 100px;
+  border-top: 1px solid var(--line);
+}
+
+.sign-reference-disclosure h2 {
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+}
+
+.sign-reference-disclosure > div:last-child {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.sign-reference-disclosure a {
+  color: var(--violet-bright);
+  font-weight: 650;
+}
+
+@media (max-width: 900px) {
+  .sign-reference-workspace,
+  .sign-reference-disclosure {
+    grid-template-columns: 1fr;
+  }
+
+  .sign-reference-stage {
+    position: static;
+    grid-row: 1;
+  }
+
+  .sign-reference-grid {
+    max-height: 480px;
+  }
+}
+
+@media (max-width: 760px) {
+  .sign-references-main,
+  .sign-references-shell footer {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .sign-references-intro {
+    padding-block: 68px 60px;
+  }
+
+  .sign-reference-canvas-wrap,
+  .sign-reference-canvas-wrap canvas {
+    height: 430px;
+    min-height: 430px;
+  }
+
+  .sign-reference-disclosure {
+    gap: 24px;
+    padding-block: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sign-reference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sign-reference-browser,
+  .sign-reference-player {
+    padding: 18px;
+  }
+
+  .sign-reference-canvas-wrap,
+  .sign-reference-canvas-wrap canvas {
+    height: 350px;
+    min-height: 350px;
+  }
+
+  .sign-reference-controls label {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-reference-grid button {
+    transition: none;
+  }
+}

@@ -410,6 +410,13 @@ export function PopsignRecognition({
 
     let active = true
 
+    setCommunicationDraft(null)
+    setCommunicationDraftId(null)
+    setCommunicationError(null)
+    setCommunicationNotice(null)
+    setConfirmationPending(false)
+    setDraftApproved(false)
+    setDraftSign(null)
     setErrorMessage(null)
     setIsPredicting(true)
 
