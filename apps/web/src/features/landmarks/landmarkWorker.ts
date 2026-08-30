@@ -8,6 +8,11 @@ import {
   SIGN_FEATURE_SIZE,
 } from './signFeatureFrame'
 import { TemporalLandmarkBuffer } from './TemporalLandmarkBuffer'
+import { PopsignSegmentBuffer } from './PopsignSegmentBuffer'
+import {
+  createPopsignFrame,
+  normalizePopsignFrame,
+} from './popsignPreprocessor'
 import type {
   LandmarkFrame,
   LandmarkWorkerRequest,
@@ -16,6 +21,7 @@ import type {
 
 const workerScope = self as unknown as DedicatedWorkerGlobalScope
 const temporalBuffer = new TemporalLandmarkBuffer()
+const popsignSegmentBuffer = new PopsignSegmentBuffer()
 
 let activeCaptureId: string | null = null
 let landmarker: HolisticLandmarker | null = null
@@ -136,6 +142,17 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
       rightHand: result.rightHandLandmarks[0],
     })
 
+    const popsignFrame = createPopsignFrame({
+      face: result.faceLandmarks[0],
+      leftHand: result.leftHandLandmarks[0],
+      pose: result.poseLandmarks[0],
+      rightHand: result.rightHandLandmarks[0],
+      timestampMs,
+    })
+    const completedPopsignSegment = popsignSegmentBuffer.add(
+      popsignFrame,
+    )
+
     const temporal = featureFrame
       ? temporalBuffer.add(featureFrame, timestampMs)
       : temporalBuffer.noteMissing(timestampMs)
@@ -144,6 +161,7 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
       face: packCoordinates(result.faceLandmarks[0]),
       leftHand: packCoordinates(result.leftHandLandmarks[0]),
       pose: packCoordinates(result.poseLandmarks[0]),
+      practice: normalizePopsignFrame(popsignFrame) ?? new Float32Array(),
       rightHand: packCoordinates(result.rightHandLandmarks[0]),
     }
 
@@ -160,6 +178,13 @@ async function detectFrame(frame: ImageBitmap, timestampMs: number) {
       },
     })
 
+    if (completedPopsignSegment) {
+      send({
+        type: 'popsign-segment-completed',
+        sequence: completedPopsignSegment,
+      })
+    }
+
     completeCaptureIfReady(
       temporal.ready,
       temporal.targetFrames,
@@ -174,6 +199,7 @@ async function handleMessage(message: LandmarkWorkerRequest) {
     case 'initialize':
       activeCaptureId = null
       temporalBuffer.clear()
+      popsignSegmentBuffer.clear()
       send({ type: 'loading' })
       await getLandmarker()
       send({ type: 'ready' })

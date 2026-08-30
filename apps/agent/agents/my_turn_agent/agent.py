@@ -90,7 +90,7 @@ root_agent = LlmAgent(
     include_contents="none",
     generate_content_config=types.GenerateContentConfig(
         temperature=0.1,
-        max_output_tokens=300,
+        max_output_tokens=1024,
     ),
     before_model_callback=before_model_callback,
     after_model_callback=after_model_callback,

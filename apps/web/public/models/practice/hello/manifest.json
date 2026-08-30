@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sign": "hello",
+  "shape": [
+    64,
+    94,
+    4
+  ],
+  "dtype": "float32-little-endian",
+  "file": "hello.bin",
+  "participantId": 62590,
+  "sequenceId": 1738393236,
+  "modelConfidence": 0.9038165807723999,
+  "normalization": {
+    "center": "median shoulder center",
+    "scale": "median shoulder width",
+    "coordinateClip": [
+      -5,
+      5
+    ]
+  },
+  "landmarkGroups": {
+    "lips": 40,
+    "leftHand": 21,
+    "pose": 12,
+    "rightHand": 21
+  },
+  "sha256": "24d14494f77c4e4ddde76793f960fcde2a8e589ed09b420220b1b78b51f3ac8f"
+}

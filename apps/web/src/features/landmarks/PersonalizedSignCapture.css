@@ -1,26 +1,35 @@
 .personalized-capture {
   display: grid;
-  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-  gap: 48px;
-  margin-top: 24px;
-  padding: 32px;
-  border: 1px solid #d2ddd9;
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 18px 50px rgba(30, 70, 60, 0.07);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: 56px;
+  margin-top: 16px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0 0, rgba(99, 230, 181, 0.05), transparent 22rem),
+    var(--surface);
 }
 
 .personalized-capture-copy h3 {
   max-width: 430px;
-  margin: 10px 0 14px;
-  font-size: clamp(1.6rem, 3vw, 2.35rem);
-  line-height: 1.05;
+  margin: 0 0 15px;
+  color: var(--text);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 610;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.personalized-capture-copy .section-label {
+  margin-bottom: 10px;
 }
 
 .personalized-capture-copy > p:last-child {
-  max-width: 460px;
+  max-width: 440px;
   margin: 0;
-  color: #61706b;
+  color: var(--text-muted);
+  font-size: 0.84rem;
   line-height: 1.65;
 }
 
@@ -29,88 +38,81 @@
 }
 
 .capture-form {
-  padding: 20px;
-  border-radius: 16px;
-  background: #f3f8f6;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .capture-form label {
   display: block;
   margin-bottom: 8px;
-  color: #173f36;
-  font-size: 0.78rem;
-  font-weight: 800;
+  color: var(--text-soft);
+  font-size: 0.68rem;
+  font-weight: 680;
 }
 
 .capture-form input {
   width: 100%;
-  min-height: 46px;
-  padding: 10px 14px;
-  border: 1px solid #c9d8d2;
-  border-radius: 12px;
-  color: #14231f;
-  background: #ffffff;
-  font: inherit;
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.capture-form input::placeholder {
+  color: #555863;
 }
 
 .capture-form input:focus {
-  border-color: #397b69;
-  outline: 3px solid rgba(57, 123, 105, 0.16);
+  border-color: rgba(139, 124, 255, 0.6);
+  outline: 2px solid rgba(139, 124, 255, 0.15);
 }
 
 .capture-form input:disabled {
-  color: #6a7974;
-  background: #eef3f1;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .capture-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .capture-actions button {
-  min-height: 44px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font: inherit;
-  font-weight: 760;
+  min-height: 42px;
+  padding: 9px 16px;
+  border-radius: 9px;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .capture-record-button {
   flex: 1;
   border: 0;
-  color: #ffffff;
-  background: #173f36;
-}
-
-.capture-record-button:hover:not(:disabled) {
-  background: #22594c;
+  color: #0b0a10;
+  background: linear-gradient(135deg, #b8b0ff, #8e80ff);
 }
 
 .capture-record-button:disabled {
   cursor: not-allowed;
-  opacity: 0.58;
+  opacity: 0.45;
 }
 
 .capture-cancel-button {
-  border: 1px solid #d9a79d;
-  color: #762b22;
-  background: #fff3f0;
-}
-
-.capture-actions button:focus-visible,
-.personalized-library button:focus-visible {
-  outline: 3px solid #ffbd59;
-  outline-offset: 3px;
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  color: #ffaaa4;
+  background: rgba(255, 91, 79, 0.08);
 }
 
 .capture-guidance {
   margin: 10px 0 0;
-  color: #687873;
-  font-size: 0.76rem;
-  line-height: 1.45;
+  color: #696c77;
+  font-size: 0.68rem;
+  line-height: 1.5;
 }
 
 .personalized-library {
@@ -126,25 +128,29 @@
 
 .personalized-library-heading h4 {
   margin: 0;
-  font-size: 1rem;
+  color: #dedee4;
+  font-size: 0.82rem;
+  font-weight: 680;
 }
 
 .personalized-library-heading > span {
   display: grid;
-  width: 28px;
-  height: 28px;
+  min-width: 25px;
+  height: 25px;
+  padding: 0 7px;
   place-items: center;
-  border-radius: 50%;
-  color: #173f36;
-  background: #e4f0eb;
-  font-size: 0.76rem;
-  font-weight: 800;
+  border: 1px solid rgba(139, 124, 255, 0.22);
+  border-radius: 7px;
+  color: #c5bfff;
+  background: var(--violet-soft);
+  font-size: 0.65rem;
+  font-weight: 720;
 }
 
 .personalized-library ul {
   display: grid;
-  gap: 8px;
-  margin: 12px 0 0;
+  gap: 7px;
+  margin: 11px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -154,9 +160,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 14px;
-  border: 1px solid #dde7e3;
-  border-radius: 12px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .personalized-library li > div {
@@ -170,65 +177,67 @@
 
 .personalized-library strong {
   overflow: hidden;
-  color: #173f36;
+  color: #d9d9df;
+  font-size: 0.78rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .personalized-library li span {
   margin-top: 4px;
-  color: #687873;
-  font-size: 0.68rem;
+  color: #666974;
+  font-size: 0.61rem;
 }
 
 .personalized-library li button {
   border: 0;
-  color: #762b22;
+  color: #db7c77;
   background: transparent;
-  font: inherit;
-  font-size: 0.72rem;
-  font-weight: 760;
+  font-size: 0.65rem;
+  font-weight: 680;
   cursor: pointer;
 }
 
 .personalized-library li button:disabled {
   cursor: wait;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
 .personalized-library-empty {
-  margin: 12px 0 0;
-  padding: 16px;
-  border: 1px dashed #c9d8d2;
-  border-radius: 12px;
-  color: #687873;
-  font-size: 0.78rem;
+  margin: 11px 0 0;
+  padding: 14px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 9px;
+  color: #666974;
+  font-size: 0.68rem;
   text-align: center;
 }
 
 .capture-notice,
 .capture-error {
-  margin: 14px 0 0;
-  padding: 11px 13px;
-  border-radius: 10px;
-  font-size: 0.76rem;
-  line-height: 1.45;
+  margin: 13px 0 0;
+  padding: 11px 12px;
+  border-radius: 9px;
+  font-size: 0.7rem;
+  line-height: 1.5;
 }
 
 .capture-notice {
-  color: #205f50;
-  background: #e8f5f0;
+  border: 1px solid rgba(99, 230, 181, 0.18);
+  color: #aef3d9;
+  background: rgba(99, 230, 181, 0.06);
 }
 
 .capture-error {
-  color: #7b2d20;
-  background: #fff3f0;
+  border: 1px solid rgba(255, 121, 111, 0.24);
+  color: #ffaaa4;
+  background: rgba(255, 91, 79, 0.08);
 }
 
 @media (max-width: 760px) {
   .personalized-capture {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 30px;
     padding: 24px;
   }
 

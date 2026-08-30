@@ -11,6 +11,7 @@ import {
 } from './TemporalLandmarkBuffer'
 import type {
   CapturedSignSequence,
+  CapturedPopsignSequence,
   LandmarkCounts,
   LandmarkFrame,
   LandmarkStatus,
@@ -46,6 +47,7 @@ type LandmarkDetectionResult = {
   counts: LandmarkCounts
   errorMessage: string | null
   frame: LandmarkFrame | null
+  popsignSequence: CapturedPopsignSequence | null
   status: LandmarkStatus
   temporal: TemporalBufferSnapshot
 }
@@ -65,6 +67,8 @@ export function useLandmarkDetection(
   const [counts, setCounts] = useState<LandmarkCounts>(EMPTY_COUNTS)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [frame, setFrame] = useState<LandmarkFrame | null>(null)
+  const [popsignSequence, setPopsignSequence] =
+    useState<CapturedPopsignSequence | null>(null)
   const [temporal, setTemporal] = useState<TemporalBufferSnapshot>(
     EMPTY_TEMPORAL_BUFFER,
   )
@@ -187,6 +191,7 @@ export function useLandmarkDetection(
       setErrorMessage(message)
       setCounts(EMPTY_COUNTS)
       setFrame(null)
+      setPopsignSequence(null)
       setTemporal(EMPTY_TEMPORAL_BUFFER)
       rejectPendingCapture(new Error(message))
     }
@@ -200,6 +205,7 @@ export function useLandmarkDetection(
           setErrorMessage(null)
           setCounts(EMPTY_COUNTS)
           setFrame(null)
+          setPopsignSequence(null)
           setTemporal(EMPTY_TEMPORAL_BUFFER)
           break
 
@@ -216,6 +222,10 @@ export function useLandmarkDetection(
           break
 
         case 'capture-started':
+          break
+
+        case 'popsign-segment-completed':
+          setPopsignSequence(event.data.sequence)
           break
 
         case 'capture-completed': {
@@ -327,6 +337,7 @@ export function useLandmarkDetection(
     counts: enabled ? counts : EMPTY_COUNTS,
     errorMessage: enabled ? errorMessage : null,
     frame: enabled ? frame : null,
+    popsignSequence: enabled ? popsignSequence : null,
     status,
     temporal: enabled ? temporal : EMPTY_TEMPORAL_BUFFER,
   }
