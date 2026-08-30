@@ -20,30 +20,37 @@ export function usePopsignModel(enabled: boolean) {
   useEffect(() => {
     let active = true
 
-    if (!enabled) {
+    const loadTimer = window.setTimeout(() => {
+      if (!active) {
+        return
+      }
+
+      if (!enabled) {
+        setErrorMessage(null)
+        setStatus('idle')
+        return
+      }
+
       setErrorMessage(null)
-      setStatus('idle')
-      return
-    }
+      setStatus('loading')
 
-    setErrorMessage(null)
-    setStatus('loading')
-
-    void loadPopsignModel()
-      .then(() => {
-        if (active) {
-          setStatus('ready')
-        }
-      })
-      .catch((error: unknown) => {
-        if (active) {
-          setErrorMessage(describeError(error))
-          setStatus('error')
-        }
-      })
+      void loadPopsignModel()
+        .then(() => {
+          if (active) {
+            setStatus('ready')
+          }
+        })
+        .catch((error: unknown) => {
+          if (active) {
+            setErrorMessage(describeError(error))
+            setStatus('error')
+          }
+        })
+    }, 0)
 
     return () => {
       active = false
+      window.clearTimeout(loadTimer)
     }
   }, [enabled])
 

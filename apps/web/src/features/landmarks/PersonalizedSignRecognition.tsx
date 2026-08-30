@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   requestCommunicationDraft,
   type CommunicationDraft,
@@ -82,7 +82,7 @@ export function PersonalizedSignRecognition({
     !disabled &&
     !isSavingFeedback
 
-  function speakText(text: string) {
+  const speakText = useCallback((text: string) => {
     const normalizedText = text.trim()
 
     if (!normalizedText) {
@@ -108,12 +108,12 @@ export function PersonalizedSignRecognition({
     setIsSpeaking(true)
     window.speechSynthesis.speak(utterance)
     return true
-  }
+  }, [])
 
-  function makeSpeakableDraft(
+  const makeSpeakableDraft = useCallback((
     draft: CommunicationDraft,
     recognizedPhrase: string,
-  ): CommunicationDraft {
+  ): CommunicationDraft => {
     if (!draft.needsUserConfirmation) {
       return draft
     }
@@ -124,9 +124,9 @@ export function PersonalizedSignRecognition({
       needsUserConfirmation: false,
       speechText: recognizedPhrase,
     }
-  }
+  }, [])
 
-  async function recognizeCurrentSign() {
+  const recognizeCurrentSign = useCallback(async () => {
     setCapturedSequence(null)
     setClosestMatch(null)
     setCommunicationDraft(null)
@@ -188,7 +188,13 @@ export function PersonalizedSignRecognition({
       setIsComparing(false)
       onActiveChange(false)
     }
-  }
+  }, [
+    captureSequence,
+    makeSpeakableDraft,
+    onActiveChange,
+    samples,
+    speakText,
+  ])
 
   async function saveFeedback(
     intendedPhrase: string,
@@ -288,6 +294,7 @@ export function PersonalizedSignRecognition({
     isSavingFeedback,
     isSpeaking,
     perceptionReady,
+    recognizeCurrentSign,
     samples.length,
     temporal.bufferedFrames,
   ])
@@ -319,7 +326,7 @@ export function PersonalizedSignRecognition({
           {isComparing
             ? `Listening ${temporal.bufferedFrames}/${temporal.targetFrames}…`
             : liveRecognitionReady
-              ? waitingForHandsToClearRef.current
+              ? temporal.bufferedFrames > 0
                 ? 'Lower your hands briefly before the next sign.'
                 : 'Live translation is listening.'
               : 'Live translation will start when the camera and local examples are ready.'}

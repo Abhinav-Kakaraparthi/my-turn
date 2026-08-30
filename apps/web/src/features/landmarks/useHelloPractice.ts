@@ -90,9 +90,17 @@ export function useHelloPractice(
   }, [])
 
   useEffect(() => {
-    if (!cameraReady) {
+    if (cameraReady) {
+      return
+    }
+
+    const resetTimer = window.setTimeout(() => {
       setActive(false)
       setPlaybackIndex(0)
+    }, 0)
+
+    return () => {
+      window.clearTimeout(resetTimer)
     }
   }, [cameraReady])
 
