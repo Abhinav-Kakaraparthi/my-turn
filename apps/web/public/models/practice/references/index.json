@@ -1,0 +1,2031 @@
+{
+  "schemaVersion": 2,
+  "dtype": "float32-little-endian",
+  "shape": [
+    64,
+    94,
+    4
+  ],
+  "normalization": {
+    "center": "median shoulder center",
+    "scale": "median shoulder width",
+    "coordinateClip": [
+      -5,
+      5
+    ]
+  },
+  "landmarkGroups": {
+    "lips": 40,
+    "leftHand": 21,
+    "pose": 12,
+    "rightHand": 21
+  },
+  "source": {
+    "name": "Google - Isolated Sign Language Recognition",
+    "dataset": "PopSign ASL landmark dataset",
+    "url": "https://www.kaggle.com/competitions/asl-signs",
+    "terms": "Use is subject to the Kaggle competition rules and dataset terms."
+  },
+  "references": [
+    {
+      "sign": "TV",
+      "file": "tv.bin",
+      "participantId": 62590,
+      "sequenceId": 2029296014,
+      "sourceFrameCount": 11,
+      "sha256": "ad2fe9a1117d502b21346b834a23de820475925916416b2947bdc514e39707a1"
+    },
+    {
+      "sign": "after",
+      "file": "after.bin",
+      "participantId": 62590,
+      "sequenceId": 1902277523,
+      "sourceFrameCount": 6,
+      "sha256": "e1f70e651ef44b9159a70f6d2debf92dc0d8bfce3600838339f12553bec08883"
+    },
+    {
+      "sign": "airplane",
+      "file": "airplane.bin",
+      "participantId": 62590,
+      "sequenceId": 1871599254,
+      "sourceFrameCount": 19,
+      "sha256": "786f192fa6b10888646c7395016b1b9750927b9bf3abea1867249dda2d12a711"
+    },
+    {
+      "sign": "all",
+      "file": "all.bin",
+      "participantId": 62590,
+      "sequenceId": 1894978208,
+      "sourceFrameCount": 20,
+      "sha256": "c14011b9b4781364ccb504ff98eb5bf963f0666211bdf45fd010d020de39f993"
+    },
+    {
+      "sign": "alligator",
+      "file": "alligator.bin",
+      "participantId": 62590,
+      "sequenceId": 1979623912,
+      "sourceFrameCount": 26,
+      "sha256": "9279a6d4b1ee16de508d77e3c1f11378bfececce5b78a569409982979f78302c"
+    },
+    {
+      "sign": "animal",
+      "file": "animal.bin",
+      "participantId": 62590,
+      "sequenceId": 2350119213,
+      "sourceFrameCount": 21,
+      "sha256": "13d2936f397ccaa3ed91ac1d51b2e38deff4ac7e7bd9874b4223dcabe3026d5c"
+    },
+    {
+      "sign": "another",
+      "file": "another.bin",
+      "participantId": 62590,
+      "sequenceId": 2515515366,
+      "sourceFrameCount": 56,
+      "sha256": "befb9130fb7b90fe901b18b52b7ae5ca479be7795202d4d9caf4f33a6f020531"
+    },
+    {
+      "sign": "any",
+      "file": "any.bin",
+      "participantId": 62590,
+      "sequenceId": 1895543883,
+      "sourceFrameCount": 16,
+      "sha256": "641570af746b06b3ddd410a15f0fdc0ce534ae4d68f59656e3fa7f4ad7faa7c5"
+    },
+    {
+      "sign": "apple",
+      "file": "apple.bin",
+      "participantId": 62590,
+      "sequenceId": 1790180930,
+      "sourceFrameCount": 21,
+      "sha256": "abde0a6d9ae0ee24c13c99d0aa9e0636f11de1398142e6f660cb326b37bcdffc"
+    },
+    {
+      "sign": "arm",
+      "file": "arm.bin",
+      "participantId": 62590,
+      "sequenceId": 2404971023,
+      "sourceFrameCount": 21,
+      "sha256": "610ecd111c38887e65d215cdf5aebebdebc9567e620d3caa8048e8cdf698e8d9"
+    },
+    {
+      "sign": "aunt",
+      "file": "aunt.bin",
+      "participantId": 62590,
+      "sequenceId": 2909606789,
+      "sourceFrameCount": 147,
+      "sha256": "2c06f47eac28895ca063fbbcf172209289b9485312e001f95aa7ddfb03df3878"
+    },
+    {
+      "sign": "awake",
+      "file": "awake.bin",
+      "participantId": 62590,
+      "sequenceId": 2124656779,
+      "sourceFrameCount": 18,
+      "sha256": "488cc63811d3183f9f200a27b52da0fcd2eade4c8fe8f5f2a7fc03131ad22143"
+    },
+    {
+      "sign": "backyard",
+      "file": "backyard.bin",
+      "participantId": 62590,
+      "sequenceId": 1998328815,
+      "sourceFrameCount": 82,
+      "sha256": "e84a90707d5d542e8f7583a77a8e17b6c829f5d275c3a15c5c33ce2993f5d92a"
+    },
+    {
+      "sign": "bad",
+      "file": "bad.bin",
+      "participantId": 62590,
+      "sequenceId": 2325131088,
+      "sourceFrameCount": 23,
+      "sha256": "e7453c934a1ba73b39f30ed10566541854906e3770d1cd966ecb0654e8c8b20c"
+    },
+    {
+      "sign": "balloon",
+      "file": "balloon.bin",
+      "participantId": 62590,
+      "sequenceId": 1885353633,
+      "sourceFrameCount": 22,
+      "sha256": "bf5633cf9d745da75223b41f1e18b2b37432e944e405e914f0b7530318f67bd8"
+    },
+    {
+      "sign": "bath",
+      "file": "bath.bin",
+      "participantId": 62590,
+      "sequenceId": 2508161093,
+      "sourceFrameCount": 18,
+      "sha256": "6e77b63c4d133f8237466615a13556c5b824e78f1410b7f379351340317077e5"
+    },
+    {
+      "sign": "because",
+      "file": "because.bin",
+      "participantId": 62590,
+      "sequenceId": 1761151969,
+      "sourceFrameCount": 15,
+      "sha256": "129b063fae3cff4c92957a9b3323173fbe659ec23cf503fcddb41d598b4f287a"
+    },
+    {
+      "sign": "bed",
+      "file": "bed.bin",
+      "participantId": 62590,
+      "sequenceId": 1664273574,
+      "sourceFrameCount": 21,
+      "sha256": "f59057b177edb0e13399f5c41c25c40e5c565dd6eaf2b6b3d8c89882057dd879"
+    },
+    {
+      "sign": "bedroom",
+      "file": "bedroom.bin",
+      "participantId": 62590,
+      "sequenceId": 1740066158,
+      "sourceFrameCount": 32,
+      "sha256": "c7da380eea43e434b29e75243430843d34ffad213d49f276731715a04cfe44e1"
+    },
+    {
+      "sign": "bee",
+      "file": "bee.bin",
+      "participantId": 62590,
+      "sequenceId": 1334419094,
+      "sourceFrameCount": 9,
+      "sha256": "237c3a3055db4235420639f8725f438dd97aa9ece3b1f8b8acaed89fdb1fdd23"
+    },
+    {
+      "sign": "before",
+      "file": "before.bin",
+      "participantId": 62590,
+      "sequenceId": 1591890525,
+      "sourceFrameCount": 16,
+      "sha256": "147ef138f12957cb014f736967b326948643a6cc582d457a26feb356b2b406e9"
+    },
+    {
+      "sign": "beside",
+      "file": "beside.bin",
+      "participantId": 62590,
+      "sequenceId": 2073589086,
+      "sourceFrameCount": 6,
+      "sha256": "f5d9cbb4fc73101a700ed8546cb572c68e58751937a3a0d06b7db0253c42688e"
+    },
+    {
+      "sign": "better",
+      "file": "better.bin",
+      "participantId": 62590,
+      "sequenceId": 3118161691,
+      "sourceFrameCount": 35,
+      "sha256": "0b424cbf29b4c1fd33f936b8b4cab8d7cdf74a60ce93d77ae5934d3e0ec28424"
+    },
+    {
+      "sign": "bird",
+      "file": "bird.bin",
+      "participantId": 62590,
+      "sequenceId": 2634878294,
+      "sourceFrameCount": 84,
+      "sha256": "e45e770c9325bbb6e49b53cbe6d862998cec70bfa7654ada6a995f9c5820120b"
+    },
+    {
+      "sign": "black",
+      "file": "black.bin",
+      "participantId": 62590,
+      "sequenceId": 2422634846,
+      "sourceFrameCount": 17,
+      "sha256": "80df0f6a529235f124fa2f0b703d9659f4c036ea49a00290ab9a910865c3e462"
+    },
+    {
+      "sign": "blow",
+      "file": "blow.bin",
+      "participantId": 62590,
+      "sequenceId": 2034249709,
+      "sourceFrameCount": 13,
+      "sha256": "0bb28127f484e276660b2c22093cc85cfe53926c77f55ba44e8d838e95739989"
+    },
+    {
+      "sign": "blue",
+      "file": "blue.bin",
+      "participantId": 62590,
+      "sequenceId": 1753280034,
+      "sourceFrameCount": 18,
+      "sha256": "daa797546afe36ea7e8ff56878509b43cdd30abb03e1ffcc8d89571715d79eee"
+    },
+    {
+      "sign": "boat",
+      "file": "boat.bin",
+      "participantId": 62590,
+      "sequenceId": 2608988450,
+      "sourceFrameCount": 19,
+      "sha256": "972181987dc03ec0b38e851d72fa95d078569b6fd6dd1634ebfedfedd458bce8"
+    },
+    {
+      "sign": "book",
+      "file": "book.bin",
+      "participantId": 62590,
+      "sequenceId": 2335306785,
+      "sourceFrameCount": 17,
+      "sha256": "a240746645958bde9e322580e2c811ac6e2f8d6961c1f2e6e1d8350e6d50fa03"
+    },
+    {
+      "sign": "boy",
+      "file": "boy.bin",
+      "participantId": 62590,
+      "sequenceId": 2545659680,
+      "sourceFrameCount": 15,
+      "sha256": "4778a13db60b1473985e5a4132e353c607cd93fdca9d317e7e7e4140449f9310"
+    },
+    {
+      "sign": "brother",
+      "file": "brother.bin",
+      "participantId": 62590,
+      "sequenceId": 2069638428,
+      "sourceFrameCount": 15,
+      "sha256": "98f78901cfc93b063c4d82b8d97fdb3224b5bed2d55f53606a0f8f7aee0170fb"
+    },
+    {
+      "sign": "brown",
+      "file": "brown.bin",
+      "participantId": 62590,
+      "sequenceId": 2221421235,
+      "sourceFrameCount": 15,
+      "sha256": "b81c52f4095ad3f9cc43d1366cfe8f6c6ff4787b0daef3059cee7ad5bd000e25"
+    },
+    {
+      "sign": "bug",
+      "file": "bug.bin",
+      "participantId": 62590,
+      "sequenceId": 1882144300,
+      "sourceFrameCount": 18,
+      "sha256": "c6edf047f79dd5b8039dc85629cfc5ad5b746feac4619bc43cc1bd6d48fead90"
+    },
+    {
+      "sign": "bye",
+      "file": "bye.bin",
+      "participantId": 62590,
+      "sequenceId": 2442095134,
+      "sourceFrameCount": 16,
+      "sha256": "3daae359db76dd963dd54ab0e2e97707bed9acdbe2ac1125271e4700274e8a5b"
+    },
+    {
+      "sign": "callonphone",
+      "file": "callonphone.bin",
+      "participantId": 62590,
+      "sequenceId": 2766518848,
+      "sourceFrameCount": 19,
+      "sha256": "5c4eac79cb3fc08c5b4fe91b591d4942dbfe42b8c38ee1c4b1aec7c0993f08ae"
+    },
+    {
+      "sign": "can",
+      "file": "can.bin",
+      "participantId": 62590,
+      "sequenceId": 1962329960,
+      "sourceFrameCount": 76,
+      "sha256": "f11caa55fbe353a44159b321c645aeb1efde1ee84d53de13b87d2413e1dde517"
+    },
+    {
+      "sign": "car",
+      "file": "car.bin",
+      "participantId": 62590,
+      "sequenceId": 1697130301,
+      "sourceFrameCount": 9,
+      "sha256": "3d39ea9d57eef6826fa6a59b72725fd193ca83d68c033d5f73d84ea3decb6fe5"
+    },
+    {
+      "sign": "carrot",
+      "file": "carrot.bin",
+      "participantId": 62590,
+      "sequenceId": 2890962489,
+      "sourceFrameCount": 15,
+      "sha256": "51bf10db3b154af31ea9e3579f5971adf92bc8802d811ce0c86d4708802a747e"
+    },
+    {
+      "sign": "cat",
+      "file": "cat.bin",
+      "participantId": 62590,
+      "sequenceId": 2336827971,
+      "sourceFrameCount": 56,
+      "sha256": "9e3e760ac398b893327f07b4a00b13b4c5c10ee7222bf87785d7d7193790f54a"
+    },
+    {
+      "sign": "cereal",
+      "file": "cereal.bin",
+      "participantId": 62590,
+      "sequenceId": 3405996840,
+      "sourceFrameCount": 17,
+      "sha256": "2edd342a892513d51403904566dad65217f4a000af79f7b453d98e6160dee099"
+    },
+    {
+      "sign": "chair",
+      "file": "chair.bin",
+      "participantId": 62590,
+      "sequenceId": 2338264825,
+      "sourceFrameCount": 54,
+      "sha256": "38b64180441370c8cd2608190f013d02b5566a224e6ca0584b9369f6a5ce99f1"
+    },
+    {
+      "sign": "cheek",
+      "file": "cheek.bin",
+      "participantId": 62590,
+      "sequenceId": 2812862015,
+      "sourceFrameCount": 24,
+      "sha256": "e62b6613453952fa9128681482db282c16717c94d9e8456eb2a50afc1e688005"
+    },
+    {
+      "sign": "child",
+      "file": "child.bin",
+      "participantId": 62590,
+      "sequenceId": 2335924498,
+      "sourceFrameCount": 18,
+      "sha256": "7f011c44931f37d29b1509d7a3af38c212a680db9a15d695dee74ff6f4e1d10d"
+    },
+    {
+      "sign": "chin",
+      "file": "chin.bin",
+      "participantId": 62590,
+      "sequenceId": 1619246974,
+      "sourceFrameCount": 19,
+      "sha256": "945c07ac1115afc19ab8a0658ede48fa73ab84c06dc02fc003cbaee647cc32e5"
+    },
+    {
+      "sign": "chocolate",
+      "file": "chocolate.bin",
+      "participantId": 62590,
+      "sequenceId": 1815415846,
+      "sourceFrameCount": 19,
+      "sha256": "be2bd672430badf0b214a9519bcd31f92e1f3d892a880e8e928c8b002d1bbbb5"
+    },
+    {
+      "sign": "clean",
+      "file": "clean.bin",
+      "participantId": 62590,
+      "sequenceId": 1820444772,
+      "sourceFrameCount": 24,
+      "sha256": "e3811ccc07573fe3f62158e2a2b3950bfb6981587adc7d9ce4293d4aee6a39c2"
+    },
+    {
+      "sign": "close",
+      "file": "close.bin",
+      "participantId": 62590,
+      "sequenceId": 2080034548,
+      "sourceFrameCount": 11,
+      "sha256": "0e0784ab69d82b5e0a706b86beda0c4da2464d40600d0c274f12f1ca3257aba3"
+    },
+    {
+      "sign": "closet",
+      "file": "closet.bin",
+      "participantId": 62590,
+      "sequenceId": 2628354843,
+      "sourceFrameCount": 25,
+      "sha256": "66c8c82bad952876b53b3c0c6550287847eb26ee2db67f97bc0b670eef3cf3f0"
+    },
+    {
+      "sign": "cloud",
+      "file": "cloud.bin",
+      "participantId": 62590,
+      "sequenceId": 2529314233,
+      "sourceFrameCount": 47,
+      "sha256": "c4246185802fe08f0c1fa642fabfed5430365cc1654ebfee3471feacad082a2a"
+    },
+    {
+      "sign": "clown",
+      "file": "clown.bin",
+      "participantId": 62590,
+      "sequenceId": 3050492522,
+      "sourceFrameCount": 19,
+      "sha256": "0c9c1ee70e48eb57f3e66308e4d7fdddc68f16f29803500ce0788e73860149d1"
+    },
+    {
+      "sign": "cow",
+      "file": "cow.bin",
+      "participantId": 62590,
+      "sequenceId": 2154522049,
+      "sourceFrameCount": 21,
+      "sha256": "4b02841b8d1f2fdce0cd36d30ab1e52d70a94673b9db868e553b8c4dc0da6066"
+    },
+    {
+      "sign": "cowboy",
+      "file": "cowboy.bin",
+      "participantId": 62590,
+      "sequenceId": 1650970141,
+      "sourceFrameCount": 17,
+      "sha256": "4185730c6d9199b84bc5eb098beeb6c0c50e5df3743e3be6c0d42b84f3b6a37c"
+    },
+    {
+      "sign": "cry",
+      "file": "cry.bin",
+      "participantId": 62590,
+      "sequenceId": 1869983449,
+      "sourceFrameCount": 13,
+      "sha256": "ffc790ac75e776ae3e6d1e6260ebb5c412d90e7e9f9e896bef185d789cb78a03"
+    },
+    {
+      "sign": "cut",
+      "file": "cut.bin",
+      "participantId": 62590,
+      "sequenceId": 1885825200,
+      "sourceFrameCount": 8,
+      "sha256": "b3d68e6293ba3704922925d5990b1f9e476ab252dcbeb60410fb7e3c5f17f66b"
+    },
+    {
+      "sign": "cute",
+      "file": "cute.bin",
+      "participantId": 62590,
+      "sequenceId": 2864683618,
+      "sourceFrameCount": 64,
+      "sha256": "f093a6e690a4d0b0e7c4e6f300126d531fbfb610184f507a7aea013107b1d114"
+    },
+    {
+      "sign": "dad",
+      "file": "dad.bin",
+      "participantId": 62590,
+      "sequenceId": 1758441485,
+      "sourceFrameCount": 15,
+      "sha256": "cf1efb32417df81db68a0b75e72eb4a9b2f6808d24695a2c7283817636286438"
+    },
+    {
+      "sign": "dance",
+      "file": "dance.bin",
+      "participantId": 62590,
+      "sequenceId": 2083147071,
+      "sourceFrameCount": 6,
+      "sha256": "cd02c15f4a14791179fa1cea77c340fe82a51c1320624510bbd6d8dedf1acb8e"
+    },
+    {
+      "sign": "dirty",
+      "file": "dirty.bin",
+      "participantId": 62590,
+      "sequenceId": 2453394942,
+      "sourceFrameCount": 17,
+      "sha256": "5a6e92aca69ef2e3d676d950c78cdfe42b2302cf1ce2d2d0193cbe891340baa4"
+    },
+    {
+      "sign": "dog",
+      "file": "dog.bin",
+      "participantId": 62590,
+      "sequenceId": 1932182168,
+      "sourceFrameCount": 16,
+      "sha256": "e76f7f50c9655b03f5425d31c6893d587902091e87001de84f0581c55a80f4b7"
+    },
+    {
+      "sign": "doll",
+      "file": "doll.bin",
+      "participantId": 62590,
+      "sequenceId": 2184604078,
+      "sourceFrameCount": 19,
+      "sha256": "6c8347499dfc7e158067eb49dd2e468a247e04489173059065fb2b7650373b27"
+    },
+    {
+      "sign": "donkey",
+      "file": "donkey.bin",
+      "participantId": 62590,
+      "sequenceId": 1302795632,
+      "sourceFrameCount": 56,
+      "sha256": "6f5048c5c58dbc1eab6a8d103e706327620ba17eece903999461b422288ed6c4"
+    },
+    {
+      "sign": "down",
+      "file": "down.bin",
+      "participantId": 62590,
+      "sequenceId": 1463516727,
+      "sourceFrameCount": 6,
+      "sha256": "e364175c2144f07f02434bbc5a14319b9e9d4150e96b1e4f3ab6b5203c0e3855"
+    },
+    {
+      "sign": "drawer",
+      "file": "drawer.bin",
+      "participantId": 62590,
+      "sequenceId": 1778823178,
+      "sourceFrameCount": 18,
+      "sha256": "cb4beefb1bc445889b255edc54e6f1f897b781e48fdb6eb2b5c714238367bc81"
+    },
+    {
+      "sign": "drink",
+      "file": "drink.bin",
+      "participantId": 62590,
+      "sequenceId": 3067613863,
+      "sourceFrameCount": 19,
+      "sha256": "507c8fdc2fdbf6dde6929430d22a5e1e592fda4ff5d8c68ac9080b3bee737062"
+    },
+    {
+      "sign": "drop",
+      "file": "drop.bin",
+      "participantId": 62590,
+      "sequenceId": 2519761435,
+      "sourceFrameCount": 20,
+      "sha256": "b8eed315006a84cd0cc31e5ab3058752a8496a6c0f600a8cf394526c18242758"
+    },
+    {
+      "sign": "dry",
+      "file": "dry.bin",
+      "participantId": 62590,
+      "sequenceId": 2501333199,
+      "sourceFrameCount": 11,
+      "sha256": "52f3ccf7393c571267c590851567beb67cb5ec4b46e2560cb0958eb8409b5fc0"
+    },
+    {
+      "sign": "dryer",
+      "file": "dryer.bin",
+      "participantId": 62590,
+      "sequenceId": 2136320833,
+      "sourceFrameCount": 15,
+      "sha256": "462ccea21a5bb2806822dc19a434115d225f031309dbcf82d10c804078826f73"
+    },
+    {
+      "sign": "duck",
+      "file": "duck.bin",
+      "participantId": 62590,
+      "sequenceId": 2058735397,
+      "sourceFrameCount": 60,
+      "sha256": "bef98aa26135783c5d18ccd0d92667fe5f6a7c5d3c445ba0f49e4eee5d412e48"
+    },
+    {
+      "sign": "ear",
+      "file": "ear.bin",
+      "participantId": 62590,
+      "sequenceId": 2242862414,
+      "sourceFrameCount": 17,
+      "sha256": "7f7dac7779c5074790518cdf91ae667f99ebd44bc8420d50c4c72a33797a46ee"
+    },
+    {
+      "sign": "elephant",
+      "file": "elephant.bin",
+      "participantId": 62590,
+      "sequenceId": 1680711605,
+      "sourceFrameCount": 96,
+      "sha256": "e1ee3a5888a361fda2b1b53727eea9241edccc690877977ca592dba6cc23e1a1"
+    },
+    {
+      "sign": "empty",
+      "file": "empty.bin",
+      "participantId": 62590,
+      "sequenceId": 1954721187,
+      "sourceFrameCount": 20,
+      "sha256": "5272c8da5af89b6135eee5cc49ff03624c308b1c501cd0f1f85a36f93691ccc7"
+    },
+    {
+      "sign": "every",
+      "file": "every.bin",
+      "participantId": 62590,
+      "sequenceId": 1851850207,
+      "sourceFrameCount": 18,
+      "sha256": "dca97a9929e3429911d9c89b5c4d95ca42a1d182da5c2f7ee7206feebb74b8b1"
+    },
+    {
+      "sign": "eye",
+      "file": "eye.bin",
+      "participantId": 62590,
+      "sequenceId": 1959432393,
+      "sourceFrameCount": 18,
+      "sha256": "93929837bbf9dc9f1a48506165758d79a38a406f3f676296e2adf95169e23fc1"
+    },
+    {
+      "sign": "face",
+      "file": "face.bin",
+      "participantId": 62590,
+      "sequenceId": 1349062206,
+      "sourceFrameCount": 14,
+      "sha256": "60bb1629e51acb7da3b0db107a924133508ffe3b66600f72baee73298308378f"
+    },
+    {
+      "sign": "fall",
+      "file": "fall.bin",
+      "participantId": 62590,
+      "sequenceId": 1755432895,
+      "sourceFrameCount": 11,
+      "sha256": "7507f98a0737c789fc77294d47331a248c230d9164f0e4d39cfb6004d44a867b"
+    },
+    {
+      "sign": "farm",
+      "file": "farm.bin",
+      "participantId": 62590,
+      "sequenceId": 1624640402,
+      "sourceFrameCount": 22,
+      "sha256": "3054ac1ec572487162bdbf0d275898e893ee1029cdc2d9c0b590a038992bbfc9"
+    },
+    {
+      "sign": "fast",
+      "file": "fast.bin",
+      "participantId": 62590,
+      "sequenceId": 1889417750,
+      "sourceFrameCount": 15,
+      "sha256": "7e33b68ea46dfea68329f9aec32d4ddf6789de9944ac42788798402e2eb1b15e"
+    },
+    {
+      "sign": "feet",
+      "file": "feet.bin",
+      "participantId": 62590,
+      "sequenceId": 2454733000,
+      "sourceFrameCount": 6,
+      "sha256": "bbcbf15765309bc9fd00577e79bef9e6caf94d96cee7e51ab6604b2e9978cfaa"
+    },
+    {
+      "sign": "find",
+      "file": "find.bin",
+      "participantId": 62590,
+      "sequenceId": 2372509044,
+      "sourceFrameCount": 13,
+      "sha256": "d8cbb4cd95c790a828e4306a3e607ba31d810d78f671cfa554bc94c0f12af456"
+    },
+    {
+      "sign": "fine",
+      "file": "fine.bin",
+      "participantId": 62590,
+      "sequenceId": 2387459524,
+      "sourceFrameCount": 14,
+      "sha256": "ba1f354a0c07b141db745bfc66d95294c8f56d352c0fbe466d882bf10c036514"
+    },
+    {
+      "sign": "finger",
+      "file": "finger.bin",
+      "participantId": 62590,
+      "sequenceId": 2445369276,
+      "sourceFrameCount": 22,
+      "sha256": "19cd57eb8a9411f5a2a40cf01babe048e8f47848b99898025eb0a8dec436b755"
+    },
+    {
+      "sign": "finish",
+      "file": "finish.bin",
+      "participantId": 62590,
+      "sequenceId": 2393458753,
+      "sourceFrameCount": 24,
+      "sha256": "ba548cb6cbd5c174a3b76bd89a12bac2935e5d8f0d397bb1c3aa3bdd19398aa0"
+    },
+    {
+      "sign": "fireman",
+      "file": "fireman.bin",
+      "participantId": 62590,
+      "sequenceId": 1804072904,
+      "sourceFrameCount": 23,
+      "sha256": "9bdf48857d5908018045c9d7a83d9154f9896956af06d2b63874d39f4ae3bb55"
+    },
+    {
+      "sign": "first",
+      "file": "first.bin",
+      "participantId": 62590,
+      "sequenceId": 1964263689,
+      "sourceFrameCount": 12,
+      "sha256": "84fba3dfa7aa1129c02099500b438585d111aa80124b5c0b8b8023687b183fde"
+    },
+    {
+      "sign": "fish",
+      "file": "fish.bin",
+      "participantId": 62590,
+      "sequenceId": 2384779045,
+      "sourceFrameCount": 23,
+      "sha256": "e6ea53073856f2a3a23f936cde8be3a41da370725ab0b0c7f9131eb69d2b71fe"
+    },
+    {
+      "sign": "flag",
+      "file": "flag.bin",
+      "participantId": 62590,
+      "sequenceId": 2284150969,
+      "sourceFrameCount": 8,
+      "sha256": "cc62efa5d6ea010df99b942b5d17dbd35aa62eb59261b93ed65d314bec74c48d"
+    },
+    {
+      "sign": "flower",
+      "file": "flower.bin",
+      "participantId": 62590,
+      "sequenceId": 2526874828,
+      "sourceFrameCount": 14,
+      "sha256": "bfd9297e7286759fcf753a6ae4ff8c90ccfadde6310ea887d2c68a59010cb023"
+    },
+    {
+      "sign": "food",
+      "file": "food.bin",
+      "participantId": 62590,
+      "sequenceId": 2533623970,
+      "sourceFrameCount": 14,
+      "sha256": "692cd2883306b76cd93d0b8a5b9d6d6f01917d4e21f8f2ac937c46d3345f469e"
+    },
+    {
+      "sign": "for",
+      "file": "for.bin",
+      "participantId": 62590,
+      "sequenceId": 2989595221,
+      "sourceFrameCount": 88,
+      "sha256": "13755669bc738af45e825133fcfa9f3af2f1f03e5fc686f162fb7482eee0b58a"
+    },
+    {
+      "sign": "frenchfries",
+      "file": "frenchfries.bin",
+      "participantId": 62590,
+      "sequenceId": 1592096203,
+      "sourceFrameCount": 20,
+      "sha256": "5c4709e20d02e119442061fb8286b02f26284a856940e427e54a10fbc3c652fc"
+    },
+    {
+      "sign": "frog",
+      "file": "frog.bin",
+      "participantId": 62590,
+      "sequenceId": 1939551358,
+      "sourceFrameCount": 75,
+      "sha256": "6abef3854271d5eb6b96a71c1ff70eba11ccc320ebaab0940b8c4e9fc1efa3d3"
+    },
+    {
+      "sign": "garbage",
+      "file": "garbage.bin",
+      "participantId": 62590,
+      "sequenceId": 2534885185,
+      "sourceFrameCount": 18,
+      "sha256": "247c448ca6d6d5e91b140c450c943f5ba70f43d3e408983460ca35d6457a903b"
+    },
+    {
+      "sign": "gift",
+      "file": "gift.bin",
+      "participantId": 62590,
+      "sequenceId": 2091825156,
+      "sourceFrameCount": 12,
+      "sha256": "6a9e6f5fd9e932f825763208be0a9e4152860be78a0191a384eefc5955d8282f"
+    },
+    {
+      "sign": "giraffe",
+      "file": "giraffe.bin",
+      "participantId": 62590,
+      "sequenceId": 2122634726,
+      "sourceFrameCount": 6,
+      "sha256": "adfe7ed4c7ce9ab5b17c676f242be358a6778f38532c7c0b8f564303ad465a81"
+    },
+    {
+      "sign": "girl",
+      "file": "girl.bin",
+      "participantId": 62590,
+      "sequenceId": 2150813966,
+      "sourceFrameCount": 11,
+      "sha256": "97f80fdf0978fb2e46818dd1e838ee60eadb89b2a0c639cb050e93dc0ddc0d42"
+    },
+    {
+      "sign": "give",
+      "file": "give.bin",
+      "participantId": 62590,
+      "sequenceId": 3072446475,
+      "sourceFrameCount": 6,
+      "sha256": "d72d3f3b0dd0c6e75c953dc93aeb677ca0fe79299f11c3ed8645aff865aa2cc1"
+    },
+    {
+      "sign": "glasswindow",
+      "file": "glasswindow.bin",
+      "participantId": 62590,
+      "sequenceId": 1421455179,
+      "sourceFrameCount": 19,
+      "sha256": "a0409eb154705bc11283bd2842c0095ed434c849f195418799c7b36d13495bc1"
+    },
+    {
+      "sign": "go",
+      "file": "go.bin",
+      "participantId": 62590,
+      "sequenceId": 1850208158,
+      "sourceFrameCount": 32,
+      "sha256": "d0b56a4e0f02ee5d685225a443292e60ed546eb9a166b4c883b56bc229eb7fcc"
+    },
+    {
+      "sign": "goose",
+      "file": "goose.bin",
+      "participantId": 62590,
+      "sequenceId": 1811419280,
+      "sourceFrameCount": 17,
+      "sha256": "e01b5407260842d034324292bc93030fe47bc41d9c0f6e4f8d2b77fef16c3f3d"
+    },
+    {
+      "sign": "grandma",
+      "file": "grandma.bin",
+      "participantId": 62590,
+      "sequenceId": 2394729577,
+      "sourceFrameCount": 13,
+      "sha256": "006aff7db63389892cab9d5a74157be01a7f80642af0fd1fad78b737022b8e0f"
+    },
+    {
+      "sign": "grandpa",
+      "file": "grandpa.bin",
+      "participantId": 62590,
+      "sequenceId": 2988223252,
+      "sourceFrameCount": 11,
+      "sha256": "a2f9d13d3d64580a3ec441cace6e75bdd81da77541962f3b761d8edee2971f18"
+    },
+    {
+      "sign": "grass",
+      "file": "grass.bin",
+      "participantId": 62590,
+      "sequenceId": 1911400382,
+      "sourceFrameCount": 72,
+      "sha256": "8f30f507162b1170d44c9907b991bc7b29a50357d8868d44cb0b1dcf59ca1b77"
+    },
+    {
+      "sign": "green",
+      "file": "green.bin",
+      "participantId": 62590,
+      "sequenceId": 1664985435,
+      "sourceFrameCount": 100,
+      "sha256": "7a1db183612ff12ba2b1e704bc221d91bdc911cffd87856d30cb9520501da903"
+    },
+    {
+      "sign": "gum",
+      "file": "gum.bin",
+      "participantId": 62590,
+      "sequenceId": 2109777542,
+      "sourceFrameCount": 53,
+      "sha256": "bab6b13c363b5b04cb6db275915df172db328bd8c1eeeb8c05779ad4724aa69c"
+    },
+    {
+      "sign": "hair",
+      "file": "hair.bin",
+      "participantId": 62590,
+      "sequenceId": 2596505333,
+      "sourceFrameCount": 24,
+      "sha256": "db43826015326f8a711286ff3e8b199e56dc2133d524828512b8170619b20f1e"
+    },
+    {
+      "sign": "happy",
+      "file": "happy.bin",
+      "participantId": 62590,
+      "sequenceId": 2449823373,
+      "sourceFrameCount": 14,
+      "sha256": "a31881fedd798ee2c366f951d6b9d2b000bbe47ec6b56e33506659a57aaec52e"
+    },
+    {
+      "sign": "hat",
+      "file": "hat.bin",
+      "participantId": 62590,
+      "sequenceId": 1973505772,
+      "sourceFrameCount": 22,
+      "sha256": "934ffdab9e9af90eea05cb6e0ce056d9f698b29a4dc0b72b51414f77c31701bc"
+    },
+    {
+      "sign": "hate",
+      "file": "hate.bin",
+      "participantId": 62590,
+      "sequenceId": 1650974126,
+      "sourceFrameCount": 6,
+      "sha256": "76b65e2efd04bc23b3f2326ee5a901aa0c880675780e2aff4031e9413f0c1827"
+    },
+    {
+      "sign": "have",
+      "file": "have.bin",
+      "participantId": 62590,
+      "sequenceId": 2474768207,
+      "sourceFrameCount": 10,
+      "sha256": "c68f3aadc312baed894a74cf85afcb33351c67678beee816061f9c98cb78703d"
+    },
+    {
+      "sign": "haveto",
+      "file": "haveto.bin",
+      "participantId": 62590,
+      "sequenceId": 2331489292,
+      "sourceFrameCount": 15,
+      "sha256": "c6a1f6b6accb999da7fd9bf95f2422c130426e91613042049a3ba80ca0a59a03"
+    },
+    {
+      "sign": "head",
+      "file": "head.bin",
+      "participantId": 62590,
+      "sequenceId": 1473398318,
+      "sourceFrameCount": 11,
+      "sha256": "d436b42b5d99fbb1f4c8dedd0634b3543d68bcc059e194c8147730e00a26b701"
+    },
+    {
+      "sign": "hear",
+      "file": "hear.bin",
+      "participantId": 62590,
+      "sequenceId": 2248053731,
+      "sourceFrameCount": 76,
+      "sha256": "88875bc5827ab177eaa417b7fef8d0c2e88c0ac553940de1fd8c81963a66a062"
+    },
+    {
+      "sign": "helicopter",
+      "file": "helicopter.bin",
+      "participantId": 62590,
+      "sequenceId": 2269037817,
+      "sourceFrameCount": 109,
+      "sha256": "13df95779ad375f91366f4f3abc17aed570b25ecc908c3684365bb54deb80a61"
+    },
+    {
+      "sign": "hello",
+      "file": "hello.bin",
+      "participantId": 62590,
+      "sequenceId": 1738393236,
+      "sourceFrameCount": 20,
+      "sha256": "37bc8a3e805b5141d77e32f75fcc82e19fe2030a7d8efc14d7925e368d602171"
+    },
+    {
+      "sign": "hen",
+      "file": "hen.bin",
+      "participantId": 62590,
+      "sequenceId": 1815785860,
+      "sourceFrameCount": 18,
+      "sha256": "56d70dff617be74e08dd69c5282ce4d39f680e71c5e05a10927ca8e02aaf9d9f"
+    },
+    {
+      "sign": "hesheit",
+      "file": "hesheit.bin",
+      "participantId": 62590,
+      "sequenceId": 2713104454,
+      "sourceFrameCount": 16,
+      "sha256": "6080018420435e9a95153edaf08fea8981ab36aa3e25a702320710e10a1fa147"
+    },
+    {
+      "sign": "hide",
+      "file": "hide.bin",
+      "participantId": 62590,
+      "sequenceId": 2315476150,
+      "sourceFrameCount": 22,
+      "sha256": "c63941a7147eeaee91c9f771c30ffae5d81a8de863a06c8e7fb19d2421e16dd7"
+    },
+    {
+      "sign": "high",
+      "file": "high.bin",
+      "participantId": 62590,
+      "sequenceId": 1634586623,
+      "sourceFrameCount": 11,
+      "sha256": "cc3b4431117dd481df0a323f46d99d0983838b6d8b5484aeba7e31653a68d9a1"
+    },
+    {
+      "sign": "home",
+      "file": "home.bin",
+      "participantId": 62590,
+      "sequenceId": 2118188807,
+      "sourceFrameCount": 22,
+      "sha256": "cd286cee52d230d4b9ed6814a2a9cd1f7299f5683aedbad2bdf8ea31c1af21bf"
+    },
+    {
+      "sign": "horse",
+      "file": "horse.bin",
+      "participantId": 62590,
+      "sequenceId": 2572906413,
+      "sourceFrameCount": 17,
+      "sha256": "91a1ef4aae5a89d86bc724baba7803d5fb8febd8accf2c70faa87c95255a9310"
+    },
+    {
+      "sign": "hot",
+      "file": "hot.bin",
+      "participantId": 62590,
+      "sequenceId": 2935626341,
+      "sourceFrameCount": 21,
+      "sha256": "962235622b15e654325b13ceb753d6a7c18b3e063ba2fa4050beaf3820bed2b5"
+    },
+    {
+      "sign": "hungry",
+      "file": "hungry.bin",
+      "participantId": 62590,
+      "sequenceId": 2102820120,
+      "sourceFrameCount": 9,
+      "sha256": "c1279978fc840674b5a8603023795043a7dbbbf3d02b0fdf67976f7b95f41bd0"
+    },
+    {
+      "sign": "icecream",
+      "file": "icecream.bin",
+      "participantId": 62590,
+      "sequenceId": 1958070221,
+      "sourceFrameCount": 21,
+      "sha256": "83486e39b152ba0f5f61731812f3e66fbcf8359ae90dea8523fa5201fe95d96a"
+    },
+    {
+      "sign": "if",
+      "file": "if.bin",
+      "participantId": 62590,
+      "sequenceId": 2604681313,
+      "sourceFrameCount": 54,
+      "sha256": "7f01e5d1add59d526d3b1bbdf8aa155cf7e58a272765f950906efb2aa6ae7d7a"
+    },
+    {
+      "sign": "into",
+      "file": "into.bin",
+      "participantId": 62590,
+      "sequenceId": 2593409437,
+      "sourceFrameCount": 18,
+      "sha256": "0d8fad02010200e74d8766fb7628e3e6106041e422e0dc680d16926ab038a49a"
+    },
+    {
+      "sign": "jacket",
+      "file": "jacket.bin",
+      "participantId": 62590,
+      "sequenceId": 2862094052,
+      "sourceFrameCount": 23,
+      "sha256": "51961cfa47c6aed871a54d08a8241123c59fc361787e4c691068935357bd3971"
+    },
+    {
+      "sign": "jeans",
+      "file": "jeans.bin",
+      "participantId": 62590,
+      "sequenceId": 1817110462,
+      "sourceFrameCount": 56,
+      "sha256": "2193c7d2e6862d18e663e78226b656828d15574ee5615009996e2fc0807dd8e2"
+    },
+    {
+      "sign": "jump",
+      "file": "jump.bin",
+      "participantId": 62590,
+      "sequenceId": 1848473630,
+      "sourceFrameCount": 11,
+      "sha256": "cbb3c364f3f503cec58c9c99deaa434691d9047c6b11a3abd64b3757ade218bb"
+    },
+    {
+      "sign": "kiss",
+      "file": "kiss.bin",
+      "participantId": 62590,
+      "sequenceId": 2740340324,
+      "sourceFrameCount": 14,
+      "sha256": "688ce895977ae83f92e13581c516bbdaa7c29d70cb4e95b4f495f2257c3db464"
+    },
+    {
+      "sign": "kitty",
+      "file": "kitty.bin",
+      "participantId": 62590,
+      "sequenceId": 1624281359,
+      "sourceFrameCount": 29,
+      "sha256": "2f6f5e764242e5381e37a59660bc32479992bda5733a455d7ed804503ebea4f6"
+    },
+    {
+      "sign": "lamp",
+      "file": "lamp.bin",
+      "participantId": 62590,
+      "sequenceId": 1668091810,
+      "sourceFrameCount": 24,
+      "sha256": "4973b02447cabb9f7eb84ab70b6cd390dd97927fee1231605fa01c751c170ecb"
+    },
+    {
+      "sign": "later",
+      "file": "later.bin",
+      "participantId": 62590,
+      "sequenceId": 1790169371,
+      "sourceFrameCount": 72,
+      "sha256": "fc021e3dbceb5f96dccb3a2b64953f0805a1b99df785edd0c681a937a5bcfc9f"
+    },
+    {
+      "sign": "like",
+      "file": "like.bin",
+      "participantId": 62590,
+      "sequenceId": 1600635028,
+      "sourceFrameCount": 9,
+      "sha256": "0cfda1914bc2e8c6dc2749f65db64de0b21e2b8f21a1d86588c0928372fdff83"
+    },
+    {
+      "sign": "lion",
+      "file": "lion.bin",
+      "participantId": 62590,
+      "sequenceId": 1815310385,
+      "sourceFrameCount": 18,
+      "sha256": "a0a70a99dedecd3286845501354815be226cca94452ba41d05c93d78ba95407b"
+    },
+    {
+      "sign": "lips",
+      "file": "lips.bin",
+      "participantId": 62590,
+      "sequenceId": 2816522701,
+      "sourceFrameCount": 25,
+      "sha256": "fe5d16dc5dc4d8e2c30b3ce3c3a3022c6a3c95527dbc61d677d1850b5daea45c"
+    },
+    {
+      "sign": "listen",
+      "file": "listen.bin",
+      "participantId": 62590,
+      "sequenceId": 2325304661,
+      "sourceFrameCount": 19,
+      "sha256": "a223a8e5a2859aa529bdec35911b9b35cf1f3b8b618270b9da2414a41f843039"
+    },
+    {
+      "sign": "look",
+      "file": "look.bin",
+      "participantId": 62590,
+      "sequenceId": 2533245831,
+      "sourceFrameCount": 12,
+      "sha256": "8e2a4c6bf3bb2c22b30092655da47a32362b84710ed7a32409a1656ead32c2d3"
+    },
+    {
+      "sign": "loud",
+      "file": "loud.bin",
+      "participantId": 62590,
+      "sequenceId": 2874208689,
+      "sourceFrameCount": 81,
+      "sha256": "69d06fb0da9a5f08e231d0df99ac678d98bd97e928c5af62911cc2e7e74e231b"
+    },
+    {
+      "sign": "mad",
+      "file": "mad.bin",
+      "participantId": 62590,
+      "sequenceId": 2424301464,
+      "sourceFrameCount": 20,
+      "sha256": "7a2a2041747e7e1e1ade8979e71b60fe0eba769a6bc269ff343139b78ef18e56"
+    },
+    {
+      "sign": "make",
+      "file": "make.bin",
+      "participantId": 62590,
+      "sequenceId": 2453423096,
+      "sourceFrameCount": 22,
+      "sha256": "041d2b5d23c5783faa45c4e013ab2c9f66c9c80324ba6342c04471abb775e437"
+    },
+    {
+      "sign": "man",
+      "file": "man.bin",
+      "participantId": 62590,
+      "sequenceId": 2036816011,
+      "sourceFrameCount": 13,
+      "sha256": "3549e6e63035c979e12418412c817d8a7c89dc42c95992d9707fad9448f7e587"
+    },
+    {
+      "sign": "many",
+      "file": "many.bin",
+      "participantId": 62590,
+      "sequenceId": 2499733522,
+      "sourceFrameCount": 6,
+      "sha256": "5353df78fbb07b8d6f8892a1bec9851ea4b50aea2e8bbec77c24efae0ac9c712"
+    },
+    {
+      "sign": "milk",
+      "file": "milk.bin",
+      "participantId": 62590,
+      "sequenceId": 2115711379,
+      "sourceFrameCount": 17,
+      "sha256": "4be0fd69ec73ead8660b110467acc5f6287a2862cd02b26a5b27020db3d86c58"
+    },
+    {
+      "sign": "minemy",
+      "file": "minemy.bin",
+      "participantId": 62590,
+      "sequenceId": 3209371085,
+      "sourceFrameCount": 20,
+      "sha256": "e5189489db2e331deac5606268be4be77ad8ec5bc99e448ad18616816c7c17f6"
+    },
+    {
+      "sign": "mitten",
+      "file": "mitten.bin",
+      "participantId": 62590,
+      "sequenceId": 1365404163,
+      "sourceFrameCount": 30,
+      "sha256": "c4e98f6266fa5660e255fbba05d45b6485e339e50e7d93df67e2611192d8af48"
+    },
+    {
+      "sign": "mom",
+      "file": "mom.bin",
+      "participantId": 62590,
+      "sequenceId": 2544926133,
+      "sourceFrameCount": 15,
+      "sha256": "aae41edfdb1dd78e717cec5fc4a2332fb6fb489849df231cb09e51936801f54e"
+    },
+    {
+      "sign": "moon",
+      "file": "moon.bin",
+      "participantId": 62590,
+      "sequenceId": 2887421663,
+      "sourceFrameCount": 18,
+      "sha256": "7571e2c53573eaaf01731c405b80f3c8ba5457e5a507fe0395f154ab70e25606"
+    },
+    {
+      "sign": "morning",
+      "file": "morning.bin",
+      "participantId": 62590,
+      "sequenceId": 1897199113,
+      "sourceFrameCount": 28,
+      "sha256": "225493a6caf5549d84cbdd0260afe53906a02f06206457a7104afb101af62001"
+    },
+    {
+      "sign": "mouse",
+      "file": "mouse.bin",
+      "participantId": 62590,
+      "sequenceId": 3111395416,
+      "sourceFrameCount": 15,
+      "sha256": "ca022830fa53a8bc0e43c911a21f53b0be11003304cb331b37933e9c7cb4ea10"
+    },
+    {
+      "sign": "mouth",
+      "file": "mouth.bin",
+      "participantId": 62590,
+      "sequenceId": 1995030239,
+      "sourceFrameCount": 15,
+      "sha256": "8309203f3077b0d7186f08986e37913b72e100021cde04ecef7ec9f0f280deb7"
+    },
+    {
+      "sign": "nap",
+      "file": "nap.bin",
+      "participantId": 62590,
+      "sequenceId": 2513275066,
+      "sourceFrameCount": 20,
+      "sha256": "56fb9e2c19654202ab59a25a5bc669f140291b1bc300d8b6b2b8e92f5035add5"
+    },
+    {
+      "sign": "napkin",
+      "file": "napkin.bin",
+      "participantId": 62590,
+      "sequenceId": 2341316308,
+      "sourceFrameCount": 12,
+      "sha256": "8a7f71b2e9f9a21cbd3fc0670f63a0292b79f65422c50466ab0ee4d6206da966"
+    },
+    {
+      "sign": "night",
+      "file": "night.bin",
+      "participantId": 62590,
+      "sequenceId": 2924447985,
+      "sourceFrameCount": 6,
+      "sha256": "a05e76f0579124735c508a93b801d0b6d27ddcf2848459ff3ff4cd4ead98acb3"
+    },
+    {
+      "sign": "no",
+      "file": "no.bin",
+      "participantId": 62590,
+      "sequenceId": 956128313,
+      "sourceFrameCount": 25,
+      "sha256": "e4e5773c274fda1beec2ec82151c07e63d302b3af98a5352496a1034581232eb"
+    },
+    {
+      "sign": "noisy",
+      "file": "noisy.bin",
+      "participantId": 62590,
+      "sequenceId": 3038112959,
+      "sourceFrameCount": 9,
+      "sha256": "7fd8b7d0c376818c1c4155d5016e3328bf84d513d5986adf67a57b813b3ae9ac"
+    },
+    {
+      "sign": "nose",
+      "file": "nose.bin",
+      "participantId": 62590,
+      "sequenceId": 2897084639,
+      "sourceFrameCount": 20,
+      "sha256": "d73e55fef0f417ffb78296f6f7a4992513a59c6354009c2d1651fad7bd3feaa8"
+    },
+    {
+      "sign": "not",
+      "file": "not.bin",
+      "participantId": 62590,
+      "sequenceId": 2269405618,
+      "sourceFrameCount": 6,
+      "sha256": "4de9dbaee7cd070b44e2ce0f42834644ba0ad7e6bafa049c89c27ab6bc538158"
+    },
+    {
+      "sign": "now",
+      "file": "now.bin",
+      "participantId": 62590,
+      "sequenceId": 2270678406,
+      "sourceFrameCount": 21,
+      "sha256": "832bf23f600fe9bf4d82a3459eb9f207c4447aa64d870979fea94e12da0a74c2"
+    },
+    {
+      "sign": "nuts",
+      "file": "nuts.bin",
+      "participantId": 62590,
+      "sequenceId": 1924269496,
+      "sourceFrameCount": 13,
+      "sha256": "dc2297a712e9dd87f81c79ddaf236f019ade992b5a4cb3165cbad0f50a650b36"
+    },
+    {
+      "sign": "old",
+      "file": "old.bin",
+      "participantId": 62590,
+      "sequenceId": 2771497438,
+      "sourceFrameCount": 68,
+      "sha256": "2082fb70c25bc4698eeb66ac3e64b36a815d2506d8a0c3dbf9a6c1d6496d229d"
+    },
+    {
+      "sign": "on",
+      "file": "on.bin",
+      "participantId": 62590,
+      "sequenceId": 2854276213,
+      "sourceFrameCount": 16,
+      "sha256": "d61b4d36d75b803a5084b3f6ae5ddf6ca53d62072f424841403ce4fac547ed49"
+    },
+    {
+      "sign": "open",
+      "file": "open.bin",
+      "participantId": 62590,
+      "sequenceId": 1393196114,
+      "sourceFrameCount": 20,
+      "sha256": "bb44bf643788c99b7247fa9d89ed94d35a214606fb576c84028a2abeb270d2e9"
+    },
+    {
+      "sign": "orange",
+      "file": "orange.bin",
+      "participantId": 62590,
+      "sequenceId": 2049556420,
+      "sourceFrameCount": 111,
+      "sha256": "392d98faba537d49aa1143d7b92466e9dc6f7f49a58c871968a1d9fa5567f951"
+    },
+    {
+      "sign": "outside",
+      "file": "outside.bin",
+      "participantId": 62590,
+      "sequenceId": 1882079884,
+      "sourceFrameCount": 24,
+      "sha256": "491c918d32c305bbd2539178d8ef044728d0c678b0f5fe985addc79af07e9f30"
+    },
+    {
+      "sign": "owie",
+      "file": "owie.bin",
+      "participantId": 62590,
+      "sequenceId": 2726328732,
+      "sourceFrameCount": 17,
+      "sha256": "dd2b8096bf180badd51679e3bb3ea857b4271bf654f7b73bf9e67f777ac5cca5"
+    },
+    {
+      "sign": "owl",
+      "file": "owl.bin",
+      "participantId": 62590,
+      "sequenceId": 1592659476,
+      "sourceFrameCount": 21,
+      "sha256": "2ca4450c0e94535add8afd584f213a08d333e8909bdbb6f1f4089909e6f28e51"
+    },
+    {
+      "sign": "pajamas",
+      "file": "pajamas.bin",
+      "participantId": 62590,
+      "sequenceId": 2298221527,
+      "sourceFrameCount": 21,
+      "sha256": "9bdb4a98b4dbcf62939d1e6386c41d3fe90b485a3021d5042a81dee5206b44ee"
+    },
+    {
+      "sign": "pen",
+      "file": "pen.bin",
+      "participantId": 62590,
+      "sequenceId": 3535531428,
+      "sourceFrameCount": 6,
+      "sha256": "2c2f253b739c1296bc13198fd540c726c028ef54e7abb270438c3fcfd28fb917"
+    },
+    {
+      "sign": "pencil",
+      "file": "pencil.bin",
+      "participantId": 62590,
+      "sequenceId": 1579062473,
+      "sourceFrameCount": 15,
+      "sha256": "d1af3e55485a536df361e9341a2885f1c346e680922b3a9284b7c6b2390586a1"
+    },
+    {
+      "sign": "penny",
+      "file": "penny.bin",
+      "participantId": 62590,
+      "sequenceId": 2282370049,
+      "sourceFrameCount": 16,
+      "sha256": "e4aa43ec39bddaf23ae5f0bd254f474c3ec1f6fe2b1f05aa846e2dd0bbad0991"
+    },
+    {
+      "sign": "person",
+      "file": "person.bin",
+      "participantId": 62590,
+      "sequenceId": 2467652567,
+      "sourceFrameCount": 19,
+      "sha256": "1bd826efba0aeb32fdbecaca0075e5c49d05305c138f04f0fb89ddc07d764cef"
+    },
+    {
+      "sign": "pig",
+      "file": "pig.bin",
+      "participantId": 62590,
+      "sequenceId": 1655060089,
+      "sourceFrameCount": 20,
+      "sha256": "6cb974b3de9df21b4fd5f7745b0e63971cd9632d326410cd2f984b13acd2cb1a"
+    },
+    {
+      "sign": "pizza",
+      "file": "pizza.bin",
+      "participantId": 62590,
+      "sequenceId": 2632343894,
+      "sourceFrameCount": 59,
+      "sha256": "cfd4ffb0a45cda2d1399a4a3694a7aae4d5d53ab62f51615266648fd5a87de53"
+    },
+    {
+      "sign": "please",
+      "file": "please.bin",
+      "participantId": 62590,
+      "sequenceId": 1839230519,
+      "sourceFrameCount": 28,
+      "sha256": "0684384c18d394df73f073a83d5786b31e6f8bb4b42608909a73ce1f334a6c93"
+    },
+    {
+      "sign": "police",
+      "file": "police.bin",
+      "participantId": 62590,
+      "sequenceId": 1678721197,
+      "sourceFrameCount": 18,
+      "sha256": "b313018e2fe18a0ab6e8876eab66920ae59d2cd946fa5a8703d66808ff62a741"
+    },
+    {
+      "sign": "pool",
+      "file": "pool.bin",
+      "participantId": 62590,
+      "sequenceId": 2118978993,
+      "sourceFrameCount": 87,
+      "sha256": "631cf305b0f24aaa7eca9846f62025f35976edde11600d74374ec4f4f50d2949"
+    },
+    {
+      "sign": "potty",
+      "file": "potty.bin",
+      "participantId": 62590,
+      "sequenceId": 2857030826,
+      "sourceFrameCount": 21,
+      "sha256": "eefb60e2018cad97beeb9401dd9890dcb49e919aa92f47cadbfb60cab864b752"
+    },
+    {
+      "sign": "pretend",
+      "file": "pretend.bin",
+      "participantId": 62590,
+      "sequenceId": 1798798790,
+      "sourceFrameCount": 14,
+      "sha256": "121cc815123df6e1253c6fab8fa7a9ed0ef6ccb838398879c765e83ed5f43a1a"
+    },
+    {
+      "sign": "pretty",
+      "file": "pretty.bin",
+      "participantId": 62590,
+      "sequenceId": 2198200128,
+      "sourceFrameCount": 16,
+      "sha256": "59e3cb50c0f4b739bbbc61b26d4221623cf58185066244ba31e5ad5442d585b0"
+    },
+    {
+      "sign": "puppy",
+      "file": "puppy.bin",
+      "participantId": 62590,
+      "sequenceId": 2849092424,
+      "sourceFrameCount": 31,
+      "sha256": "fa9f3e552116575a90ad0e1536e8f6b754e1f063b0963b4a3178c85733f61a10"
+    },
+    {
+      "sign": "puzzle",
+      "file": "puzzle.bin",
+      "participantId": 62590,
+      "sequenceId": 2034092551,
+      "sourceFrameCount": 8,
+      "sha256": "1cdbb1dba42af565b1e560b5bd7ca68b1828eac55ed6ed02177653ea2078eff5"
+    },
+    {
+      "sign": "quiet",
+      "file": "quiet.bin",
+      "participantId": 62590,
+      "sequenceId": 3187665271,
+      "sourceFrameCount": 13,
+      "sha256": "a3e45c3d9772c72ef6255b1567125189f89cdf87e255ef8a3e38de300402f1a4"
+    },
+    {
+      "sign": "radio",
+      "file": "radio.bin",
+      "participantId": 62590,
+      "sequenceId": 2281799272,
+      "sourceFrameCount": 19,
+      "sha256": "c675889fb2b39de970838ac8403f7b443696d6dad6b0aabffb047a69fc01ebe7"
+    },
+    {
+      "sign": "rain",
+      "file": "rain.bin",
+      "participantId": 62590,
+      "sequenceId": 2643944358,
+      "sourceFrameCount": 85,
+      "sha256": "1a3f4dee7ca8f97520d9ce4c60e60ce9ade9bc0cc977a86b658d9eb36a437568"
+    },
+    {
+      "sign": "read",
+      "file": "read.bin",
+      "participantId": 62590,
+      "sequenceId": 2124469425,
+      "sourceFrameCount": 15,
+      "sha256": "74b3f11ecdaaa5dad6833a5558f804d6a5284830c838427a7ce6045eadc356fd"
+    },
+    {
+      "sign": "red",
+      "file": "red.bin",
+      "participantId": 62590,
+      "sequenceId": 1587025448,
+      "sourceFrameCount": 17,
+      "sha256": "72a62f027a5030d3c66b137885de51477e7eb7f7b60b6873ac5dd431e54c0c7b"
+    },
+    {
+      "sign": "refrigerator",
+      "file": "refrigerator.bin",
+      "participantId": 62590,
+      "sequenceId": 2099466498,
+      "sourceFrameCount": 6,
+      "sha256": "4471a740e9d26da3a02140f8b362382615d7910e7a49d8ad1abaf662d96bf825"
+    },
+    {
+      "sign": "ride",
+      "file": "ride.bin",
+      "participantId": 62590,
+      "sequenceId": 1608143223,
+      "sourceFrameCount": 8,
+      "sha256": "7e7921d12236a0d73652f4084d04404b7b5dbcadee03c060f113515d476febfb"
+    },
+    {
+      "sign": "room",
+      "file": "room.bin",
+      "participantId": 62590,
+      "sequenceId": 2118533399,
+      "sourceFrameCount": 36,
+      "sha256": "c9184a7358928c4ccacc2772a2d593e2059c3486aa494de45b7ad335c2e8a692"
+    },
+    {
+      "sign": "sad",
+      "file": "sad.bin",
+      "participantId": 62590,
+      "sequenceId": 1762263219,
+      "sourceFrameCount": 16,
+      "sha256": "3fd15a5465e98194d96f3199e3b5349c699fbacf0b37890132bd5db9118cf16c"
+    },
+    {
+      "sign": "same",
+      "file": "same.bin",
+      "participantId": 62590,
+      "sequenceId": 2814503790,
+      "sourceFrameCount": 12,
+      "sha256": "0e581fbaca369db7dc9ea481c896893f24d64e2e12b2da1345c65103cb528bbc"
+    },
+    {
+      "sign": "say",
+      "file": "say.bin",
+      "participantId": 62590,
+      "sequenceId": 1961738015,
+      "sourceFrameCount": 41,
+      "sha256": "389c5df4ce0366c3a0e04d24ec6fdf0adcc3b628f84089b9721b290e9ad58b2f"
+    },
+    {
+      "sign": "scissors",
+      "file": "scissors.bin",
+      "participantId": 62590,
+      "sequenceId": 2603759263,
+      "sourceFrameCount": 16,
+      "sha256": "6c0c2913c771e10bab33ccd63c85702eb91c9306c55af06860942c5dd90fc5d3"
+    },
+    {
+      "sign": "see",
+      "file": "see.bin",
+      "participantId": 62590,
+      "sequenceId": 1645116244,
+      "sourceFrameCount": 18,
+      "sha256": "c54cca833733be4357e1feb89f1029ad182f7772ac1ac318b68c55b54e68323a"
+    },
+    {
+      "sign": "shhh",
+      "file": "shhh.bin",
+      "participantId": 62590,
+      "sequenceId": 1406640325,
+      "sourceFrameCount": 25,
+      "sha256": "f5432eea51d9bfbef2f4eba0e3a76e43d42ec5cdeb1c48a28ef519fdf838c990"
+    },
+    {
+      "sign": "shirt",
+      "file": "shirt.bin",
+      "participantId": 62590,
+      "sequenceId": 2805725246,
+      "sourceFrameCount": 17,
+      "sha256": "a6bee10b8936bf13a92972ff86e3a4eb96a61d37f55245c9ce515ad5f1cf76aa"
+    },
+    {
+      "sign": "shoe",
+      "file": "shoe.bin",
+      "participantId": 62590,
+      "sequenceId": 1612810248,
+      "sourceFrameCount": 19,
+      "sha256": "99fd1777790d17561b9a7142c43507f6f33ce10efae1405023ae31e1b4a16a64"
+    },
+    {
+      "sign": "shower",
+      "file": "shower.bin",
+      "participantId": 62590,
+      "sequenceId": 1499000690,
+      "sourceFrameCount": 24,
+      "sha256": "c8767a1ed4f5ca0aead7f5a4a1c92fa98f81d350885c4dcb04034c822356c789"
+    },
+    {
+      "sign": "sick",
+      "file": "sick.bin",
+      "participantId": 62590,
+      "sequenceId": 1562435875,
+      "sourceFrameCount": 23,
+      "sha256": "4ff1bcae47d151c74e47a933e2932ead973278499ca1be774740e46415866753"
+    },
+    {
+      "sign": "sleep",
+      "file": "sleep.bin",
+      "participantId": 62590,
+      "sequenceId": 2015117545,
+      "sourceFrameCount": 22,
+      "sha256": "e17716f6767ee4a409d4ea786a9e3ee32f27cd3b87b62aeb8b800a2ffc10c7bd"
+    },
+    {
+      "sign": "sleepy",
+      "file": "sleepy.bin",
+      "participantId": 62590,
+      "sequenceId": 2186388962,
+      "sourceFrameCount": 24,
+      "sha256": "23080e6d6905a5fd111b62365411988d83503b51cfd905d870b910e329899d0d"
+    },
+    {
+      "sign": "smile",
+      "file": "smile.bin",
+      "participantId": 62590,
+      "sequenceId": 1394015615,
+      "sourceFrameCount": 56,
+      "sha256": "53aa5328319713e97e0f5f705cfb3e38c4ee6b799270303dc81e17d0466e4b63"
+    },
+    {
+      "sign": "snack",
+      "file": "snack.bin",
+      "participantId": 62590,
+      "sequenceId": 1684803415,
+      "sourceFrameCount": 6,
+      "sha256": "5ba58c30f2e9b59f5de8f824eea9f2ac03f9967e06ff95b21dec24f3d0852723"
+    },
+    {
+      "sign": "snow",
+      "file": "snow.bin",
+      "participantId": 62590,
+      "sequenceId": 1933623462,
+      "sourceFrameCount": 16,
+      "sha256": "03ab90270af8cdf9110be1f57307a765d52b21eb0005f8a23a7480a018e7e2e3"
+    },
+    {
+      "sign": "stairs",
+      "file": "stairs.bin",
+      "participantId": 62590,
+      "sequenceId": 786252032,
+      "sourceFrameCount": 12,
+      "sha256": "63a785a92f90b6710cbc3810101d3fd75a70e46526435d6b0f1dd5cfdc8d0136"
+    },
+    {
+      "sign": "stay",
+      "file": "stay.bin",
+      "participantId": 62590,
+      "sequenceId": 1764203735,
+      "sourceFrameCount": 8,
+      "sha256": "e0afd9facc3106e06ab781781e23e1dfddc6b6e5906f78972df459a3502abf81"
+    },
+    {
+      "sign": "sticky",
+      "file": "sticky.bin",
+      "participantId": 62590,
+      "sequenceId": 2358517933,
+      "sourceFrameCount": 21,
+      "sha256": "3f690f74bb6452ef0fa30f505c65aa1565fcfc5215f7b52271368a8c218e2b31"
+    },
+    {
+      "sign": "store",
+      "file": "store.bin",
+      "participantId": 62590,
+      "sequenceId": 2413725394,
+      "sourceFrameCount": 21,
+      "sha256": "ef821ab47fd4499565824c755f7c5181993a1f7c1b72dfad37df8dbeee93892a"
+    },
+    {
+      "sign": "story",
+      "file": "story.bin",
+      "participantId": 62590,
+      "sequenceId": 1625122552,
+      "sourceFrameCount": 14,
+      "sha256": "e6fc7adeff4484fb0eb28d3f28c9c69513598227121194c2c02a5cc0d07058bb"
+    },
+    {
+      "sign": "stuck",
+      "file": "stuck.bin",
+      "participantId": 62590,
+      "sequenceId": 2509514525,
+      "sourceFrameCount": 16,
+      "sha256": "87188fca17a7f9bb8d43a9d22f39b90c9493bd425c167e93d08254967633dea3"
+    },
+    {
+      "sign": "sun",
+      "file": "sun.bin",
+      "participantId": 62590,
+      "sequenceId": 1791853363,
+      "sourceFrameCount": 15,
+      "sha256": "472b6561ba68847b86c52f7bd1205db91fe7952b2dc622678fc2f77090ab5357"
+    },
+    {
+      "sign": "table",
+      "file": "table.bin",
+      "participantId": 62590,
+      "sequenceId": 2389468558,
+      "sourceFrameCount": 92,
+      "sha256": "e801dbb6c6d72363de5dcd6572178acbfb9ec1904af1d6d8f0ee84f774811d29"
+    },
+    {
+      "sign": "talk",
+      "file": "talk.bin",
+      "participantId": 62590,
+      "sequenceId": 2080768663,
+      "sourceFrameCount": 149,
+      "sha256": "8553dc27c8eab90b4e8f30d10f44943250e883deb2c67a27d43a98d9267b37c1"
+    },
+    {
+      "sign": "taste",
+      "file": "taste.bin",
+      "participantId": 62590,
+      "sequenceId": 1958597804,
+      "sourceFrameCount": 18,
+      "sha256": "8d42a5ce79270d16bc2f6fb29a710628312390fff34caa0f0bfc68cfbdb45dd3"
+    },
+    {
+      "sign": "thankyou",
+      "file": "thankyou.bin",
+      "participantId": 62590,
+      "sequenceId": 2548683409,
+      "sourceFrameCount": 10,
+      "sha256": "10d51043973797424d079ddb11c3450ddc8e6e6cda654d6c1bc5cc38b807e883"
+    },
+    {
+      "sign": "that",
+      "file": "that.bin",
+      "participantId": 62590,
+      "sequenceId": 2106718680,
+      "sourceFrameCount": 15,
+      "sha256": "c8b21293b31aab3063fbf834bddb8fa3dc1f7a2c7009ee483fa9fe362e11a19f"
+    },
+    {
+      "sign": "there",
+      "file": "there.bin",
+      "participantId": 62590,
+      "sequenceId": 2196034478,
+      "sourceFrameCount": 62,
+      "sha256": "babc1355457920d67fab5a92802fa062c5125949ca703c9182095a2e7c2420b8"
+    },
+    {
+      "sign": "think",
+      "file": "think.bin",
+      "participantId": 62590,
+      "sequenceId": 1933206197,
+      "sourceFrameCount": 13,
+      "sha256": "66a8197799383f4223db4d9456bdfedaeeed7cdbbfae833d3e75340e54d34045"
+    },
+    {
+      "sign": "thirsty",
+      "file": "thirsty.bin",
+      "participantId": 62590,
+      "sequenceId": 2750747127,
+      "sourceFrameCount": 26,
+      "sha256": "cdb20a29ce48ecfaecd4e61503e42333281013c647dfcc275ef93b7fa45ef7f5"
+    },
+    {
+      "sign": "tiger",
+      "file": "tiger.bin",
+      "participantId": 62590,
+      "sequenceId": 2337090779,
+      "sourceFrameCount": 20,
+      "sha256": "64f8f76fd8415d7875ba74fdfbc915008dd111b9da5a3dcf85eee53cde4b7992"
+    },
+    {
+      "sign": "time",
+      "file": "time.bin",
+      "participantId": 62590,
+      "sequenceId": 2464646355,
+      "sourceFrameCount": 71,
+      "sha256": "ea924055324d4e3c7ebf469edd08e82a50e1df8cd8f0795d9fbb9809deeef822"
+    },
+    {
+      "sign": "tomorrow",
+      "file": "tomorrow.bin",
+      "participantId": 62590,
+      "sequenceId": 2713670229,
+      "sourceFrameCount": 13,
+      "sha256": "9f3158c94eab32ae8abe85cc27776f05846d9add97c6f1abcc7870810e779c21"
+    },
+    {
+      "sign": "tongue",
+      "file": "tongue.bin",
+      "participantId": 62590,
+      "sequenceId": 2713873536,
+      "sourceFrameCount": 15,
+      "sha256": "791c9f88c6ac5c78238f9f24ffd9c45486be0619dc03df2247117a6934dc2a76"
+    },
+    {
+      "sign": "tooth",
+      "file": "tooth.bin",
+      "participantId": 62590,
+      "sequenceId": 1807371850,
+      "sourceFrameCount": 27,
+      "sha256": "9602c42cc75ef09f5566dc1cda7936636d6934817955ff93490f4291af0de6a3"
+    },
+    {
+      "sign": "toothbrush",
+      "file": "toothbrush.bin",
+      "participantId": 62590,
+      "sequenceId": 2098070894,
+      "sourceFrameCount": 21,
+      "sha256": "021854bf3de0b6e26601900a8a5630dfdbbbf732c236df06141811c307bda0ba"
+    },
+    {
+      "sign": "touch",
+      "file": "touch.bin",
+      "participantId": 62590,
+      "sequenceId": 2566191158,
+      "sourceFrameCount": 18,
+      "sha256": "3de29a0cb40f0786fdd1f263c966052cc6074089ec2308f1cbc91cf8dfb1c12d"
+    },
+    {
+      "sign": "toy",
+      "file": "toy.bin",
+      "participantId": 62590,
+      "sequenceId": 1700545782,
+      "sourceFrameCount": 107,
+      "sha256": "381b4b9ffe05381505c48bd6c3f7eb03918f545cdcd7af0f7bd509ac6bbb7fb6"
+    },
+    {
+      "sign": "tree",
+      "file": "tree.bin",
+      "participantId": 62590,
+      "sequenceId": 2813485294,
+      "sourceFrameCount": 15,
+      "sha256": "17e294ed952e53c99f05ca02b0cab2e1267eecd410ca0ded36b098a16d977ab2"
+    },
+    {
+      "sign": "uncle",
+      "file": "uncle.bin",
+      "participantId": 62590,
+      "sequenceId": 2495042939,
+      "sourceFrameCount": 13,
+      "sha256": "87a0ca58fc05b55c9394f0b868f391be6ccd8d7fb271f9a2e4a7da5d99c89b88"
+    },
+    {
+      "sign": "underwear",
+      "file": "underwear.bin",
+      "participantId": 62590,
+      "sequenceId": 2611692738,
+      "sourceFrameCount": 13,
+      "sha256": "70b1b35ed664cce277c405043f2ead3f3fef6309c4d3ae25834892da1d2405c6"
+    },
+    {
+      "sign": "up",
+      "file": "up.bin",
+      "participantId": 62590,
+      "sequenceId": 2506383116,
+      "sourceFrameCount": 46,
+      "sha256": "f3c721e87fe960b672fed223179d550efc0cbb944a7a6488ff3cb5bb24e05094"
+    },
+    {
+      "sign": "vacuum",
+      "file": "vacuum.bin",
+      "participantId": 62590,
+      "sequenceId": 2239316202,
+      "sourceFrameCount": 17,
+      "sha256": "89e2b908721aa0db0aedac0d92ed2c94752b1b98dc1b742f64732490a403a640"
+    },
+    {
+      "sign": "wait",
+      "file": "wait.bin",
+      "participantId": 62590,
+      "sequenceId": 3051509633,
+      "sourceFrameCount": 33,
+      "sha256": "43c763c21ef8cce9405fc5f763c572622a9e493366738d18c5227d6d00b25f3f"
+    },
+    {
+      "sign": "wake",
+      "file": "wake.bin",
+      "participantId": 62590,
+      "sequenceId": 2633266599,
+      "sourceFrameCount": 17,
+      "sha256": "5378b10b7e16463cd8e975e7cfca7d7b657c6358eba2c0d126a669c95e5f6011"
+    },
+    {
+      "sign": "water",
+      "file": "water.bin",
+      "participantId": 62590,
+      "sequenceId": 1588356956,
+      "sourceFrameCount": 16,
+      "sha256": "ca6abd7423ccbb042284b916239134e857534dc7b8c22168401b932c9b66bbb3"
+    },
+    {
+      "sign": "wet",
+      "file": "wet.bin",
+      "participantId": 62590,
+      "sequenceId": 2259825371,
+      "sourceFrameCount": 11,
+      "sha256": "b79eac2a0c5a3695f42fc4a7d4080115fd3b4eaa8332276b3a92f580fc2d8383"
+    },
+    {
+      "sign": "weus",
+      "file": "weus.bin",
+      "participantId": 62590,
+      "sequenceId": 1673353210,
+      "sourceFrameCount": 18,
+      "sha256": "a0057eb83af1b18ff104992a10af7c6a96377bf2dc69269cfce2c4a7b248b881"
+    },
+    {
+      "sign": "where",
+      "file": "where.bin",
+      "participantId": 62590,
+      "sequenceId": 1634175249,
+      "sourceFrameCount": 18,
+      "sha256": "66ea2a4daec4471e6dc7ada8cf5ea064f4b1e006a07824af94093c82031f5443"
+    },
+    {
+      "sign": "white",
+      "file": "white.bin",
+      "participantId": 62590,
+      "sequenceId": 1919449875,
+      "sourceFrameCount": 15,
+      "sha256": "9ff416b1e9bc1c36c5183de49b5a1fe6d52a3108f2f7c3d3a3b8b4d8509882cf"
+    },
+    {
+      "sign": "who",
+      "file": "who.bin",
+      "participantId": 62590,
+      "sequenceId": 2233117179,
+      "sourceFrameCount": 16,
+      "sha256": "40607ea2f36eeca2bfecfd4b14cde8e4f03a2a8bf1ac8f7f3dfbe00453cc5fbd"
+    },
+    {
+      "sign": "why",
+      "file": "why.bin",
+      "participantId": 62590,
+      "sequenceId": 2460702942,
+      "sourceFrameCount": 20,
+      "sha256": "9d5e74c695d8d4927cb8fda3df6a7843c8b7527671da2039b49b7461b5de3e70"
+    },
+    {
+      "sign": "will",
+      "file": "will.bin",
+      "participantId": 62590,
+      "sequenceId": 2257735024,
+      "sourceFrameCount": 14,
+      "sha256": "ce65b260f4db1b333f189ec5ddb0a613120a96b364ac77b93378c2e08adccd5a"
+    },
+    {
+      "sign": "wolf",
+      "file": "wolf.bin",
+      "participantId": 62590,
+      "sequenceId": 2157689910,
+      "sourceFrameCount": 12,
+      "sha256": "a2e6fe01e54308a52eda5b1b7ea713b8905632d0916e1038a829659536a45063"
+    },
+    {
+      "sign": "yellow",
+      "file": "yellow.bin",
+      "participantId": 62590,
+      "sequenceId": 1841940228,
+      "sourceFrameCount": 19,
+      "sha256": "de87f39c7e78070445719d611feb34db02d0214fb2526b8c159191d8642a375e"
+    },
+    {
+      "sign": "yes",
+      "file": "yes.bin",
+      "participantId": 62590,
+      "sequenceId": 2102119985,
+      "sourceFrameCount": 17,
+      "sha256": "183081304493db155d5e74afffce7d4a61e9d6454061422f9a5d022eb19279b0"
+    },
+    {
+      "sign": "yesterday",
+      "file": "yesterday.bin",
+      "participantId": 62590,
+      "sequenceId": 1617979598,
+      "sourceFrameCount": 19,
+      "sha256": "ca7ddb3251a56bf3dbb24975352e6fc3c7946b6c0ca6be97a1cbf5b927234017"
+    },
+    {
+      "sign": "yourself",
+      "file": "yourself.bin",
+      "participantId": 62590,
+      "sequenceId": 1830957689,
+      "sourceFrameCount": 68,
+      "sha256": "56a0cb1473fa869c5f7195de52c0bbdb282389685637394e00953c011c8995f2"
+    },
+    {
+      "sign": "yucky",
+      "file": "yucky.bin",
+      "participantId": 62590,
+      "sequenceId": 2699301558,
+      "sourceFrameCount": 17,
+      "sha256": "7ff4fc865bff5b3051044372fa6146ce322d1447cc687e928528e98b967e19fb"
+    },
+    {
+      "sign": "zebra",
+      "file": "zebra.bin",
+      "participantId": 62590,
+      "sequenceId": 2460207320,
+      "sourceFrameCount": 16,
+      "sha256": "9651f90389d828d9368da1bd6457c98308475f3c48a3a3668c70e039f2576353"
+    },
+    {
+      "sign": "zipper",
+      "file": "zipper.bin",
+      "participantId": 62590,
+      "sequenceId": 2608647220,
+      "sourceFrameCount": 7,
+      "sha256": "fe6fb42874299033f768bbcbd64804bd2dfa1879dbba911fd7bb14856f445077"
+    }
+  ]
+}

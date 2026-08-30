@@ -1,4 +1,5 @@
 import { CameraPreview } from './features/camera/CameraPreview'
+import { SignReferencesPage } from './features/landmarks/SignReferencesPage'
 
 const roles = [
   {
@@ -22,6 +23,12 @@ const steps = [
 ] as const
 
 function App() {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/'
+
+  if (path === '/sign-references') {
+    return <SignReferencesPage />
+  }
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -36,6 +43,7 @@ function App() {
         <nav className="site-nav" aria-label="Primary navigation">
           <a href="#camera-workspace">Product</a>
           <a href="#choose-role">Use cases</a>
+          <a href="/sign-references">Sign references</a>
           <a href="#how-it-works">How it works</a>
         </nav>
 

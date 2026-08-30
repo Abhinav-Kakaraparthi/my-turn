@@ -736,6 +736,70 @@
   opacity: 0.72;
 }
 
+.popsign-camera-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.popsign-camera-actions .popsign-camera-retry {
+  width: auto;
+  min-height: 52px;
+  margin-top: 0;
+  padding: 10px 14px;
+}
+
+.popsign-camera-correction {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(241, 197, 107, 0.28);
+  border-radius: 10px;
+  background: rgba(241, 197, 107, 0.06);
+}
+
+.popsign-camera-correction label {
+  display: grid;
+  gap: 6px;
+}
+
+.popsign-camera-correction label > span {
+  color: #d8d0bd;
+  font-size: 0.68rem;
+  font-weight: 650;
+}
+
+.popsign-camera-correction select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid rgba(139, 124, 255, 0.34);
+  border-radius: 8px;
+  color: #f1f0f5;
+  background: #111117;
+}
+
+.popsign-camera-correction select:focus-visible {
+  outline: 3px solid rgba(99, 230, 181, 0.55);
+  outline-offset: 2px;
+}
+
+.popsign-camera-correction small {
+  color: #aaa6b1;
+  font-size: 0.64rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+  .popsign-camera-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .popsign-camera-actions .popsign-camera-retry {
+    width: 100%;
+  }
+}
+
 .popsign-history > summary {
   display: flex;
   align-items: center;

@@ -1,15 +1,29 @@
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react'
 import { createPortal } from 'react-dom'
 import {
   loadRecentCommunicationMemory,
   requestCommunicationDraft,
   saveConfirmedCommunication,
+  saveRecognitionCorrection,
   type CommunicationDraft,
 } from '../communication/communicationAgentClient'
+import { loadPracticeCatalog } from './practiceCatalog'
 import {
   predictPopsign,
   type PopsignPrediction,
 } from './popsignModel'
+import {
+  findRecognitionCorrection,
+  listRecognitionCorrections,
+  saveRecognitionCorrectionSample,
+  type RecognitionCorrectionMatch,
+  type RecognitionCorrectionSample,
+} from './recognitionCorrectionStore'
 import type {
   CapturedPopsignSequence,
   LandmarkStatus,
@@ -28,6 +42,7 @@ type PopsignRecognitionProps = {
 }
 
 const MAXIMUM_ISOLATED_SIGN_DURATION_MS = 3000
+const POPSIGN_MODEL_VERSION = 'my-turn-popsign-v1'
 
 type CommunicationHistoryItem = {
   caption: string
@@ -65,6 +80,38 @@ function formatPercentage(value: number) {
   return `${Math.round(value * 100)}%`
 }
 
+function applyRecognitionCorrection(
+  prediction: PopsignPrediction,
+  match: RecognitionCorrectionMatch,
+): PopsignPrediction {
+  const correctedCandidate = prediction.candidates.find(
+    (candidate) => candidate.sign === match.correctedSign,
+  ) ?? {
+    confidence: match.similarity,
+    index: -1,
+    sign: match.correctedSign,
+  }
+
+  return {
+    ...prediction,
+    candidates: [
+      {
+        ...correctedCandidate,
+        confidence: match.similarity,
+      },
+      ...prediction.candidates.filter(
+        (candidate) => candidate.sign !== match.correctedSign,
+      ),
+    ].slice(0, 5),
+    confidence: match.similarity,
+    confirmationCandidates: undefined,
+    decision: 'automatic',
+    margin: match.similarity,
+    model: 'personal-motion',
+    sign: match.correctedSign,
+  }
+}
+
 export function PopsignRecognition({
   cameraActive,
   enabled,
@@ -80,20 +127,21 @@ export function PopsignRecognition({
     useState<PopsignPrediction | null>(null)
   const [communicationDraft, setCommunicationDraft] =
     useState<CommunicationDraft | null>(null)
-  const [communicationDraftId, setCommunicationDraftId] =
-    useState<number | null>(null)
   const [communicationError, setCommunicationError] =
     useState<string | null>(null)
   const [communicationHistory, setCommunicationHistory] =
     useState<CommunicationHistoryItem[]>([])
   const [communicationNotice, setCommunicationNotice] =
     useState<string | null>(null)
-  const [draftApproved, setDraftApproved] = useState(false)
   const [draftSign, setDraftSign] = useState<string | null>(null)
   const [isDrafting, setIsDrafting] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
-  const [confirmationPending, setConfirmationPending] =
-    useState(false)
+  const [correctionOpen, setCorrectionOpen] = useState(false)
+  const [correctionSign, setCorrectionSign] = useState('')
+  const [correctionSigns, setCorrectionSigns] = useState<string[]>([])
+  const [correctionNotice, setCorrectionNotice] =
+    useState<string | null>(null)
+  const [isSavingCorrection, setIsSavingCorrection] = useState(false)
   const [cloudMemoryStatus, setCloudMemoryStatus] =
     useState<CloudMemoryStatus>('loading')
   const communicationBusyRef = useRef(false)
@@ -101,10 +149,15 @@ export function PopsignRecognition({
   const communicationHistoryRef =
     useRef<CommunicationHistoryItem[]>([])
   const communicationRequestIdRef = useRef(0)
+  const latestCommunicationEventIdRef = useRef<string | null>(null)
   const finalizedDraftIdsRef = useRef(new Set<number>())
   const pendingEvidenceRef = useRef(
     new Map<number, RecognitionMemoryEvidence>(),
   )
+  const correctionSamplesRef = useRef<RecognitionCorrectionSample[]>([])
+  const basePredictionRef = useRef<PopsignPrediction | null>(null)
+  const predictionSequenceRef =
+    useRef<CapturedPopsignSequence | null>(null)
   const ignoredDisabledSequenceIdRef = useRef<number | null>(null)
   const ignoredPracticeSequenceIdRef = useRef<number | null>(null)
   const speechUtteranceRef =
@@ -181,7 +234,6 @@ export function PopsignRecognition({
     }
 
     finalizedDraftIdsRef.current.add(requestId)
-    setDraftApproved(true)
 
     const item: CommunicationHistoryItem = {
       caption: draft.caption,
@@ -196,6 +248,7 @@ export function PopsignRecognition({
     ].slice(-6)
 
     communicationHistoryRef.current = nextHistory
+    latestCommunicationEventIdRef.current = item.id
     setCommunicationHistory(nextHistory)
 
     const evidence = pendingEvidenceRef.current.get(requestId) ?? {
@@ -224,8 +277,8 @@ export function PopsignRecognition({
 
     setCommunicationNotice(
       speechStarted
-        ? `Caption confirmed and spoken for â€œ${recognizedSign}â€.`
-        : `Caption confirmed for â€œ${recognizedSign}â€.`,
+        ? `Caption confirmed and spoken for "${recognizedSign}".`
+        : `Caption confirmed for "${recognizedSign}".`,
     )
   }
 
@@ -234,10 +287,7 @@ export function PopsignRecognition({
     predictionEvidence?: PopsignPrediction,
   ) {
     if (communicationBusyRef.current) {
-      setCommunicationNotice(
-        'Finish the current communication draft before sending another sign.',
-      )
-      return
+      communicationAbortRef.current?.abort()
     }
 
     communicationBusyRef.current = true
@@ -253,12 +303,10 @@ export function PopsignRecognition({
       predictedSign: predictionEvidence?.sign ?? recognizedSign,
     })
     setCommunicationDraft(null)
-    setCommunicationDraftId(null)
     setCommunicationError(null)
     setCommunicationNotice(
-      `Turning â€œ${recognizedSign}â€ into a grounded captionâ€¦`,
+      `Turning "${recognizedSign}" into a grounded caption...`,
     )
-    setDraftApproved(false)
     setDraftSign(recognizedSign)
     setIsDrafting(true)
 
@@ -270,33 +318,52 @@ export function PopsignRecognition({
       )
 
       if (requestId !== communicationRequestIdRef.current) {
+        pendingEvidenceRef.current.delete(requestId)
         return
       }
 
-      setCommunicationDraft(draft)
-      setCommunicationDraftId(requestId)
+      const speakableDraft = draft.needsUserConfirmation
+        ? {
+            caption: recognizedSign,
+            clarificationQuestion: null,
+            needsUserConfirmation: false,
+            speechText: recognizedSign,
+          }
+        : draft
 
-      if (draft.needsUserConfirmation) {
-        setCommunicationNotice(
-          draft.clarificationQuestion ??
-            'Review the generated caption before it is spoken.',
-        )
-        return
-      }
-
-      finalizeCommunicationDraft(recognizedSign, draft, requestId)
+      setCommunicationDraft(speakableDraft)
+      finalizeCommunicationDraft(
+        recognizedSign,
+        speakableDraft,
+        requestId,
+      )
     } catch (error) {
       if (
         !isCancellation(error) &&
         requestId === communicationRequestIdRef.current
       ) {
-        setCommunicationError(describeError(error))
-        setCommunicationNotice(
-          'The recognized sign was retained, but no caption was spoken.',
-        )
-      }
+        const fallbackDraft: CommunicationDraft = {
+          caption: recognizedSign,
+          clarificationQuestion: null,
+          needsUserConfirmation: false,
+          speechText: recognizedSign,
+        }
 
-      pendingEvidenceRef.current.delete(requestId)
+        setCommunicationDraft(fallbackDraft)
+        finalizeCommunicationDraft(
+          recognizedSign,
+          fallbackDraft,
+          requestId,
+        )
+        setCommunicationError(
+          `${describeError(error)} The recognized sign was spoken directly instead.`,
+        )
+        setCommunicationNotice(
+          'Gemini was unavailable, so My Turn spoke the recognized sign directly.',
+        )
+      } else {
+        pendingEvidenceRef.current.delete(requestId)
+      }
     } finally {
       if (communicationAbortRef.current === abortController) {
         communicationAbortRef.current = null
@@ -306,37 +373,118 @@ export function PopsignRecognition({
     }
   }
 
-  function approveCurrentDraft() {
-    if (
-      !communicationDraft ||
-      communicationDraftId === null ||
-      !draftSign
-    ) {
+  async function handleSaveCorrection(
+    event: FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault()
+
+    const intendedSign = correctionSign.trim()
+    const correctionSequence = predictionSequenceRef.current
+    const basePrediction = basePredictionRef.current ?? prediction
+
+    if (!prediction || !basePrediction || !correctionSequence) {
+      setCorrectionNotice(
+        'Perform a sign before reporting a recognition issue.',
+      )
       return
     }
 
-    finalizeCommunicationDraft(
-      draftSign,
-      communicationDraft,
-      communicationDraftId,
-    )
-  }
-
-  function confirmRecognizedSign(recognizedSign: string) {
-    if (!prediction) {
+    if (!intendedSign) {
+      setCorrectionNotice('Choose the sign you intended.')
       return
     }
 
-    setConfirmationPending(false)
-    void createCommunicationDraft(recognizedSign, prediction)
-  }
+    if (intendedSign === prediction.sign) {
+      setCorrectionNotice(
+        'Choose a different sign when reporting an incorrect result.',
+      )
+      return
+    }
 
-  function retryCurrentSign() {
-    setConfirmationPending(false)
-    setPrediction(null)
-    setCommunicationNotice(
-      'Nothing was sent. Lower both hands, then perform the sign again.',
-    )
+    setIsSavingCorrection(true)
+    setCorrectionNotice(null)
+
+    try {
+      const supersededCorrection = findRecognitionCorrection(
+        correctionSequence,
+        basePrediction.sign,
+        correctionSamplesRef.current,
+      )
+      const sample = await saveRecognitionCorrectionSample({
+        correctedSign: intendedSign,
+        modelVersion: POPSIGN_MODEL_VERSION,
+        prediction: basePrediction,
+        sequence: correctionSequence,
+        supersedesSampleId: supersededCorrection?.sampleId,
+      })
+      const nextSamples = [
+        sample,
+        ...correctionSamplesRef.current.filter(
+          (candidate) =>
+            candidate.id !== supersededCorrection?.sampleId,
+        ),
+      ]
+      const correctedPrediction = applyRecognitionCorrection(
+        prediction,
+        {
+          correctedSign: sample.correctedSign,
+          sampleId: sample.id,
+          similarity: 1,
+        },
+      )
+
+      correctionSamplesRef.current = nextSamples
+
+      const communicationEventId =
+        latestCommunicationEventIdRef.current
+      const correctedHistory = communicationHistoryRef.current.filter(
+        (item) => item.id !== communicationEventId,
+      )
+
+      communicationHistoryRef.current = correctedHistory
+      latestCommunicationEventIdRef.current = null
+      setCommunicationHistory(correctedHistory)
+      setPrediction(correctedPrediction)
+      setCorrectionOpen(false)
+      setCorrectionSign('')
+      setCorrectionNotice(
+        `Correction saved. Similar “${sample.predictedSign}” motions will now use “${sample.correctedSign}”.`,
+      )
+
+      void saveRecognitionCorrection({
+        communicationEventId,
+        confidence: sample.confidence,
+        correctedSign: sample.correctedSign,
+        correctionId: sample.id,
+        durationMs: sample.durationMs,
+        margin: sample.margin,
+        model: sample.model,
+        modelVersion: sample.modelVersion,
+        predictedSign: sample.predictedSign,
+        sequenceId: sample.sequenceId,
+        supersedesCorrectionId: sample.supersedesCorrectionId,
+        values: sample.values,
+      })
+        .then(() => {
+          setCorrectionNotice(
+            `Correction saved locally and queued for training: “${sample.predictedSign}” → “${sample.correctedSign}”.`,
+          )
+        })
+        .catch(() => {
+          setCorrectionNotice(
+            'Correction saved on this device. Cloud training storage is currently unavailable.',
+          )
+        })
+
+      void createCommunicationDraft(
+        sample.correctedSign,
+        correctedPrediction,
+      )
+    } catch (error) {
+      setCorrectionNotice(describeError(error))
+    } finally {
+      setIsSavingCorrection(false)
+    }
   }
 
   const createCommunicationDraftRef = useRef(
@@ -359,6 +507,34 @@ export function PopsignRecognition({
       .catch(() => {
         if (active) {
           setCloudMemoryStatus('error')
+        }
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let active = true
+
+    void Promise.all([
+      listRecognitionCorrections(),
+      loadPracticeCatalog(),
+    ])
+      .then(([samples, catalog]) => {
+        if (!active) {
+          return
+        }
+
+        correctionSamplesRef.current = samples
+        setCorrectionSigns(
+          catalog.references.map((reference) => reference.sign),
+        )
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          setCorrectionNotice(describeError(error))
         }
       })
 
@@ -403,6 +579,8 @@ export function PopsignRecognition({
       modelStatus !== 'ready'
     ) {
       setPrediction(null)
+      basePredictionRef.current = null
+      predictionSequenceRef.current = null
       setErrorMessage(null)
       setIsPredicting(false)
       return
@@ -410,27 +588,47 @@ export function PopsignRecognition({
 
     let active = true
 
+    setCommunicationDraft(null)
+    setCommunicationError(null)
+    setCommunicationNotice(null)
+    setCorrectionOpen(false)
+    setCorrectionSign('')
+    setCorrectionNotice(null)
+    setDraftSign(null)
     setErrorMessage(null)
     setIsPredicting(true)
+    predictionSequenceRef.current = sequence
 
     void predictPopsign(sequence.values)
       .then((nextPrediction) => {
         if (active) {
-          setPrediction(nextPrediction)
+          const correctionMatch = findRecognitionCorrection(
+            sequence,
+            nextPrediction.sign,
+            correctionSamplesRef.current,
+          )
+          const effectivePrediction = correctionMatch
+            ? applyRecognitionCorrection(
+                nextPrediction,
+                correctionMatch,
+              )
+            : nextPrediction
 
-          if (nextPrediction.decision === 'automatic') {
-            setConfirmationPending(false)
-            void createCommunicationDraftRef.current(
-              nextPrediction.sign,
-              nextPrediction,
+          basePredictionRef.current = nextPrediction
+          setPrediction(effectivePrediction)
+
+          if (correctionMatch) {
+            setCorrectionNotice(
+              `Applied your saved correction: “${nextPrediction.sign}” → “${effectivePrediction.sign}”.`,
             )
-          } else if (nextPrediction.decision === 'confirmation') {
-            setConfirmationPending(true)
-            setCommunicationNotice(
-              'The model is uncertain. Confirm the intended sign in the camera panel.',
+          }
+
+          if (effectivePrediction.decision !== 'rejected') {
+            void createCommunicationDraftRef.current(
+              effectivePrediction.sign,
+              effectivePrediction,
             )
           } else {
-            setConfirmationPending(false)
             setCommunicationNotice(
               'No communication was sent because the motion was rejected.',
             )
@@ -481,11 +679,11 @@ export function PopsignRecognition({
             <div className="popsign-camera-card-heading">
               <div>
                 <span>
-                  {communicationDraft
-                    ? 'Caption and voice'
-                    : prediction.decision === 'automatic'
-                      ? 'Auto voice'
-                      : 'Quick confirmation'}
+                  {prediction.model === 'personal-motion'
+                    ? 'Personal correction'
+                    : communicationDraft
+                      ? 'Caption and voice'
+                      : 'Auto voice'}
                 </span>
                 <strong>{draftSign ?? prediction.sign}</strong>
               </div>
@@ -501,16 +699,7 @@ export function PopsignRecognition({
 
                 <blockquote>{communicationDraft.caption}</blockquote>
 
-                {communicationDraft.needsUserConfirmation &&
-                !draftApproved ? (
-                  <button
-                    className="popsign-camera-primary-action"
-                    type="button"
-                    onClick={approveCurrentDraft}
-                  >
-                    Approve & speak
-                  </button>
-                ) : (
+                <div className="popsign-camera-actions">
                   <button
                     className="popsign-camera-primary-action"
                     type="button"
@@ -521,44 +710,63 @@ export function PopsignRecognition({
                   >
                     {isSpeaking ? 'Speaking...' : 'Replay voice'}
                   </button>
-                )}
-              </div>
-            ) : prediction.decision === 'automatic' ? (
-              <p>High-confidence match. Creating the caption automatically.</p>
-            ) : confirmationPending ? (
-              <>
-                <p>The match is uncertain. Tap the sign you intended.</p>
 
-                <div className="popsign-camera-choices">
-                  {(prediction.confirmationCandidates ??
-                    prediction.candidates.slice(0, 3))
-                    .map((candidate) => (
-                      <button
-                        key={candidate.index}
-                        type="button"
-                        disabled={isDrafting || !ready}
-                        onClick={() =>
-                          confirmRecognizedSign(candidate.sign)
-                        }
-                      >
-                        <span>{candidate.sign}</span>
-                        <strong>
-                          {formatPercentage(candidate.confidence)}
-                        </strong>
-                      </button>
-                    ))}
+                  <button
+                    className="popsign-camera-retry"
+                    type="button"
+                    disabled={isSavingCorrection}
+                    onClick={() => setCorrectionOpen((open) => !open)}
+                  >
+                    {correctionOpen ? 'Cancel correction' : 'Wrong sign?'}
+                  </button>
                 </div>
 
-                <button
-                  className="popsign-camera-retry"
-                  type="button"
-                  onClick={retryCurrentSign}
-                >
-                  None — try again
-                </button>
-              </>
+                {correctionOpen && (
+                  <form
+                    className="popsign-camera-correction"
+                    onSubmit={handleSaveCorrection}
+                  >
+                    <label>
+                      <span>What sign did you intend?</span>
+                      <select
+                        aria-label="Intended sign"
+                        value={correctionSign}
+                        disabled={isSavingCorrection}
+                        onChange={(event) =>
+                          setCorrectionSign(event.target.value)
+                        }
+                      >
+                        <option value="">Choose the correct sign</option>
+                        {correctionSigns.map((sign) => (
+                          <option value={sign} key={sign}>
+                            {sign}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <button
+                      className="popsign-camera-primary-action"
+                      type="submit"
+                      disabled={
+                        isSavingCorrection || !correctionSign
+                      }
+                    >
+                      {isSavingCorrection
+                        ? 'Saving correction...'
+                        : 'Save and speak correction'}
+                    </button>
+
+                    <small>
+                      Saves this landmark sequence on your device and
+                      submits it as labeled training feedback. No camera
+                      image is uploaded.
+                    </small>
+                  </form>
+                )}
+              </div>
             ) : (
-              <p>Selection received. Creating the caption.</p>
+              <p>Creating the caption and voice automatically.</p>
             )}
           </aside>,
           overlayElement,
@@ -587,22 +795,23 @@ export function PopsignRecognition({
         Raise either hand to begin a sign, then lower both hands briefly
         to finish it. My Turn captures a variable-length motion and
         resamples it internally; you do not need to count frames.
-        High-confidence signs are spoken automatically. Only uncertain
-        matches ask for a quick confirmation in the camera panel.
+        Accepted signs are captioned and spoken automatically. If a word
+        is wrong, use the correction control in the camera panel so the
+        captured landmarks become personal memory and training feedback.
       </p>
 
       <p className="popsign-recognition-status" role="status">
         {!enabled
           ? 'Public recognition is paused while Personalized mode is selected.'
           : practiceActive
-          ? 'Practice is active. Its slow guided motion will not be classified.'
-          : isTooLong
+            ? 'Practice is active. Its slow guided motion will not be classified.'
+            : isTooLong
               ? 'Motion excluded because it exceeded 3 seconds. Perform one sign naturally and lower both hands.'
               : isPredicting
-          ? 'Classifying the completed motionâ€¦'
-          : ready
-            ? 'Ready. Perform one sign from the 250-sign vocabulary.'
-            : 'Turn on the camera and wait for both local models.'}
+                ? 'Classifying the completed motion...'
+                : ready
+                  ? 'Ready. Perform one sign from the 250-sign vocabulary.'
+                  : 'Turn on the camera and wait for both local models.'}
       </p>
 
       {sequence && (
@@ -643,7 +852,7 @@ export function PopsignRecognition({
                     <dd>{formatPercentage(prediction.confidence)}</dd>
                   </div>
                   <div>
-                    <dt>Decision</dt>
+                    <dt>Model tier</dt>
                     <dd>{prediction.decision}</dd>
                   </div>
                   <div>
@@ -664,45 +873,6 @@ export function PopsignRecognition({
                   ))}
                 </ol>
               </details>
-
-              {prediction.decision === 'confirmation' &&
-                confirmationPending && (
-                <div className="popsign-confirmation">
-                  <p>
-                    Use the quick confirmation card displayed over your
-                    live camera. These controls are repeated here only as
-                    an accessible fallback.
-                  </p>
-
-                  <div>
-                    {(prediction.confirmationCandidates ??
-                      prediction.candidates.slice(0, 3))
-                      .map((candidate) => (
-                        <button
-                          key={candidate.index}
-                          type="button"
-                          disabled={isDrafting || !ready}
-                          onClick={() =>
-                            confirmRecognizedSign(candidate.sign)
-                          }
-                        >
-                          <span>{candidate.sign}</span>
-                          <strong>
-                            {formatPercentage(candidate.confidence)}
-                          </strong>
-                        </button>
-                      ))}
-                  </div>
-
-                  <button
-                    className="popsign-confirmation-retry"
-                    type="button"
-                    onClick={retryCurrentSign}
-                  >
-                    None of these â€” try the sign again
-                  </button>
-                </div>
-              )}
             </div>
           )}
         </div>
@@ -743,11 +913,17 @@ export function PopsignRecognition({
           </p>
         )}
 
+        {correctionNotice && (
+          <p className="popsign-communication-notice" role="status">
+            {correctionNotice}
+          </p>
+        )}
+
         {communicationError && (
           <div className="popsign-communication-error" role="alert">
             <p>{communicationError}</p>
 
-            {prediction && prediction.decision === 'automatic' && (
+            {prediction && prediction.decision !== 'rejected' && (
               <button
                 type="button"
                 disabled={isDrafting}
@@ -773,15 +949,13 @@ export function PopsignRecognition({
 
             <blockquote>{communicationDraft.caption}</blockquote>
 
-            {communicationDraft.needsUserConfirmation &&
-              !draftApproved && (
-                <button
-                  type="button"
-                  onClick={approveCurrentDraft}
-                >
-                  Approve caption and speak
-                </button>
-              )}
+            <button
+              type="button"
+              disabled={isSavingCorrection}
+              onClick={() => setCorrectionOpen(true)}
+            >
+              Wrong sign? Save a useful correction
+            </button>
           </article>
         )}
 

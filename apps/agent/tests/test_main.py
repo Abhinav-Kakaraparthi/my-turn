@@ -1,11 +1,16 @@
+import base64
 import os
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
+
+from fastapi import HTTPException
 
 from main import (
+    RecognitionCorrectionRequest,
     allowed_origins,
     app,
     normalize_request_id,
+    save_recognition_correction,
 )
 
 
@@ -21,6 +26,7 @@ class ApplicationTests(unittest.TestCase):
         self.assertIn("/healthz", route_paths)
         self.assertIn("/memory/events", route_paths)
         self.assertIn("/memory/recent", route_paths)
+        self.assertIn("/feedback/corrections", route_paths)
         self.assertIn("/list-apps", route_paths)
         self.assertIn("/run", route_paths)
 
@@ -54,6 +60,62 @@ class ApplicationTests(unittest.TestCase):
             "unsafe request id",
         )
         self.assertEqual(len(generated), 32)
+
+
+class RecognitionCorrectionTests(unittest.IsolatedAsyncioTestCase):
+    async def test_fractional_duration_is_rounded_before_storage(
+        self,
+    ) -> None:
+        request = RecognitionCorrectionRequest(
+            correction_id="correction-2",
+            user_id="user-1",
+            session_id="session-1",
+            predicted_sign="grandpa",
+            corrected_sign="hello",
+            model="250-sign",
+            model_version="my-turn-popsign-v1",
+            confidence=0.69,
+            margin=0.59,
+            duration_ms=2400.6,
+            sequence_id=8,
+            landmark_values_base64=base64.b64encode(
+                bytes(64 * 94 * 4 * 4),
+            ).decode("ascii"),
+        )
+        store = Mock()
+        store.save_recognition_correction.return_value = (
+            "my_turn_users/user-1/recognition_corrections/correction-2"
+        )
+
+        with patch("main.get_memory_store", return_value=store):
+            response = await save_recognition_correction(request)
+
+        saved_correction = (
+            store.save_recognition_correction.call_args.args[0]
+        )
+        self.assertEqual(saved_correction.duration_ms, 2401)
+        self.assertTrue(response.stored)
+
+    async def test_invalid_landmark_base64_is_rejected(self) -> None:
+        request = RecognitionCorrectionRequest(
+            correction_id="correction-1",
+            user_id="user-1",
+            session_id="session-1",
+            predicted_sign="dad",
+            corrected_sign="mom",
+            model="250-sign",
+            model_version="my-turn-popsign-v1",
+            confidence=0.92,
+            margin=0.31,
+            duration_ms=850,
+            sequence_id=7,
+            landmark_values_base64="!" * 100_000,
+        )
+
+        with self.assertRaises(HTTPException) as context:
+            await save_recognition_correction(request)
+
+        self.assertEqual(context.exception.status_code, 422)
 
 
 if __name__ == "__main__":

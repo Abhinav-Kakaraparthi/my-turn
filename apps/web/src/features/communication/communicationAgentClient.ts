@@ -1,4 +1,4 @@
-﻿const DEFAULT_AGENT_BASE_URL = 'http://127.0.0.1:8080'
+const DEFAULT_AGENT_BASE_URL = 'http://127.0.0.1:8080'
 
 const agentBaseUrl = (
   import.meta.env.VITE_MY_TURN_AGENT_URL ?? DEFAULT_AGENT_BASE_URL
@@ -56,6 +56,21 @@ export type ConfirmedCommunicationMemory = {
   model: string
   confidence: number
   margin: number
+}
+
+export type RecognitionCorrectionEvidence = {
+  communicationEventId: string | null
+  confidence: number
+  correctedSign: string
+  correctionId: string
+  durationMs: number
+  margin: number
+  model: string
+  modelVersion: string
+  predictedSign: string
+  sequenceId: number
+  supersedesCorrectionId: string | null
+  values: Float32Array
 }
 
 export type StoredCommunicationMemory = {
@@ -231,6 +246,67 @@ export async function saveConfirmedCommunication(
   if (!response.ok) {
     throw new Error(
       `Cloud memory could not save this communication (status ${response.status}).`,
+    )
+  }
+}
+
+function encodeFloat32Values(values: Float32Array) {
+  const bytes = new Uint8Array(
+    values.buffer,
+    values.byteOffset,
+    values.byteLength,
+  )
+  const chunkSize = 0x8000
+  let binary = ''
+
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(
+      ...bytes.subarray(offset, offset + chunkSize),
+    )
+  }
+
+  return window.btoa(binary)
+}
+
+export async function saveRecognitionCorrection(
+  correction: RecognitionCorrectionEvidence,
+) {
+  const response = await fetch(
+    `${agentBaseUrl}/feedback/corrections`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correction_id: correction.correctionId,
+        communication_event_id: correction.communicationEventId,
+        user_id: userId,
+        session_id: sessionId,
+        predicted_sign: correction.predictedSign,
+        corrected_sign: correction.correctedSign,
+        model: correction.model,
+        model_version: correction.modelVersion,
+        confidence: correction.confidence,
+        margin: correction.margin,
+        duration_ms: Math.max(
+          1,
+          Math.round(correction.durationMs),
+        ),
+        sequence_id: correction.sequenceId,
+        supersedes_correction_id:
+          correction.supersedesCorrectionId,
+        landmark_values_base64: encodeFloat32Values(
+          correction.values,
+        ),
+      }),
+      credentials: 'omit',
+    },
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `Training feedback could not reach cloud storage (status ${response.status}).`,
     )
   }
 }

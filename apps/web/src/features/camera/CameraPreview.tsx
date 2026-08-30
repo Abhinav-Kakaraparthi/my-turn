@@ -6,7 +6,8 @@ import { PersonalizedSignCapture } from '../landmarks/PersonalizedSignCapture'
 import { PopsignRecognition } from '../landmarks/PopsignRecognition'
 import { PracticeCoach } from '../landmarks/PracticeCoach'
 import { PracticeOverlay } from '../landmarks/PracticeOverlay'
-import { useHelloPractice } from '../landmarks/useHelloPractice'
+import { loadPracticeCatalog } from '../landmarks/practiceCatalog'
+import { useSignPractice } from '../landmarks/useSignPractice'
 import { useLandmarkDetection } from '../landmarks/useLandmarkDetection'
 import {
   usePopsignModel,
@@ -38,6 +39,8 @@ export function CameraPreview() {
   const [recognitionMode, setRecognitionMode] = useState<
     'public' | 'personalized'
   >('public')
+  const [practiceSign, setPracticeSign] = useState('hello')
+  const [practiceSigns, setPracticeSigns] = useState<string[]>(['hello'])
   const { errorMessage, startCamera, status, stopCamera, stream } = useCamera()
 
   const isActive = status === 'active'
@@ -52,10 +55,31 @@ export function CameraPreview() {
   } = useLandmarkDetection(videoRef, isActive)
   const practiceCameraReady =
     isActive && landmarkMonitor.status === 'running'
-  const helloPractice = useHelloPractice(
+  const signPractice = useSignPractice(
     landmarkFrame,
     practiceCameraReady,
+    practiceSign,
   )
+
+  useEffect(() => {
+    let mounted = true
+
+    void loadPracticeCatalog()
+      .then((catalog) => {
+        if (mounted) {
+          setPracticeSigns(
+            catalog.references.map((reference) => reference.sign),
+          )
+        }
+      })
+      .catch(() => {
+        // The selected-sign hook presents the actionable loading error.
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
@@ -80,8 +104,8 @@ export function CameraPreview() {
 
     cancelSequenceCapture()
 
-    if (helloPractice.active) {
-      helloPractice.toggle()
+    if (signPractice.active) {
+      signPractice.toggle()
     }
 
     setRecognitionMode(nextMode)
@@ -124,10 +148,10 @@ export function CameraPreview() {
 
           <PracticeOverlay
             enabled={
-              recognitionMode === 'public' && helloPractice.active
+              recognitionMode === 'public' && signPractice.active
             }
             frame={landmarkFrame}
-            targetFrame={helloPractice.targetFrame}
+            targetFrame={signPractice.targetFrame}
             videoRef={videoRef}
           />
 
@@ -145,9 +169,9 @@ export function CameraPreview() {
             </span>
           )}
 
-          {recognitionMode === 'public' && helloPractice.active && (
+          {recognitionMode === 'public' && signPractice.active && (
             <span className="practice-live">
-              Practice: hello · {helloPractice.frameIndex + 1}/64
+              Practice: {signPractice.sign} · {signPractice.frameIndex + 1}/64
             </span>
           )}
 
@@ -251,7 +275,9 @@ export function CameraPreview() {
       {recognitionMode === 'public' && (
         <PracticeCoach
           cameraReady={practiceCameraReady}
-          controller={helloPractice}
+          controller={signPractice}
+          onSignChange={setPracticeSign}
+          signs={practiceSigns}
         />
       )}
 
@@ -262,7 +288,7 @@ export function CameraPreview() {
           modelStatus={popsignModel.status}
           overlayElement={recognitionOverlayElement}
           perceptionStatus={landmarkMonitor.status}
-          practiceActive={helloPractice.active}
+          practiceActive={signPractice.active}
           sequence={popsignSequence}
         />
       </div>

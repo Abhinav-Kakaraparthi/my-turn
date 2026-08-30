@@ -1,9 +1,11 @@
-import type { HelloPracticeController } from './useHelloPractice'
+import type { SignPracticeController } from './useSignPractice'
 import './PracticeCoach.css'
 
 type PracticeCoachProps = {
   cameraReady: boolean
-  controller: HelloPracticeController
+  controller: SignPracticeController
+  onSignChange: (sign: string) => void
+  signs: readonly string[]
 }
 
 function formatPercentage(value: number | undefined) {
@@ -13,6 +15,8 @@ function formatPercentage(value: number | undefined) {
 export function PracticeCoach({
   cameraReady,
   controller,
+  onSignChange,
+  signs,
 }: PracticeCoachProps) {
   const feedback = controller.feedback
   const disabled = !cameraReady || controller.status !== 'ready'
@@ -29,20 +33,30 @@ export function PracticeCoach({
         </div>
 
         <span data-active={controller.active}>
-          {controller.active ? 'Following hello' : 'Paused'}
+          {controller.active
+            ? `Following ${controller.sign}`
+            : 'Paused'}
         </span>
       </div>
 
       <p className="practice-coach-copy">
-        Match the green hello skeleton over your live landmarks. Red arrows
+        Match the green {controller.sign} skeleton over your live landmarks. Red arrows
         point from your fingertips toward the current target position.
       </p>
 
       <div className="practice-coach-toolbar">
         <label>
           <span>Practice sign</span>
-          <select value="hello" disabled aria-label="Practice sign">
-            <option value="hello">hello</option>
+          <select
+            value={controller.sign}
+            aria-label="Practice sign"
+            onChange={(event) => onSignChange(event.target.value)}
+          >
+            {signs.map((sign) => (
+              <option value={sign} key={sign}>
+                {sign}
+              </option>
+            ))}
           </select>
         </label>
 
@@ -51,7 +65,9 @@ export function PracticeCoach({
           disabled={disabled}
           onClick={controller.toggle}
         >
-          {controller.active ? 'Pause guide' : 'Start hello practice'}
+          {controller.active
+            ? 'Pause guide'
+            : `Start ${controller.sign} practice`}
         </button>
 
         <button
@@ -66,7 +82,7 @@ export function PracticeCoach({
 
       {controller.status === 'loading' && (
         <p className="practice-coach-message" role="status">
-          Loading the local hello reference…
+          Loading the local {controller.sign} reference…
         </p>
       )}
 
