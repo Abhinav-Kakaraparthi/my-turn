@@ -76,7 +76,7 @@ class RecognitionCorrectionRequest(BaseModel):
     model_version: str = Field(min_length=1, max_length=80)
     confidence: float = Field(ge=0, le=1)
     margin: float = Field(ge=0, le=1)
-    duration_ms: int = Field(ge=1, le=3000)
+    duration_ms: float = Field(ge=1, le=3000)
     sequence_id: int = Field(ge=0)
     supersedes_correction_id: str | None = Field(
         default=None,
@@ -315,7 +315,7 @@ async def save_recognition_correction(
         confidence=request.confidence,
         corrected_sign=request.corrected_sign,
         correction_id=request.correction_id,
-        duration_ms=request.duration_ms,
+        duration_ms=int(round(request.duration_ms)),
         landmark_values=landmark_values,
         margin=request.margin,
         model=request.model,

@@ -289,7 +289,10 @@ export async function saveRecognitionCorrection(
         model_version: correction.modelVersion,
         confidence: correction.confidence,
         margin: correction.margin,
-        duration_ms: correction.durationMs,
+        duration_ms: Math.max(
+          1,
+          Math.round(correction.durationMs),
+        ),
         sequence_id: correction.sequenceId,
         supersedes_correction_id:
           correction.supersedesCorrectionId,
